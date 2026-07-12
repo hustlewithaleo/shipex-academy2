@@ -413,19 +413,44 @@ app.get("/api/vip-status", async (req, res) => {
 app.post("/api/whop-webhook", async (req, res) => {
   if (!WHOP_CONFIGURED) return res.status(503).end();
 
-  const signature = req.get("x-whop-signature") || req.get("whop-signature") || "";
-  const expected = crypto.createHmac("sha256", WHOP_WEBHOOK_SECRET).update(req.rawBody || Buffer.from("")).digest("hex");
-  const valid = signature && signature.length === expected.length &&
-    crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+  // Whop signs webhooks per the Standard Webhooks spec: headers webhook-id /
+  // webhook-timestamp / webhook-signature, signed content "{id}.{timestamp}.{body}",
+  // secret is "ws_"-prefixed + base64, signature is "v1,<base64 hmac>" (space-separated
+  // if there are multiple, e.g. during secret rotation).
+  const webhookId = req.get("webhook-id");
+  const webhookTimestamp = req.get("webhook-timestamp");
+  const webhookSignature = req.get("webhook-signature") || "";
+  if (!webhookId || !webhookTimestamp || !webhookSignature) {
+    console.error("[whop] missing standard-webhooks headers:", JSON.stringify(req.headers));
+    return res.status(401).end();
+  }
+
+  const secretB64 = WHOP_WEBHOOK_SECRET.startsWith("whsec_")
+    ? WHOP_WEBHOOK_SECRET.slice(6)
+    : WHOP_WEBHOOK_SECRET.startsWith("ws_")
+    ? WHOP_WEBHOOK_SECRET.slice(3)
+    : WHOP_WEBHOOK_SECRET;
+  const secretBytes = Buffer.from(secretB64, "base64");
+  const signedContent = `${webhookId}.${webhookTimestamp}.${(req.rawBody || Buffer.from("")).toString("utf8")}`;
+  const expectedSig = crypto.createHmac("sha256", secretBytes).update(signedContent).digest("base64");
+
+  const providedSigs = webhookSignature.split(" ").map((s) => s.split(",")[1]).filter(Boolean);
+  const valid = providedSigs.some((sig) => {
+    try {
+      return sig.length === expectedSig.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expectedSig));
+    } catch (e) {
+      return false;
+    }
+  });
   if (!valid) {
-    console.error("[whop] webhook signature mismatch — headers:", JSON.stringify(req.headers));
+    console.error("[whop] webhook signature mismatch", { webhookId, providedSigs, expectedSig });
     return res.status(401).end();
   }
 
   const event = req.body || {};
   console.log("[whop] webhook received:", event.action || event.type || "(no action field)");
 
-  const successActions = ["payment.succeeded", "membership.went_valid", "membership.valid"];
+  const successActions = ["payment.succeeded", "membership.activated", "membership.went_valid", "membership.valid"];
   const action = event.action || event.type;
   if (!successActions.includes(action)) {
     return res.json({ ok: true, ignored: true });
@@ -434,6 +459,7 @@ app.post("/api/whop-webhook", async (req, res) => {
   const data = event.data || {};
   // Whop's payload shape can vary — check the likely spots for the buyer's Discord ID.
   const discordId =
+    data.metadata?.discord_id ||
     data.discord_id ||
     data.user?.discord_id ||
     data.discord?.id ||
