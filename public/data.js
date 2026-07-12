@@ -16,6 +16,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$1,700",
+    vipOnly: true,
     chapters: [
       {
         id: "ev1",
