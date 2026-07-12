@@ -30,6 +30,7 @@ const COURSE_DIRS = [
   "Zakaria Airakaz - ECOM Masterclass  [ JUN-2026 ]",
   "HighTicket E-Commerce Course",
   "Impact Team - VIP (High-Ticket Sales System)",
+  "Evolve E-Commerce by Spencer Pawliw",
 ];
 
 const VIDEO_EXT = new Set([".mp4", ".mov", ".m4v"]);

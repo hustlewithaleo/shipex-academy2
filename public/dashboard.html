@@ -1045,6 +1045,15 @@ p {
   object-fit: cover;
   display: block;
 }
+.userchip__name--vip { color: #FFA83C; font-weight: 600; }
+.userchip__vip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.04em;
+  color: #FFA83C;
+  background: rgba(255, 168, 60, 0.14);
+  border: 1px solid rgba(255, 168, 60, 0.4);
+}
 .linkbtn {
   background: none; border: 0; cursor: pointer;
   color: var(--muted); font-size: 14px; font-family: var(--font-body);
@@ -1274,6 +1283,47 @@ p {
 .modal__msg.success { color: #22C55E; }
 .modal__submit { width: 100%; margin-top: 6px; justify-content: center; }
 .modal__submit:disabled { opacity: 0.6; cursor: default; }
+
+/* VIP */
+.cat-pill--vip {
+  border-color: rgba(255, 168, 60, 0.5); color: #FFA83C; font-weight: 700;
+  background: rgba(255, 168, 60, 0.08);
+}
+.cat-pill--vip:hover { background: rgba(255, 168, 60, 0.16); color: #FFA83C; }
+.ccard__tag--vip {
+  background: rgba(255, 168, 60, 0.25) !important;
+  border: 1px solid rgba(255, 168, 60, 0.6) !important;
+  color: #fff !important;
+}
+.modal--vip { max-width: 460px; border-color: rgba(255, 168, 60, 0.3); }
+.vip-title-badge {
+  display: inline-block; margin-left: 8px; padding: 3px 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.04em; vertical-align: middle;
+  color: #FFA83C; background: rgba(255, 168, 60, 0.14); border: 1px solid rgba(255, 168, 60, 0.4);
+}
+.vip-modal__intro { color: var(--muted-2); font-size: 14px; line-height: 1.5; margin-bottom: 16px; }
+.vip-modal__features { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-direction: column; gap: 12px; }
+.vip-modal__features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: #fff; line-height: 1.4;
+}
+.vip-modal__features li svg { flex: 0 0 auto; margin-top: 2px; color: #FFA83C; }
+.vip-modal__price {
+  text-align: center; font-family: var(--font-head); font-size: 26px; letter-spacing: -0.02em;
+  color: #FFA83C; margin-bottom: 16px;
+}
+#vipPurchaseBtn {
+  background: linear-gradient(135deg, #FFA83C, #FF4211); color: #101604;
+}
+.ccard--locked { position: relative; }
+.ccard__lock {
+  position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+  background: rgba(5, 5, 5, 0.72); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  color: #fff; font-family: var(--font-head); font-size: 13px; letter-spacing: 0.02em;
+  border-radius: var(--radius);
+}
+.ccard__lock svg { color: #FFA83C; }
 
 /* course card category tag — sits over the cover art */
 .ccard__tags {
@@ -1530,6 +1580,25 @@ p {
     </div>
   </div>
 
+  <div class="modal-overlay" id="vipModal">
+    <div class="modal modal--vip">
+      <div class="modal__head">
+        <div class="modal__title">Shipex Academy <span class="vip-title-badge">VIP</span></div>
+        <button class="modal__close" id="vipModalClose" type="button" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <p class="vip-modal__intro">Unlock the courses reserved for VIP members, plus everything below.</p>
+      <ul class="vip-modal__features">
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Full access to E-Commerce MRR Mastery by Brandon van Mierlo</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Every future VIP-only course, included automatically</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A VIP role in Discord + an orange VIP badge on the site</li>
+      </ul>
+      <div class="vip-modal__price" id="vipPrice">Loading price…</div>
+      <a class="btn btn--accent modal__submit" id="vipPurchaseBtn" href="#" target="_blank" rel="noopener">Purchase VIP</a>
+    </div>
+  </div>
+
   <script>
 /* ============================================================
    COURSE DATA — single source of truth
@@ -1549,7 +1618,900 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$1,700",
-    chapters: [],
+    chapters: [
+      {
+        id: "ev1",
+        title: "Evolve Main Course",
+        lessons: [
+          { id: "ev1-1", title: "Read First", duration: "", src: "", resources: [] }
+        ],
+        sections: [
+          {
+            id: "ev1-s1",
+            title: "Welcome To Evolve",
+            lessons: [
+              { id: "ev1-s1-1", title: "Start Here Welcome To Evolve", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/1. Welcome To Evolve/1.Start Here Welcome To Evolve - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s1-2", title: "Overview Of Program 2.0 Nov 2025", duration: "25m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/1. Welcome To Evolve/2.Overview Of Program 2.0 Nov 2025 - Evolve Start Here Evolve.mp4", resources: [
+                {"name": "Overview.txt", "size": "0 KB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/1. Welcome To Evolve/2.Overview.txt"}
+              ] },
+              { id: "ev1-s1-3", title: "90 Seconds Tip to Hit 1mMonth", duration: "1m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/1. Welcome To Evolve/3.90 Seconds Tip to Hit 1mMonth - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s1-4", title: "️60 Winning Ads Document", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/1. Welcome To Evolve/4.️60 Winning Ads Document - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s1-5", title: "What To Focus On To Scale To 10Mmth By Rev", duration: "22m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/1. Welcome To Evolve/6.What To Focus On To Scale To 10Mmth By Rev - Evolve Start Here E.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s2",
+            title: "Why Do Ads Work (Psychology)",
+            lessons: [
+              { id: "ev1-s2-1", title: "💥 Action Item Practicing The Core 3", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/6. 💥 Action Item Practicing The Core 3.mp4", resources: [] },
+              { id: "ev1-s2-2", title: "1 Overview", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/1 Overview - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s2-3", title: "2 Market Desires", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/2 Market Desires - Evolve Evolve.mp4", resources: [] },
+              { id: "ev1-s2-4", title: "3 Market Awareness", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/3 Market Awareness - Evolve Evolve.mp4", resources: [] },
+              { id: "ev1-s2-5", title: "4 EVOLVE - Understanding Unaware Using AI For Your Awareness Level", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/4  EVOLVE - Understanding Unaware Using AI For Your Awareness Level .mp4", resources: [] },
+              { id: "ev1-s2-6", title: "5 Market Sophistication", duration: "19m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/5 Market Sophistication.mp4", resources: [] },
+              { id: "ev1-s2-7", title: "6 Action Item Practicing The Core 3", duration: "", src: "", resources: [] },
+              { id: "ev1-s2-8", title: "7 Rule Of One For Evolve", duration: "34m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/7  Rule Of One For Evolve.mp4", resources: [] },
+              { id: "ev1-s2-9", title: "8 Evolve - What Is Identification Marketing", duration: "20m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/8 Evolve - What Is Identification Marketing.mp4", resources: [] },
+              { id: "ev1-s2-10", title: "9 Evolve - What Is Belief In Marketing", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/2. Why Do Ads Work (Psychology)/9 Evolve - What Is Belief In Marketing.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s3",
+            title: "What Ads To Make (Research)",
+            lessons: [
+              { id: "ev1-s3-1", title: "Overview & Self Onboarding", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/1.Overview & Self Onboarding.mp4", resources: [] },
+              { id: "ev1-s3-2", title: "1 Getting Ready To Do Research - Part 1", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/3.1 Getting Ready To Do Research - Part 1.mp4", resources: [
+                {"name": "2 Getting Ready To Do Research - Part 2.mp4", "size": "27.6 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/3.2 Getting Ready To Do Research - Part 2.mp4"}
+              ] },
+              { id: "ev1-s3-3", title: "1 Understanding Your Product - Part 1", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/5.1 Understanding Your Product - Part 1.mp4", resources: [
+                {"name": "2 Understanding The Product - Part 2.mp4", "size": "8.0 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/5.2 Understanding The Product - Part 2.mp4"}
+              ] },
+              { id: "ev1-s3-4", title: "1 Google Research - Part 1", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/6.1 Google Research - Part 1.mp4", resources: [
+                {"name": "2 Google Research - Part 2.mp4", "size": "28.2 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/6.2 Google Research - Part 2.mp4"}
+              ] },
+              { id: "ev1-s3-5", title: "1 Amazon Research - Part 1", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/7.1 Amazon Research - Part 1.mp4", resources: [
+                {"name": "2 Amazon Research - Part 2.mp4", "size": "30.3 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/7.2 Amazon Research - Part 2.mp4"}
+              ] },
+              { id: "ev1-s3-6", title: "1 Reddit Research", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/9.1 Reddit Research.mp4", resources: [] },
+              { id: "ev1-s3-7", title: "1 YouTube Research", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/10.1 YouTube Research.mp4", resources: [] },
+              { id: "ev1-s3-8", title: "1 Competitor Research - Part 1", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/11.1 Competitor Research - Part 1.mp4", resources: [
+                {"name": "2 Competitor Research - Part 2.mp4", "size": "20.2 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/11.2 Competitor Research - Part 2.mp4"}
+              ] },
+              { id: "ev1-s3-9", title: "1 Facebook Research - Part 1", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/12.1 Facebook Research - Part 1.mp4", resources: [
+                {"name": "2 Facebook Research - Part 2.mp4", "size": "28.2 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/12.2 Facebook Research - Part 2.mp4"}
+              ] },
+              { id: "ev1-s3-10", title: "1 Creative Research - Part 1 (Atria)", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/13.1 Creative Research - Part 1 (Atria).mp4", resources: [
+                {"name": "2 Creative Research - Part 2.mp4", "size": "72.1 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/13.2 Creative Research - Part 2.mp4"}
+              ] },
+              { id: "ev1-s3-11", title: "1 TikTok Research", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/14.1 TikTok Research.mp4", resources: [] },
+              { id: "ev1-s3-12", title: "1 Ad Account Research", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/15.1 Ad Account Research - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s3-13", title: "1 Understanding Other Desires", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/16.1 Understanding Other Desires.mp4", resources: [
+                {"name": "2 Understanding Objections.mp4", "size": "12.1 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/16.2 Understanding Objections.mp4"}
+              ] },
+              { id: "ev1-s3-14", title: "1 Cleaning Up The Research Doc", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/17.1 Cleaning Up The Research Doc.mp4", resources: [] },
+              { id: "ev1-s3-15", title: "🆕 Ad ONLY Instagram Research", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/18. 🆕  Ad ONLY Instagram Research - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s3-16", title: "19 Answer The Public - Research", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/19  Answer The Public - Research - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s3-17", title: "20 EVOLVE - Customer Phone Call Research", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/3.  What Ads To Make (Research)/20 EVOLVE - Customer Phone Call Research.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s4",
+            title: "1 How To Create Avatars",
+            lessons: [
+              { id: "ev1-s4-1", title: "1.Understanding Your Product - Part 1", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /1.1.Understanding Your Product - Part 1 - Evolve Evolve.mp4", resources: [
+                {"name": "2 Understanding Your Product - Part 2.mp4", "size": "181.5 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /1.2 Understanding Your Product - Part 2 - Evolve Evolve.mp4"},
+                {"name": "3 Understanding Your Product - Part 3.mp4", "size": "29.5 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /1.3 Understanding Your Product - Part 3 - Evolve Evolve.mp4"}
+              ] },
+              { id: "ev1-s4-2", title: "1 Understanding Applying Desire - Part 1", duration: "1h 2m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /2.1 Understanding Applying Desire - Part 1 - Evolve Evolve.mp4", resources: [
+                {"name": "2 The Desire Calendar - Part 2.mp4", "size": "127.9 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /2.2 The Desire Calendar - Part 2 - Evolve Evolve.mp4"},
+                {"name": "3 How To Find Desires - Part 3.mp4", "size": "330.1 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /2.3 How To Find Desires - Part 3 - Evolve Evolve.mp4"}
+              ] },
+              { id: "ev1-s4-3", title: "1 Understanding Market Sophistication - Part 1", duration: "38m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /3.1  Understanding Market Sophistication - Part 1 - Evolve Evolve.mp4", resources: [
+                {"name": "2 How To Find Apply New Mechanisms - Part 2.mp4", "size": "65.1 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /3.2 How To Find Apply New Mechanisms - Part 2 - Evolve Evolve.mp4"},
+                {"name": "3 💥 Action Item:  Find New Mechanisms.3 💥 action item： find new mechanisms - 👣 evolve (start here) · evolve html", "size": "736 KB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /3.3 💥 Action Item： Find New Mechanisms - 👣 Evolve (Start Here) · Evolve html"}
+              ] },
+              { id: "ev1-s4-4", title: "1 How To Find Apply New Information - Part 3", duration: "21m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /4.1 How To Find Apply New Information - Part 3 - Evolve Evolve.mp4", resources: [] },
+              { id: "ev1-s4-5", title: "1 How To Find Apply New Identities - Part 4", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /5.1 How To Find Apply New Identities - Part 4 - Evolve Evolve.mp4", resources: [
+                {"name": "2 🆕 The Evolve Avatar Training.mp4", "size": "1055.5 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /5.2  🆕 The Evolve Avatar Training - 👣 Evolve · Evolve.mp4"},
+                {"name": "3 🆕 Evolve Avatar Training AI Podcast Version.mp4", "size": "25.4 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /5.3  🆕 Evolve Avatar Training AI Podcast Version - 👣 Evolve Start Here · Evolve.mp4"}
+              ] },
+              { id: "ev1-s4-6", title: "1 🆕 How To Build Core Avatars", duration: "47m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /6.1 🆕 How To Build Core Avatars - 👣 Evolve · Evolve.mp4", resources: [
+                {"name": "3 🆕 How To Build Sub Avatars.mp4", "size": "224.3 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.1 How To Create Avatars /6.3 🆕 How To Build Sub Avatars - 👣 Evolve · Evolve.mp4"}
+              ] }
+            ],
+          },
+          {
+            id: "ev1-s5",
+            title: "2 Watch If Overwhelmed",
+            lessons: [
+              { id: "ev1-s5-1", title: "Im Overwhelmed Stuck - Wat Do", duration: "12m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/4.2 Watch If Overwhelmed/Im Overwhelmed Stuck - Wat Do - Evolve Start Here Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s6",
+            title: "How To Plan Ads (Preparation)",
+            lessons: [
+              { id: "ev1-s6-1", title: "Understanding Ad Definitions", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/5.How To Plan Ads (Preparation)/1.Understanding Ad Definitions - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s6-2", title: "How To Come Up With Ad Angles", duration: "35m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/5.How To Plan Ads (Preparation)/2.How To Come Up With Ad Angles - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s6-3", title: "The 3 Testing Methods - Part 1", duration: "21m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/5.How To Plan Ads (Preparation)/4.The 3 Testing Methods - Part 1 - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s6-4", title: "The 3 Testing Methods - Part 2", duration: "23m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/5.How To Plan Ads (Preparation)/5.The 3 Testing Methods - Part 2 - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s6-5", title: "Putting All The Planning Together Examples", duration: "32m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/5.How To Plan Ads (Preparation)/6.Putting All The Planning Together Examples - Evolve Start Here E.mp4", resources: [] },
+              { id: "ev1-s6-6", title: "The 3.0 Evolve Growth Guide", duration: "27m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/5.How To Plan Ads (Preparation)/8. The 3.0 Evolve Growth Guide - Evolve Start Here Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s7",
+            title: "How To Make Ads (Execution)",
+            lessons: [
+              { id: "ev1-s7-1", title: "🆕 Overview Of How To Make Ads Section", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/1.🆕 Overview Of How To Make Ads Section - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-2", title: "🆕 The Execution Problem", duration: "37m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/2.🆕 The Execution Problem - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-3", title: "🆕 Every Ad Format That You Can Use", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/3.🆕 Every Ad Format That You Can Use - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-4", title: "🆕 Copywriting 101 - Evolve Version", duration: "37m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/4.🆕 Copywriting 101 - Evolve Version - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-5", title: "🆕 How To Write Image Ads - Part 1", duration: "29m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/5.🆕 How To Write Image Ads - Part 1 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-6", title: "🆕 How To Write Image Ads - Part 2", duration: "51m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/6.🆕 How To Write Image Ads - Part 2 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-7", title: "Banger Static Ads Prompt Evolve AI Program", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/7.Banger Static Ads Prompt Evolve AI Program - Evolve Start Here E.mp4", resources: [] },
+              { id: "ev1-s7-8", title: "🆕 How To Write Video Ads - Part 1", duration: "26m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/9.🆕 How To Write Video Ads - Part 1 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-9", title: "How To Write Hooks That BANG Shaun", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/10.How To Write Hooks That BANG Shaun - 👣 Evolve · Evolve.mp4", resources: [
+                {"name": "🆕 How To Write Video Ads - Part 2 (Final Script Written by spencer).pdf", "size": "207 KB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/10.🆕 How To Write Video Ads - Part 2 (Final Script Written by spencer).pdf"},
+                {"name": "🆕 How To Write Video Ads - Part 2.mp4", "size": "265.7 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/10.🆕 How To Write Video Ads - Part 2 - 👣 Evolve · Evolve.mp4"}
+              ] },
+              { id: "ev1-s7-10", title: "How To Write Hooks That BANG Shaun", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/11.How To Write Hooks That BANG Shaun - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s7-11", title: "Scriptwriting For Ads Shaun", duration: "26m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/12.Scriptwriting For Ads Shaun - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-12", title: "🆕 How To Turn Editors To A-Players Get Content", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/14.🆕 How To Turn Editors To A-Players Get Content - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-13", title: "How To Source B-Roll For Videos ecomtalent", duration: "30m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/15.How To Source B-Roll For Videos ecomtalent - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-14", title: "🆕 13 Winning Static Ad Templates", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/16.🆕 13 Winning Static Ad Templates - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s7-15", title: "🆕 How To Clone Print Imitations Ads", duration: "12m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/6.How To Make Ads (Execution)/17.🆕 How To Clone Print Imitations Ads - 👣 Evolve · Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s8",
+            title: "How To Run Ads (Testing)",
+            lessons: [
+              { id: "ev1-s8-1", title: "1 Evolve Facebook Ads Strategy Philosophy", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/1.1 Evolve _ Facebook Ads Strategy Philosophy.mp4", resources: [
+                {"name": "2 Full Media Buying Strategy Outline 2026.mp4", "size": "32.2 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/1.2 Full Media Buying Strategy Outline 2026 - Evolve Start Here Evol.mp4"}
+              ] },
+              { id: "ev1-s8-2", title: "How To Set Up a 322 Campaign", duration: "32m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/3.How To Set Up a 322 Campaign - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s8-3", title: "How To Test Landing Pages 3222", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/4.How To Test Landing Pages 3222 - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s8-4", title: "How To Set Up ZombieGraveyard Campaign", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/5.How To Set Up ZombieGraveyard Campaign - Evolve Start Here Evolv.mp4", resources: [] },
+              { id: "ev1-s8-5", title: "How To Set Up ABO Scaling Campaign", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/6.How To Set Up ABO Scaling Campaign - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s8-6", title: "How To Set Up Raw Content Campaign", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/7.How To Set Up Raw Content Campaign - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s8-7", title: "How To See Ads Performance Our Columns", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/9.How To See Ads Performance Our Columns - Evolve Start Here Evolv.mp4", resources: [] },
+              { id: "ev1-s8-8", title: "How To Set Targets KPIs", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/10.How To Set Targets KPIs - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s8-9", title: "How To Duplicate Ads Into Champions NEW WAY", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/12.How To Duplicate Ads Into Champions NEW WAY - Evolve Start Here.mp4", resources: [] },
+              { id: "ev1-s8-10", title: "How To Find Any Post IDs For Winning Ads", duration: "", src: "", resources: [] },
+              { id: "ev1-s8-11", title: "Turning On Seasonal Ads For Quick Performance", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/15.Turning On Seasonal Ads For Quick Performance - Evolve Start Her.mp4", resources: [] },
+              { id: "ev1-s8-12", title: "How To Protect Against Bad Ads Over Spending", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/16.How To Protect Against Bad Ads Over Spending - Evolve Start Here.mp4", resources: [] },
+              { id: "ev1-s8-13", title: "How To Set Up A Promo Campaign", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/17.How To Set Up A Promo Campaign - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s8-14", title: "How To Set Up Naming Templates", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/7. How To Run Ads (Testing)/18.How To Set Up Naming Templates - Evolve Start Here Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s9",
+            title: "How To Manage Ads (Scaling)",
+            lessons: [
+              { id: "ev1-s9-1", title: "How to Scale Facebook Ads Up Down", duration: "19m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/8. How To Manage Ads (Scaling)/1.How to Scale Facebook Ads Up Down - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s9-2", title: "How To Understand Facebook Ads Attribution", duration: "13m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/8. How To Manage Ads (Scaling)/2.How To Understand Facebook Ads Attribution - Evolve Start Here E.mp4", resources: [] },
+              { id: "ev1-s9-3", title: "How To View Attribution in TW Triple Whale", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/8. How To Manage Ads (Scaling)/3.How To View Attribution in TW Triple Whale - Evolve Start Here E.mp4", resources: [] },
+              { id: "ev1-s9-4", title: "Advanced Surf Scaling Method", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/8. How To Manage Ads (Scaling)/4.Advanced Surf Scaling Method - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s9-5", title: "How To See If You Should Turn Off High-Spend Ads", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/8. How To Manage Ads (Scaling)/6.How To See If You Should Turn Off High-Spend Ads - Evolve Start.mp4", resources: [] },
+              { id: "ev1-s9-6", title: "How To Deal With Roller Coaster Performance", duration: "1h 6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/8. How To Manage Ads (Scaling)/7.How To Deal With Roller Coaster Performance - Evolve Start Here.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s10",
+            title: "How To Analyze Ads (Feedback)",
+            lessons: [
+              { id: "ev1-s10-1", title: "How To Do Learnings - Part 1 Losers", duration: "13m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/1.How To Do Learnings - Part 1 Losers - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s10-2", title: "How To Do Learnings - Part 2 Winning Ads", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/2.How To Do Learnings - Part 2 Winning Ads - Evolve Start Here Evo.mp4", resources: [] },
+              { id: "ev1-s10-3", title: "How To Do Learnings - Part 3 Losers", duration: "31m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/3.How To Do Learnings - Part 3 Losers - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s10-4", title: "How To Do Learnings - Part 4 Winning Ads", duration: "22m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/4.How To Do Learnings - Part 4 Winning Ads - Evolve Start Here Evo.mp4", resources: [] },
+              { id: "ev1-s10-5", title: "How To Do Learnings - Part 5 Winning Ads", duration: "26m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/5.How To Do Learnings - Part 5 Winning Ads - Evolve Start Here Evo.mp4", resources: [] },
+              { id: "ev1-s10-6", title: "How To Pull Frameworks From Ads", duration: "15m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/6.How To Pull Frameworks From Ads - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s10-7", title: "How To Do Learnings - Questions", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/7.How To Do Learnings - Questions - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s10-8", title: "🆕 How To Rewrite Losing Ads Into Winners", duration: "56m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/9.🆕 How To Rewrite Losing Ads Into Winners.mp4", resources: [] },
+              { id: "ev1-s10-9", title: "How To Do Iterations Variations Live Example", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/10.How To Do Iterations Variations Live Example - Evolve Start Here.mp4", resources: [] },
+              { id: "ev1-s10-10", title: "Winning Humidifier Ad - Learnings Shaun", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/10. How To Analyze Ads (Feedback)/12.Winning Humidifier Ad - Learnings Shaun - Evolve Start Here Evol.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s11",
+            title: "How To Get UGC (Generation)",
+            lessons: [
+              { id: "ev1-s11-1", title: "Why Content Is So Important - Part 1", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/1.Why Content Is So Important - Part 1 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-2", title: "🆕 Why Content Is So Important - Part 2", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/2.🆕 Why Content Is So Important - Part 2 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-3", title: "How To Get Viral UGC Inspo For Creators Ads", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/3.How To Get Viral UGC Inspo For Creators Ads - Evolve Evolve.mp4", resources: [] },
+              { id: "ev1-s11-4", title: "🆕 Does Insense Still Work", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/4.🆕 Does Insense Still Work - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-5", title: "UGC Content Overview - Part 1", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/5.UGC Content Overview - Part 1 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-6", title: "UGC Content Overview - Part 2", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/6.UGC Content Overview - Part 2 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-7", title: "How To Add a New Brand To Insense", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/8.How To Add a New Brand To Insense - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-8", title: "🆕 How To Create an Insense Campaign 2025", duration: "12m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/10.🆕 How To Create an Insense Campaign 2025 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-9", title: "How To Process Creators Add To Shortlist", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/12.How To Process Creators Add To Shortlist - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-10", title: "How To Download Creators Upload To Sheet", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/13.How To Download Creators Upload To Sheet - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-11", title: "How to Hire Approved Creators - Part 1", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/14.How to Hire Approved Creators - Part 1 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-12", title: "Sending Frameworks To Creators - Part 2", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/15.Sending Frameworks To Creators - Part 2 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-13", title: "How To Make B-Rolls For Frameworks", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/16.How To Make B-Rolls For Frameworks - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-14", title: "How to Follow Up Upload Content - Part 1", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/17.How to Follow Up Upload Content - Part 1 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-15", title: "How to Follow Up Upload Content - Part 2", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/18.How to Follow Up Upload Content - Part 2 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s11-16", title: "How to Contact Winning Creators Affiliate", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/20.How to Contact Winning Creators Affiliate - Evolve Evolve.mp4", resources: [] },
+              { id: "ev1-s11-17", title: "1 How To Onboard Brand Ambassadors", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/22.1 How To Onboard Brand Ambassadors.mp4", resources: [
+                {"name": "3 How To Onboard Brand Ambassadors - [Creator’s Name] - EVOLVE TEMPLATE - AD SPEND.pdf", "size": "3.5 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/22.3 How To Onboard Brand Ambassadors - [Creator’s Name] - EVOLVE TEMPLATE - AD SPEND.pdf"},
+                {"name": "4 How To Onboard Brand Ambassadors - [Creator’s Name] - EVOLVE TEMPLATE - REVENUE.pdf", "size": "3.5 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/22.4 How To Onboard Brand Ambassadors - [Creator’s Name] - EVOLVE TEMPLATE - REVENUE.pdf"},
+                {"name": "5 How To Onboard Brand Ambassadors - [Creator’s Name] - EVOLVE TEMPLATE - AD SPEND + WHITELISTING.pdf", "size": "3.5 MB", "key": "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/22.5 How To Onboard Brand Ambassadors - [Creator’s Name] - EVOLVE TEMPLATE - AD SPEND + WHITELISTING.pdf"}
+              ] },
+              { id: "ev1-s11-18", title: "How To Communicate With Brand Ambassadors", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/24.How To Communicate With Brand Ambassadors - Evolve Evolve.mp4", resources: [] },
+              { id: "ev1-s11-19", title: "Feedback Loops With Your Brand Ambassadors", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/11. How To Get UGC (Generation)/26.Feedback Loops With Your Brand Ambassadors - Evolve Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s12",
+            title: "How To Run Whitelisted Ads",
+            lessons: [
+              { id: "ev1-s12-1", title: "Whitelisting Overview Proof It Works", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/12.How To Run Whitelisted Ads/1.Whitelisting Overview Proof It Works - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s12-2", title: "How To Setup Whitelisting Creators", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/12.How To Run Whitelisted Ads/2.How To Setup Whitelisting Creators - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s12-3", title: "How To Test Whitelisted Ads", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/12.How To Run Whitelisted Ads/3.How To Test Whitelisted Ads - Evolve Start Here Evolve.mp4", resources: [] },
+              { id: "ev1-s12-4", title: "Partnership Ads Updated Strategy", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/12.How To Run Whitelisted Ads/4.Partnership Ads Updated Strategy - Evolve Start Here Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s13",
+            title: "Productivity System & Mindset",
+            lessons: [
+              { id: "ev1-s13-1", title: "How To Find Time And Get Shit Done", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/13.Productivity System & Mindset/1.How To Find Time And Get Shit Done - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s13-2", title: "How To Focus Quiet Your Mind", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/13.Productivity System & Mindset/2.How To Focus Quiet Your Mind - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s13-3", title: "🆕 Endless Motivation - Rewiring Pain Pleasure", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/13.Productivity System & Mindset/3,🆕 Endless Motivation - Rewiring Pain Pleasure - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s13-4", title: "Planning Achieving Goals Important", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/13.Productivity System & Mindset/4.Planning Achieving Goals Important - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s13-5", title: "🆕Never Stop Growing YoY - Face Off With The Devil", duration: "23m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/13.Productivity System & Mindset/5.🆕Never Stop Growing YoY - Face Off With The Devil - 👣 Evolve · Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev1-s14",
+            title: "Product Research",
+            lessons: [
+              { id: "ev1-s14-1", title: "How To Make Any Product Work Brand Building Pt 1", duration: "39m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/14. Product Research/1.How To Make Any Product Work Brand Building Pt 1 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s14-2", title: "Live Product Research w Kalodata - Pt 2", duration: "1h", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/14. Product Research/2.Live Product Research w Kalodata - Pt 2 - 👣 Evolve · Evolve.mp4", resources: [] },
+              { id: "ev1-s14-3", title: "How Brands Actually Scale to 8 Figures", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/1.EVOLVE MAIN COURSE/14. Product Research/3.How Brands Actually Scale to 8 Figures - Evolve Start Here Evolv.mp4", resources: [] }
+            ],
+          }
+        ],
+      },
+      {
+        id: "ev2",
+        title: "Evolve Copywriting (NEW)",
+        lessons: [
+          { id: "ev2-1", title: "Read First", duration: "", src: "", resources: [] }
+        ],
+        sections: [
+          {
+            id: "ev2-s1",
+            title: "Copywriting Overview",
+            lessons: [
+              { id: "ev2-s1-1", title: "Overview Of Copywriting Program", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/1. Copywriting Overview/1.Overview Of Copywriting Program - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s1-2", title: "The current state of copywriting", duration: "13m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/1. Copywriting Overview/2.The current state of copywriting - ️ Evolve Copywriting NEW Evol.mp4", resources: [] },
+              { id: "ev2-s1-3", title: "How to guarantee you get better at copywriting", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/1. Copywriting Overview/3.How to guarantee you get better at copywriting - ️ Evolve Copywr.mp4", resources: [] },
+              { id: "ev2-s1-4", title: "Why you need to write in the environment", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/1. Copywriting Overview/5.Why you need to write in the environment - ️ Evolve Copywriting.mp4", resources: [] },
+              { id: "ev2-s1-5", title: "Why great copywriting requires boredom", duration: "12m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/1. Copywriting Overview/7.Why great copywriting requires boredom - ️ Evolve Copywriting NE.mp4", resources: [] },
+              { id: "ev2-s1-6", title: "Read First", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev2-s2",
+            title: "Copywriting Principles",
+            lessons: [
+              { id: "ev2-s2-1", title: "The 3 checks for great copywriting", duration: "19m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/1.The 3 checks for great copywriting - ️ Evolve Copywriting NEW Ev.mp4", resources: [] },
+              { id: "ev2-s2-2", title: "The importance of how you say it", duration: "12m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/2.The importance of how you say it - ️ Evolve Copywriting NEW Evol.mp4", resources: [] },
+              { id: "ev2-s2-3", title: "Why you need to write facts", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/3.Why you need to write facts - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s2-4", title: "Why you need to write less fluff", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/4.Why you need to write less fluff - ️ Evolve Copywriting NEW Evol.mp4", resources: [] },
+              { id: "ev2-s2-5", title: "Why you need to speak copy not write it", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/5.Why you need to speak copy not write it - ️ Evolve Copywriting N.mp4", resources: [] },
+              { id: "ev2-s2-6", title: "Why you need to write at a 6th grade level", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/6.Why you need to write at a 6th grade level - ️ Evolve Copywritin.mp4", resources: [] },
+              { id: "ev2-s2-7", title: "Why you need to use unique mechanisms", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/7.Why you need to use unique mechanisms - ️ Evolve Copywriting NEW.mp4", resources: [] },
+              { id: "ev2-s2-8", title: "Why you need to understand beliefs", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/8.Why you need to understand beliefs - ️ Evolve Copywriting NEW Ev.mp4", resources: [] },
+              { id: "ev2-s2-9", title: "Why you need to understand authority", duration: "39m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/2. Copywriting Principles/9.Why you need to understand authority - ️ Evolve Copywriting NEW.mp4", resources: [] },
+              { id: "ev2-s2-10", title: "Read First", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev2-s3",
+            title: "Copywriting Fundamentals",
+            lessons: [
+              { id: "ev2-s3-1", title: "Being aware of avatars", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/3. Copywriting Fundamentals/1.Being aware of avatars - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s3-2", title: "Being aware of angles", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/3. Copywriting Fundamentals/2.Being aware of angles - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s3-3", title: "Being aware of mechanisms", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/3. Copywriting Fundamentals/3.Being aware of mechanisms - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s3-4", title: "Being aware of authorities", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/3. Copywriting Fundamentals/4.Being aware of authorities - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s3-5", title: "Being aware of market awareness", duration: "19m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/3. Copywriting Fundamentals/5.Being aware of market awareness - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s3-6", title: "Read First", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev2-s4",
+            title: "Copywriting Strategies",
+            lessons: [
+              { id: "ev2-s4-1", title: "How to finalize your ad ideas", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/1.How to finalize your ad ideas - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s4-2", title: "The framework behind great hooks", duration: "13m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/2.The framework behind great hooks - ️ Evolve Copywriting NEW Evol.mp4", resources: [] },
+              { id: "ev2-s4-3", title: "The 2 types of hooks", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/3.The 2 types of hooks - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s4-4", title: "The 2 ways to write great hooks", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/4.The 2 ways to write great hooks - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s4-5", title: "1️⃣ - How to write open loops", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/5.1️⃣ - How to write open loops - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s4-6", title: "2️⃣ - How to write a bridge", duration: "24m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/6.2️⃣ - How to write a bridge - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s4-7", title: "3️⃣ - How to preventhandle objections in writing", duration: "37m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/7.3️⃣ - How to preventhandle objections in writing - ️ Evolve Copy.mp4", resources: [] },
+              { id: "ev2-s4-8", title: "4️⃣ - How to pitch without rejection", duration: "13m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/8.4️⃣ - How to pitch without rejection - ️ Evolve Copywriting NEW.mp4", resources: [] },
+              { id: "ev2-s4-9", title: "How to raise the stakes", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/9.How to raise the stakes - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s4-10", title: "How to create ads that show dont tell", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/10.How to create ads that show dont tell - ️ Evolve Copywriting NEW.mp4", resources: [] },
+              { id: "ev2-s4-11", title: "How to write ads that show and dont tell", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/11.How to write ads that show and dont tell - ️ Evolve Copywriting.mp4", resources: [] },
+              { id: "ev2-s4-12", title: "How to use metaphorssimilesanalogies", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/12.How to use metaphorssimilesanalogies - ️ Evolve Copywriting NEW.mp4", resources: [] },
+              { id: "ev2-s4-13", title: "How to write with labels customer language", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/13.How to write with labels customer language - ️ Evolve Copywritin.mp4", resources: [] },
+              { id: "ev2-s4-14", title: "How to write unaware ads hooks", duration: "21m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/4. Copywriting Strategies/14.How to write unaware ads hooks - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev2-s5",
+            title: "Evolve Storytelling",
+            lessons: [
+              { id: "ev2-s5-1", title: "Why storytelling is so powerful", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/5.Evolve Storytelling/1.Why storytelling is so powerful - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s5-2", title: "Why you cant just rely on education", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/5.Evolve Storytelling/2.Why you cant just rely on education - ️ Evolve Copywriting NEW E.mp4", resources: [] },
+              { id: "ev2-s5-3", title: "What makes a great story", duration: "36m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/5.Evolve Storytelling/3. What makes a great story - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s5-4", title: "The laws of story telling", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/5.Evolve Storytelling/4.The laws of story telling - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s5-5", title: "The three enemies of storytelling", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/5.Evolve Storytelling/5.The three enemies of storytelling - ️ Evolve Copywriting NEW Evo.mp4", resources: [] },
+              { id: "ev2-s5-6", title: "The storytelling arcsplots", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/5.Evolve Storytelling/6.The storytelling arcsplots - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s5-7", title: "Prompts to help you storytell", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/5.Evolve Storytelling/7.Prompts to help you storytell - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] },
+              { id: "ev2-s5-8", title: "Must Read", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev2-s6",
+            title: "Evolve Positioning",
+            lessons: [
+              { id: "ev2-s6-1", title: "Why you need to position your brand", duration: "45m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/6. Evolve Positioning/1. Why you need to position your brand - ️ Evolve Copywriting NEW.mp4", resources: [] },
+              { id: "ev2-s6-2", title: "Positioning Exercise", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/6. Evolve Positioning/2.Positioning Exercise - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev2-s7",
+            title: "What about AI",
+            lessons: [
+              { id: "ev2-s7-1", title: "What about AI", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/7.What about AI/What about AI - ️ Evolve Copywriting NEW Evolve.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev2-s10",
+            title: "Live Ad Creation",
+            lessons: [
+              { id: "ev2-s10-1", title: "How To Write Image Ads - Part 1", duration: "29m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/10.Live Ad Creation/1.How To Write Image Ads - Part 1 - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s10-2", title: "How To Write Image Ads - Part 2", duration: "51m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/10.Live Ad Creation/2.How To Write Image Ads - Part 2 - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s10-3", title: "How To Write Video Ads - Part 1", duration: "26m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/10.Live Ad Creation/3.How To Write Video Ads - Part 1 - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s10-4", title: "How To Write Video Ads - Part 2", duration: "31m", src: "Evolve E-Commerce by Spencer Pawliw/2.Evolve Copywriting (NEW)/10.Live Ad Creation/4.How To Write Video Ads - Part 2 - ️ Evolve Copywriting NEW Evolv.mp4", resources: [] },
+              { id: "ev2-s10-5", title: "2 Canvas Zend-Wellness-Sbatch3-Dieter-Video-251109 0207 (1)", duration: "", src: "", resources: [] },
+              { id: "ev2-s10-6", title: "Read First", duration: "", src: "", resources: [] }
+            ],
+          }
+        ],
+      },
+      {
+        id: "ev3",
+        title: "Evolve Supply Chain Program",
+        lessons: [
+          { id: "ev3-1", title: "Module 1 - Understanding Different Supplier Types", duration: "47m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/2.Module 1 - Understanding Different Supplier Types - 📦 Evolve Supply Chain Program · Evolve.mp4", resources: [
+            {"name": "Module.txt", "size": "0 KB", "key": "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/2.module.txt"}
+          ] },
+          { id: "ev3-2", title: "Module 2 - How to Create Custom Products in China", duration: "49m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/3.Module 2 - How to Create Custom Products in China - 📦 Evolve Supply Chain Program · Evolve.mp4", resources: [] },
+          { id: "ev3-3", title: "Module 3 - Improve Product Quality Profit Margin", duration: "22m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/4.Module 3 - Improve Product Quality Profit Margin - 📦 Evolve Supply Chain Program · Evolve.mp4", resources: [] },
+          { id: "ev3-4", title: "Module 5 - How to Work With Factories For A Brand", duration: "27m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/5.Module 5 - How to Work With Factories For A Brand - 📦 Evolve Supply Chain Program · Evolve.mp4", resources: [] },
+          { id: "ev3-5", title: "Module 6 - How To Increase Perceived Product Value", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/6.Module 6 - How To Increase Perceived Product Value - 📦 Evolve Supply Chain Program · Evolve.mp4", resources: [] },
+          { id: "ev3-6", title: "How to QC Manufacturers", duration: "50m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/How to QC Manufacturers - Evolve Supply Chain Program Evolve.mp4", resources: [] },
+          { id: "ev3-7", title: "Last Minute CNY Prep - 2026", duration: "41m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/Last Minute CNY Prep - 2026 - Evolve Supply Chain Program Evolve.mp4", resources: [] },
+          { id: "ev3-8", title: "Payment Term Negotiating Strategies", duration: "50m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/Payment Term Negotiating Strategies - Evolve Supply Chain Progra.mp4", resources: [] },
+          { id: "ev3-9", title: "Perform Due Diligence on Manufacturers", duration: "45m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/Perform Due Diligence on Manufacturers - Evolve Supply Chain Pro.mp4", resources: [] },
+          { id: "ev3-10", title: "Product Compliance Manufacturer Agreements", duration: "59m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/Product Compliance Manufacturer Agreements - Evolve Supply Chain.mp4", resources: [] },
+          { id: "ev3-11", title: "Q1 Q2 Product Launch Strategies", duration: "1h 1m", src: "Evolve E-Commerce by Spencer Pawliw/3. EVOLVE SUPPLY CHAIN PROGRAM/Q1 Q2 Product Launch Strategies - Evolve Supply Chain Program Ev.mp4", resources: [] }
+        ],
+      },
+      {
+        id: "ev4",
+        title: "Evolve Finance",
+        lessons: [
+          { id: "ev4-1", title: "Intro - Chadzone", duration: "1m", src: "Evolve E-Commerce by Spencer Pawliw/4.Evolve Finance/Intro - Chadzone - Evolve Finance Evolve.mp4", resources: [] },
+          { id: "ev4-2", title: "Meta Billing - How to Still Pay With Credit Cards", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/4.Evolve Finance/Meta Billing - How to Still Pay With Credit Cards - Evolve Finan.mp4", resources: [] },
+          { id: "ev4-3", title: "Module 1 Contribution Margin", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/4.Evolve Finance/Module 1 Contribution Margin - Evolve Finance Evolve.mp4", resources: [] },
+          { id: "ev4-4", title: "Module 2 LTV Modeling How to Outspend Everyone", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/4.Evolve Finance/Module 2 LTV Modeling How to Outspend Everyone - Evolve Finance.mp4", resources: [] },
+          { id: "ev4-5", title: "Module 3 The Barometers Fix Fast vs Kill You", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/4.Evolve Finance/Module 3 The Barometers Fix Fast vs Kill You - Evolve Finance Ev.mp4", resources: [] },
+          { id: "ev4-6", title: "Module 4 The Cash Conversion Cycle", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/4.Evolve Finance/Module 4 The Cash Conversion Cycle - Evolve Finance Evolve.mp4", resources: [] },
+          { id: "ev4-7", title: "Read First", duration: "", src: "", resources: [] }
+        ],
+      },
+      {
+        id: "ev5",
+        title: "Evolve Call Recordings (New)",
+        sections: [
+          {
+            id: "ev5-s1",
+            title: "Special Guest Calls",
+            lessons: [
+              { id: "ev5-s1-1", title: "Special Guest Calls (2024 - 2026)", duration: "", src: "", resources: [] },
+              { id: "ev5-s1-2", title: "⭐ Mini CRO Program w Spencer Pawliw - Dec 13 24 -", duration: "54m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/1. Special Guest Calls/2.⭐ Mini CRO Program w_ Spencer Pawliw - Dec 13_24 -.mp4", resources: [] },
+              { id: "ev5-s1-3", title: "⭐ Get Started & Scale With Amazon - June 11th 2025", duration: "", src: "", resources: [] },
+              { id: "ev5-s1-4", title: "Content.JPG", duration: "", src: "", resources: [] },
+              { id: "ev5-s1-5", title: "Note", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev5-s2",
+            title: "2026 Evolve Weekly Calls",
+            lessons: [
+              { id: "ev5-s2-1", title: "Live from Marrakech QA - March 25th 2026", duration: "34m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/1.Live from Marrakech QA - March 25th 2026 - Evolve Weekly Call Re.mp4", resources: [] },
+              { id: "ev5-s2-2", title: "Copywriters Checklist Open QA - March 4th 2026", duration: "1h", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/2.Copywriters Checklist Open QA - March 4th 2026 - Evolve Weekly C.mp4", resources: [] },
+              { id: "ev5-s2-3", title: "Ad Strategy Iteration Open QA - Feb 25th 2026", duration: "1h 1m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/3.Ad Strategy Iteration Open QA - Feb 25th 2026 - Evolve Weekly Ca.mp4", resources: [] },
+              { id: "ev5-s2-4", title: "QA Working Harder Than Ever - Feb 11th 2026", duration: "1h 2m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/5.QA Working Harder Than Ever - Feb 11th 2026 - Evolve Weekly Call.mp4", resources: [] },
+              { id: "ev5-s2-5", title: "In Person QA w Karlo - February 04th 2026", duration: "1h 34m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/6.In Person QA w Karlo - February 04th 2026 - Evolve Weekly Call R.mp4", resources: [] },
+              { id: "ev5-s2-6", title: "In Person QA - January 28th 2026", duration: "1h 2m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/7.In Person QA - January 28th 2026 - Evolve Weekly Call Recordings.mp4", resources: [] },
+              { id: "ev5-s2-7", title: "2026 Roadmap Update QA - January 21st 2026", duration: "1h 24m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/8.2026 Roadmap Update QA - January 21st 2026 - Evolve Weekly Call.mp4", resources: [] },
+              { id: "ev5-s2-8", title: "Valence Intensity - January 14th 2026", duration: "1h 21m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/9.Valence Intensity - January 14th 2026 - Evolve Weekly Call Recor.mp4", resources: [] },
+              { id: "ev5-s2-9", title: "How to write open Loops QA - January 7th 2026", duration: "1h 15m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/2.2026 Evolve Weekly Calls/10.How to write open Loops QA - January 7th 2026 - Evolve Weekly Ca.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev5-s3",
+            title: "2025 Evolve Weekly Calls",
+            lessons: [
+              { id: "ev5-s3-1", title: "Copywriting Sneak Peek QA - December 17th 2025", duration: "1h 14m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/3.2025 Evolve Weekly Calls/1.Copywriting Sneak Peek QA - December 17th 2025 - Evolve Weekly C.mp4", resources: [] },
+              { id: "ev5-s3-2", title: "Black Friday Prep - November 26th 2025", duration: "1h 3m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/3.2025 Evolve Weekly Calls/5.Black Friday Prep - November 26th 2025 - Evolve Weekly Call Reco.mp4", resources: [] },
+              { id: "ev5-s3-3", title: "Open QA - September 10th 2025", duration: "54m", src: "Evolve E-Commerce by Spencer Pawliw/5.Evolve Call Recordings (New)/3.2025 Evolve Weekly Calls/14.Open QA - September 10th 2025 - Evolve Weekly Call Recordings Ev.mp4", resources: [] }
+            ],
+          }
+        ],
+      },
+      {
+        id: "ev6",
+        title: "Full Live Webinar Of $0-$100kMonth",
+        lessons: [
+          { id: "ev6-1", title: "Full Live Webinar Of 0- 100k Month", duration: "2h 19m", src: "Evolve E-Commerce by Spencer Pawliw/5.Full Live Webinar Of $0-$100kMonth/Full Live Webinar Of 0- 100k Month - 0- 100k Month Full Masterclass · Evolve.mp4", resources: [] }
+        ],
+      },
+      {
+        id: "ev7",
+        title: "Origins program",
+        sections: [
+          {
+            id: "ev7-s1",
+            title: "Start here",
+            lessons: [
+              { id: "ev7-s1-1", title: "How you re going to scale to 100k mo - Origins Program Start Here · Origins", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/1. Start here/1.How you re going to scale to 100k mo - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s1-2", title: "What to do in the first 48 hours - Origins Program Start Here · Origins", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/1. Start here/2.What to do in the first 48 hours - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s1-3", title: "What to do in the first 7 days - Origins Program Start Here · Origins", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/1. Start here/3.What to do in the first 7 days - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s1-4", title: "What to do in the first 30 days - Origins Program Start Here · Origins", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/1. Start here/4.What to do in the first 30 days - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s2",
+            title: "Origins mindset",
+            lessons: [
+              { id: "ev7-s2-1", title: "How to prepare your mind for change - Origins Program Start Here · Origins", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/2. Origins mindset/1. How to prepare your mind for change - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s2-2", title: "How long it will take you to get rich - Origins Program Start Here · Origins", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/2. Origins mindset/2.How long it will take you to get rich - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s2-3", title: "How to guarantee success - Origins Program Start Here · Origins", duration: "28m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/2. Origins mindset/3.How to guarantee success - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s2-4", title: "The whitebelt mindset - Origins Program Start Here · Origins", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/2. Origins mindset/5.The whitebelt mindset - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s2-5", title: "Why you actually never fail - Origins Program Start Here · Origins", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/2. Origins mindset/6.Why you actually never fail - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s2-6", title: "Why the fact it’s hard is actually good - Origins Program Start Here · Origins", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/2. Origins mindset/7.Why the fact it’s hard is actually good - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s4",
+            title: "How To Find Products",
+            lessons: [
+              { id: "ev7-s4-1", title: "Market Desires - Origins Program Start Here · Origins", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/4.  How To Find Products/1.Market Desires - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s4-2", title: "Market Sophistication - Origins Program Start Here · Origins", duration: "19m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/4.  How To Find Products/2.Market Sophistication - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s4-3", title: "How To Find Winning Products Brand Building Pt 1 - Origins Program Start Here · Origins", duration: "39m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/4.  How To Find Products/3.How To Find Winning Products Brand Building Pt 1 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s4-4", title: "Live Product Research w Kalodata - Pt 2 - Origins Program Start Here · Origins", duration: "1h", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/4.  How To Find Products/4.Live Product Research w Kalodata - Pt 2 - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s5",
+            title: "How to Create Offers",
+            lessons: [
+              { id: "ev7-s5-1", title: "Why offers have such a big impact - Origins Program Start Here · Origins", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/5. How to Create Offers/1.Why offers have such a big impact - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s5-2", title: "Why you MUST know your numbers with new offers - Origins Program Start Here · Origins", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/5. How to Create Offers/2.Why you MUST know your numbers with new offers - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s5-3", title: "The types of offers you can run - Origins Program Start Here · Origins", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/5. How to Create Offers/3.The types of offers you can run - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s5-4", title: "How to create an offer - Origins Program Start Here · Origins", duration: "38m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/5. How to Create Offers/5.How to create an offer - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s5-5", title: "How one offer can 2x ad spend and 3x ROAS - Origins Program 0-10", duration: "27m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/5. How to Create Offers/7.How one offer can 2x ad spend and 3x ROAS - Origins Program 0-10.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s6",
+            title: "How I Create Avatar",
+            lessons: [
+              { id: "ev7-s6-1", title: "Understanding Your Product - Part 1 - Origins Program Start Here · Origins", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/1.Understanding Your Product - Part 1 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-2", title: "Understanding Your Product - Part 2 - Origins Program Start Here · Origins", duration: "33m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/2.Understanding Your Product - Part 2 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-3", title: "Understanding Your Product - Part 3 - Origins Program Start Here · Origins", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/3.Understanding Your Product - Part 3 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-4", title: "Understanding Applying Desire - Part 1 - Origins Program Start Here · Origins", duration: "1h 2m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/5.Understanding Applying Desire - Part 1 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-5", title: "The Desire Calendar - Part 2 - Origins Program Start Here · Origins", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/6..The Desire Calendar - Part 2 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-6", title: "How To Find Desires - Part 3 - Origins Program Start Here · Origins", duration: "43m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/7.How To Find Desires - Part 3 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-7", title: "Understanding Market Sophistication - Part 1 - Origins Program Start Here · Origins", duration: "38m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/9.Understanding Market Sophistication - Part 1 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-8", title: "How To Find Apply New Mechanisms - Part 2 - Origins Program Start Here · Origins", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/10.How To Find Apply New Mechanisms - Part 2 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-9", title: "How To Find Apply New Information - Part 3 - Origins Program Start Here · Origins", duration: "22m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/12.How To Find Apply New Information - Part 3 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-10", title: "How To Find Apply New Identities - Part 4 - Origins Program Start Here · Origins", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/14.How To Find Apply New Identities - Part 4 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-11", title: "How To Build Core Avatars - Origins Program Start Here · Origins", duration: "47m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/17.How To Build Core Avatars - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s6-12", title: "How To Build Sub Avatars - Origins Program Start Here · Origins", duration: "33m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/6. How I Create Avatar/19.How To Build Sub Avatars - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s7",
+            title: "Watch This If Overwhelmed",
+            lessons: [
+              { id: "ev7-s7-1", title: "🆕 How to feel better about being overwhelmed - Origins Program Start Here · Origins", duration: "19m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/7. Watch This If Overwhelmed/🆕 How to feel better about being overwhelmed - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s8",
+            title: "How To Create Ads",
+            lessons: [
+              { id: "ev7-s8-1", title: "Understanding ad definitions - Origins Program Start Here · Origins", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/1.Understanding ad definitions - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-2", title: "How to come up with ad angles - Origins Program Start Here · Origins", duration: "35m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/2.How to come up with ad angles - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-3", title: "The 3 Testing Methods - Part 1 Origins Version - Origins Program Start Here · Origins", duration: "21m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/4.The 3 Testing Methods - Part 1 Origins Version - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-4", title: "Putting It All Together Origins Version - Origins Program Start Here · Origins", duration: "17m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/5.Putting It All Together Origins Version - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-5", title: "Every Ad Format That You Can Use - Origins Program Start Here · Origins", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/6.Every Ad Format That You Can Use - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-6", title: "The Origins creative roadmap - Origins Program Start Here · Origins", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/8.The Origins creative roadmap - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-7", title: "How to create image ads - part 1 - Origins Program Start Here · Origins", duration: "29m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/10.How to create image ads - part 1 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-8", title: "How to create image ads - part 2 - Origins Program Start Here · Origins", duration: "51m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/11.How to create image ads - part 2 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-9", title: "13 winning static ads breakdown templates - Origins Program Start Here · Origins", duration: "14m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/12.13 winning static ads breakdown templates - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-10", title: "What winning video ads look like 9 examples - Origins Program Start Here · Origins", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/14.What winning video ads look like 9 examples - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-11", title: "The importance of copywriting for videos - Origins Program Start Here · Origins", duration: "42m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/16.The importance of copywriting for videos - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-12", title: "How to write a video ad - Part 1 - Origins Program Start Here · Origins", duration: "26m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/17.How to write a video ad - Part 1 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-13", title: "How to write a video ad - Part 2 - Origins Program Start Here · Origins", duration: "31m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/18.How to write a video ad - Part 2 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-14", title: "How to get content for ads options for editing - Origins Program Start Here · Origins", duration: "20m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8.  How To Create Ads/20.How to get content for ads options for editing - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s8-15", title: "Final Script", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s9",
+            title: "How To Set Up FB Assets",
+            lessons: [
+              { id: "ev7-s9-1", title: "FB Asset Structure to Prevent Getting Rekt - Origins Program Start Here · Origins", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8. How To Set Up FB Assets/1.FB Asset Structure to Prevent Getting Rekt - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s9-2", title: "Set Up Warm Up Your FB Profile - Origins Program Start Here · Origins", duration: "1m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8. How To Set Up FB Assets/2.Set Up Warm Up Your FB Profile - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s9-3", title: "Set Up Warm Up Your FB Page - Origins Program Start Here · Origins", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8. How To Set Up FB Assets/3.Set Up Warm Up Your FB Page - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s9-4", title: "How To Verify Your Meta Business Manager", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8. How To Set Up FB Assets/5.How To Verify Your Meta Business Manager.mp4", resources: [] },
+              { id: "ev7-s9-5", title: "Set Up Warm Up Your FB Ad Account - Origins Program Start Here · Origins", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8. How To Set Up FB Assets/6.Set Up Warm Up Your FB Ad Account - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s9-6", title: "Set Up FB Pixel Dataset - Origins Program Start Here · Origins", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8. How To Set Up FB Assets/7.Set Up FB Pixel Dataset - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s9-7", title: "Putting The FB Asset Structure Together - Origins Program Start Here · Origins", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/8. How To Set Up FB Assets/8.Putting The FB Asset Structure Together - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s10",
+            title: "How to Run Add",
+            lessons: [
+              { id: "ev7-s10-1", title: "Overview of media buying section - Origins Program Start Here · Origins", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/9. How to Run Add/1.Overview of media buying section - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s10-2", title: "Andromeda Why you need to think way bigger - Origins Program Start Here · Origins", duration: "16m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/9. How to Run Add/2. Andromeda Why you need to think way bigger - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s10-3", title: "Full YouTube media buying strategy", duration: "", src: "", resources: [] },
+              { id: "ev7-s10-4", title: "How to set ROAS targets for scaling - Origins Program Start Here · Origins", duration: "10m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/9. How to Run Add/5.How to set ROAS targets for scaling - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s10-5", title: "How to scale your account up down - Origins Program Start Here · Origins", duration: "31m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/9. How to Run Add/6.How to scale your account up down - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s10-6", title: "Why bad ads get spend - Origins Program Start Here · Origins", duration: "28m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/9. How to Run Add/8.Why bad ads get spend - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev7-s11",
+            title: "🧠 How To Do Learnings",
+            lessons: [
+              { id: "ev7-s11-1", title: "How to review losing ads - Origins Program Start Here · Origins", duration: "31m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/10. 🧠 How To Do Learnings/1.How to review losing ads - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s11-2", title: "How to apply learnings to make new ads - Origins Program Start Here · Origins", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/10. 🧠 How To Do Learnings/2. How to apply learnings to make new ads - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s11-3", title: "How to review winning ads even if you have 0 - Origins Program Start Here · Origins", duration: "22m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/10. 🧠 How To Do Learnings/3.How to review winning ads even if you have 0 - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s11-4", title: "🆕 How to pull ideas frameworks from ads - Origins Program Start Here · Origins", duration: "15m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/10. 🧠 How To Do Learnings/4.🆕 How to pull ideas frameworks from ads - Origins Program Start Here · Origins.mp4", resources: [] },
+              { id: "ev7-s11-5", title: "How to complete feedback loops 12 questions - Origins Program Start Here · Origins", duration: "12m", src: "Evolve E-Commerce by Spencer Pawliw/6. Origins program/10. 🧠 How To Do Learnings/5.How to complete feedback loops 12 questions - Origins Program Start Here · Origins.mp4", resources: [] }
+            ],
+          }
+        ],
+      },
+      {
+        id: "ev8",
+        title: "Team Building, Systems, Hiring - Dubai Mastermind",
+        lessons: [
+          { id: "ev8-1", title: "Dubai Mastermind Recording", duration: "1h 44m", src: "Evolve E-Commerce by Spencer Pawliw/7.Team Building, Systems, Hiring - Dubai Mastermind/Dubai Mastermind Recording.mp4", resources: [] }
+        ],
+      },
+      {
+        id: "ev9",
+        title: "2025 Evolve Q4 Strategy",
+        lessons: [
+          { id: "ev9-1", title: "The Evolve Q4 Masterclass 2025", duration: "1h 36m", src: "Evolve E-Commerce by Spencer Pawliw/8.2025 EVOLVE Q4 STRATEGY/1.The Evolve Q4 Masterclass 2025 - 💰 Evolve Q4 · Evolve.mp4", resources: [] },
+          { id: "ev9-2", title: "The Evolve Q4 Creative Blueprint 2025", duration: "1h 4m", src: "Evolve E-Commerce by Spencer Pawliw/8.2025 EVOLVE Q4 STRATEGY/2.The Evolve Q4 Creative Blueprint 2025 - 💰 Evolve Q4 · Evolve.mp4", resources: [] },
+          { id: "ev9-3", title: "How To Setup Promo Campaigns", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/8.2025 EVOLVE Q4 STRATEGY/4.How To Setup Promo Campaigns - 💰 Evolve Q4 · Evolve.mp4", resources: [] },
+          { id: "ev9-4", title: "How To Create Rules For Promo Campaigns", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/8.2025 EVOLVE Q4 STRATEGY/5.How To Create Rules For Promo Campaigns - 💰 Evolve Q4 · Evolve.mp4", resources: [] },
+          { id: "ev9-5", title: "Advanced Surf Scaling Method", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/8.2025 EVOLVE Q4 STRATEGY/6.Advanced Surf Scaling Method - 💰 Evolve Q4 · Evolve.mp4", resources: [] },
+          { id: "ev9-6", title: "V.I.P Lead Gen Strategy Calculator", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/8.2025 EVOLVE Q4 STRATEGY/7.V.I.P Lead Gen Strategy Calculator - 💰 Evolve Q4 · Evolve.mp4", resources: [] },
+          { id: "ev9-7", title: "Q4 Email Marketing Strategy", duration: "1h 28m", src: "Evolve E-Commerce by Spencer Pawliw/8.2025 EVOLVE Q4 STRATEGY/9.Q4 Email Marketing Strategy - 💰 Evolve Q4 · Evolve.mp4", resources: [] }
+        ],
+      },
+      {
+        id: "ev10",
+        title: "$0-$100kDay Yap Session With Spencer & Shaun",
+        lessons: [
+          { id: "ev10-1", title: "0- 100k Day Yap Session With Spencer Shaun", duration: "1h 25m", src: "Evolve E-Commerce by Spencer Pawliw/9.$0-$100kDay Yap Session With Spencer & Shaun/0- 100k Day Yap Session With Spencer Shaun - 0- 100k Day Podcast · Evolve.mp4", resources: [] }
+        ],
+      },
+      {
+        id: "ev11",
+        title: "Evolve CRO (Legacy)",
+        lessons: [
+          { id: "ev11-1", title: "#Evolve CRO", duration: "", src: "", resources: [] }
+        ],
+        sections: [
+          {
+            id: "ev11-s1",
+            title: "CRO Basics",
+            lessons: [
+              { id: "ev11-s1-1", title: "What Is CRO", duration: "", src: "", resources: [] },
+              { id: "ev11-s1-2", title: "Types Of CRO", duration: "", src: "", resources: [] },
+              { id: "ev11-s1-3", title: "Key Metrics For CRO", duration: "", src: "", resources: [] },
+              { id: "ev11-s1-4", title: "Tools Of The Trade", duration: "", src: "", resources: [] },
+              { id: "ev11-s1-5", title: "Analyze Your Store", duration: "", src: "", resources: [] },
+              { id: "ev11-s1-6", title: "Action Item- Fix Your Store", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev11-s2",
+            title: "CRO Research",
+            lessons: [
+              { id: "ev11-s2-1", title: "(Evolve) Understanding Your Product", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/2. CRO Research/1. (Evolve) Understanding Your Product.mp4", resources: [] },
+              { id: "ev11-s2-2", title: "Evolve Self-Onboarding Questions", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-3", title: "(Evolve) Getting Ready To Do Research + Branding", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/2. CRO Research/3. (Evolve) Getting Ready To Do Research + Branding.mp4", resources: [] },
+              { id: "ev11-s2-4", title: "Action Item- Make A Copy & Start Research", duration: "", src: "", resources: [
+                {"name": "EAM CLIENT - CRO Research Doc.docx", "size": "34 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/2. CRO Research/4. EAM _ CLIENT - CRO Research Doc.docx"}
+              ] },
+              { id: "ev11-s2-5", title: "Live Website Audit Walkthrough", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-6", title: "Action Item- Audit Your Site For Information", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-7", title: "Ad Account Research For CRO", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-8", title: "Action Item- Ad Account Research", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-9", title: "Direct Competitor Research For CRO", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-10", title: "Action Item- Conduct Competitor Research", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-11", title: "Angle Research For CRO On Google + Reddit", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-12", title: "Action Item- Conduct Angle Research", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-13", title: "Landing Page Research For CRO - Atria", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-14", title: "Landing Page Research For CRO - PageDeck", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-15", title: "Action Item- Conduct Landing Page Research", duration: "", src: "", resources: [] },
+              { id: "ev11-s2-16", title: "CRO Research - Twitter", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev11-s3",
+            title: "CRO Landing Pages",
+            lessons: [
+              { id: "ev11-s3-1", title: "Page Deck - Setting Up Foundations", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-2", title: "Action Item- Setup Your Page Deck Foundation", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-3", title: "Page Deck - Customizing Themes", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-4", title: "Action Item- Setup Your Page Deck Theme", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-5", title: "REMINDER Identify The Angle Of Your Landing Page", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-6", title: "Action Item- Choose Your Landing Page Angle", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-7", title: "Strategizing Offers For Your Landing Page.bak", duration: "", src: "", resources: [
+                {"name": "Strategizing Offers For Your Landing Page.pdf", "size": "106 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/3. CRO Landing Pages/7. Strategizing Offers For Your Landing Page.pdf"},
+                {"name": "Strategizing Offers For Your Landing Page.ts", "size": "1668.0 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/3. CRO Landing Pages/7. Strategizing Offers For Your Landing Page.ts"}
+              ] },
+              { id: "ev11-s3-8", title: "Page Deck - Offer Functionality In Page Deck", duration: "", src: "", resources: [
+                {"name": "Page Deck Offer Functionality In Page Deck.pdf", "size": "80 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/3. CRO Landing Pages/8. Page Deck Offer Functionality In Page Deck.pdf"}
+              ] },
+              { id: "ev11-s3-9", title: "Action Item- Strategize Offers For Your Page", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-10", title: "Page Deck - Choosing Your Template", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-11", title: "Action Item- Choose Your Template", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-12", title: "Page Deck - Writing Your Messaging", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-13", title: "Action Item- Optimize Your Messaging", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-14", title: "Page Deck - Optimizing Landing Page Content - 1", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-15", title: "Page Deck - Optimizing Landing Page Content - 2", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-16", title: "Action Item- Optimize Your Content!", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-17", title: "Coupon Code Generator", duration: "", src: "", resources: [
+                {"name": "The Importance Of Functionality.ts", "size": "491.9 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/3. CRO Landing Pages/17. The Importance Of Functionality.ts"}
+              ] },
+              { id: "ev11-s3-18", title: "Action Item- Optimize Your Functionality", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-19", title: "Page Deck - Optimizing Page Information", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-20", title: "Action Item- Optimize Your Page Info", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-21", title: "QA, QA, QA, And Then... More QA - Part 1", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-22", title: "Action Item- QA Your Page Aggressively", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-23", title: "QA, QA, QA, And Then... More QA - Part 2", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-24", title: "Action Item- QA Your Page Again", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-25", title: "Conversion Rate Optimization Hack", duration: "", src: "", resources: [] },
+              { id: "ev11-s3-26", title: "Action Item- Follow The CRO Hack", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev11-s4",
+            title: "CRO Testing",
+            lessons: [
+              { id: "ev11-s4-1", title: "How To Test Landing Pages On Meta", duration: "", src: "", resources: [
+                {"name": "How To Test Landing Pages On Meta.ts", "size": "376.9 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/1. How To Test Landing Pages On Meta.ts"}
+              ] },
+              { id: "ev11-s4-2", title: "How To Analyze Landing Page Tests On Meta", duration: "", src: "", resources: [
+                {"name": "How To Analyze Landing Page Tests On Meta.ts", "size": "449.6 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/2. How To Analyze Landing Page Tests On Meta.ts"}
+              ] },
+              { id: "ev11-s4-3", title: "Action Item- Launch Your PageDeck Test", duration: "", src: "", resources: [] },
+              { id: "ev11-s4-4", title: "Page Deck - How To A-B Test Landing Pages", duration: "", src: "", resources: [] },
+              { id: "ev11-s4-5", title: "Page Deck - What To A-B Test On Landing Pages", duration: "", src: "", resources: [] },
+              { id: "ev11-s4-6", title: "Action Item- Launch Your A-B Test", duration: "", src: "", resources: [] },
+              { id: "ev11-s4-7", title: "Overview Of The Software + Setup", duration: "", src: "", resources: [
+                {"name": "Intelligems - Overview Of The Software + Setup.ts", "size": "130.2 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/7. Intelligems - Overview Of The Software + Setup.ts"}
+              ] },
+              { id: "ev11-s4-8", title: "Intelligems - URL Redirect Test", duration: "", src: "", resources: [
+                {"name": "URL Redirect Test.pdf", "size": "63 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/8. URL Redirect Test.pdf"}
+              ] },
+              { id: "ev11-s4-9", title: "Intelligems - Visual A-B Test", duration: "", src: "", resources: [
+                {"name": "Visual A-B Test.pdf", "size": "65 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/9. Visual A-B Test.pdf"}
+              ] },
+              { id: "ev11-s4-10", title: "Template Test", duration: "", src: "", resources: [
+                {"name": "Intelligems - Template Test.ts", "size": "489.9 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/10. Intelligems - Template Test.ts"}
+              ] },
+              { id: "ev11-s4-11", title: "Intelligems - Theme Test", duration: "", src: "", resources: [
+                {"name": "Theme Test.pdf", "size": "72 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/11. Theme Test.pdf"}
+              ] },
+              { id: "ev11-s4-12", title: "Intelligems - Shipping Tests", duration: "", src: "", resources: [] },
+              { id: "ev11-s4-13", title: "Intelligems - The Importance Of QA", duration: "", src: "", resources: [
+                {"name": "The Importance Of QA.pdf", "size": "36 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/13. The Importance Of QA.pdf"}
+              ] },
+              { id: "ev11-s4-14", title: "Intelligems - Analyzing Split Tests", duration: "", src: "", resources: [] },
+              { id: "ev11-s4-15", title: "Intelligems - Understanding Powered Stat Sig", duration: "", src: "", resources: [
+                {"name": "Understanding Powered Stat Sig.pdf", "size": "61 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/4. CRO Testing/15. Understanding Powered Stat Sig.pdf"}
+              ] },
+              { id: "ev11-s4-16", title: "Intelligems - How To Execute Winning Tests", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev11-s5",
+            title: "CRO Ongoing",
+            lessons: [
+              { id: "ev11-s5-1", title: "The Importance Of Ongoing Research", duration: "", src: "", resources: [] },
+              { id: "ev11-s5-2", title: "Action Item- Do Some More Research", duration: "", src: "", resources: [] },
+              { id: "ev11-s5-3", title: "CRO Easy Wins + Test Ideas", duration: "", src: "", resources: [
+                {"name": "Frequently Asked Questions Guide.docx", "size": "8 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/5. CRO Ongoing/3. Frequently Asked Questions Guide.docx"}
+              ] },
+              { id: "ev11-s5-4", title: "Live Landing Page Progress - Part 1", duration: "", src: "", resources: [] },
+              { id: "ev11-s5-5", title: "Live Landing Page Progress - Part 2", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/5. CRO Ongoing/5. Live Landing Page Progress - Part 2.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev11-s6",
+            title: "CRO Customer Feedback",
+            lessons: [
+              { id: "ev11-s6-1", title: "Overview - The Importance Of Customer Feedback", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-2", title: "IMPORTANT - How To See If You Qualify For This", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-3", title: "How To Come Up With a Giveaway Offer", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-4", title: "Action Item- Come Up With a Giveaway Offer", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-5", title: "How To Setup a Viral Sweep Giveaway", duration: "", src: "", resources: [
+                {"name": "How To Setup a Viral Sweep Giveaway.ts", "size": "299.8 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/5. How To Setup a Viral Sweep Giveaway.ts"}
+              ] },
+              { id: "ev11-s6-6", title: "Action Item- Set Up Your Giveaway", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-7", title: "Optimal Sending Schedule For Viral Sweep Campaign", duration: "", src: "", resources: [
+                {"name": "Optimal Sending Schedule For Viral Sweep Campaign.ts", "size": "56.2 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/7. Optimal Sending Schedule For Viral Sweep Campaign.ts"}
+              ] },
+              { id: "ev11-s6-8", title: "How To Design Email Templates in Klaviyo", duration: "", src: "", resources: [
+                {"name": "How To Design Email Templates in Klaviyo.ts", "size": "206.4 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/8. How To Design Email Templates in Klaviyo.ts"}
+              ] },
+              { id: "ev11-s6-9", title: "Action Item- Design Your Templates", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-10", title: "How To Segment The Giveaway Sending Lis", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-11", title: "Action Item- Segment Your Lists", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-12", title: "How To Design & Launch A Viral Sweep Giveaway Page", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-13", title: "Action Item- Set Up Your Landing Page", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-14", title: "How To Setup The Entrants List On Klaviyo", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-15", title: "Action Item- Set Up Your Entrants List", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-16", title: "How to Generate & Schedule Winners Email - Part 1", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-17", title: "How to Generate & Schedule Winners Email", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-18", title: "How to Contact Individual Winners Email", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-19", title: "Action Item- Schedule And Send Winners Emails", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-20", title: "How to Schedule The Founders Discount Email", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-21", title: "Action Item- Schedule Founders Email", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-22", title: "How To Download Entrants & Upload To Sheet", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/22. How To Download Entrants & Upload To Sheet.mp4", resources: [
+                {"name": "EAM TEMPLATE - Purchasers Giveaway Feedback V10.0.xlsx", "size": "837 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/22. EAM _ TEMPLATE - Purchasers Giveaway Feedback V10.0.xlsx"}
+              ] },
+              { id: "ev11-s6-23", title: "Action Item- Download Entrants", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-24", title: "How To Organize Sheet With Feedback Data - Part 1", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/24. How To Organize Sheet With Feedback Data - Part 1.mp4", resources: [] },
+              { id: "ev11-s6-25", title: "How To Organize Sheet With Feedback Data - Part 2", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/25. How To Organize Sheet With Feedback Data - Part 2.mp4", resources: [] },
+              { id: "ev11-s6-26", title: "How To Organize Sheet With Feedback Data - Part 3", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/26. How To Organize Sheet With Feedback Data - Part 3.mp4", resources: [] },
+              { id: "ev11-s6-27", title: "Action Item- Organize Your Sheet", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-28", title: "How To Upload Knowledge Basis To Chat GPT", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/28. How To Upload Knowledge Basis To Chat GPT.mp4", resources: [
+                {"name": "EAM Customer Feedback Summary - AI Prompts.docx", "size": "8 KB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/28. EAM _ Customer Feedback Summary - AI Prompts.docx"}
+              ] },
+              { id: "ev11-s6-29", title: "Action Item- Upload Data To GPT", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-30", title: "How To Summarize All Data & Create a Custom GPT", duration: "", src: "", resources: [
+                {"name": "How To Summarize All Data & Create a Custom GPT.ts", "size": "35.7 MB", "key": "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/30. How To Summarize All Data & Create a Custom GPT.ts"}
+              ] },
+              { id: "ev11-s6-31", title: "Action Item- Summarize Your Data", duration: "", src: "", resources: [] },
+              { id: "ev11-s6-32", title: "How To Calculate ROI From Survey", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/6. CRO Customer Feedback/32. How To Calculate ROI From Survey.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev11-s7",
+            title: "CRO Heatmaps",
+            lessons: [
+              { id: "ev11-s7-1", title: "Setting Up Heatmap", duration: "", src: "", resources: [] },
+              { id: "ev11-s7-2", title: "EAM Heatmap", duration: "", src: "", resources: [] }
+            ],
+          },
+          {
+            id: "ev11-s8",
+            title: "CRO Sales Optimizations",
+            lessons: [
+              { id: "ev11-s8-1", title: "Sales CRO - Proof This Works", duration: "", src: "", resources: [] },
+              { id: "ev11-s8-2", title: "Shopify Discount Codes Explained", duration: "15m", src: "Evolve E-Commerce by Spencer Pawliw/12. Evolve CRO (from old version of Evolve)/8. CRO Sales Optimizations/2. Shopify Discount Codes Explained.mp4", resources: [] }
+            ],
+          }
+        ],
+      },
+      {
+        id: "ev12",
+        title: "Evolve - Agency Edition (Legacy)",
+        lessons: [
+          { id: "ev12-1", title: "Retention Masterclass - Overview", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/1. Retention Masterclass - Overview.mp4", resources: [] },
+          { id: "ev12-2", title: "Retention - Typical Agencies", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/2. Retention - Typical Agencies.mp4", resources: [] },
+          { id: "ev12-3", title: "Retention - Deep Client Understanding", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/3. Retention - Deep Client Understanding.mp4", resources: [] },
+          { id: "ev12-4", title: "Retention - The Importance Of First Impressions", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/4. Retention - The Importance Of First Impressions.mp4", resources: [] },
+          { id: "ev12-5", title: "Retention - Communication (Part 1)", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/5. Retention - Communication (Part 1).mp4", resources: [] },
+          { id: "ev12-6", title: "Retention - Communication (Part 2)", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/6. Retention - Communication (Part 2).mp4", resources: [] },
+          { id: "ev12-7", title: "Retention - Communication (Part 3)", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/7. Retention - Communication (Part 3).mp4", resources: [] },
+          { id: "ev12-8", title: "Retention - Communication (Part 4)", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/8. Retention - Communication (Part 4).mp4", resources: [] },
+          { id: "ev12-9", title: "Retention - Communication (Part 5)", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/9. Retention - Communication (Part 5).mp4", resources: [] },
+          { id: "ev12-10", title: "Retention - Communication (Part 6)", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/10. Retention - Communication (Part 6).mp4", resources: [] },
+          { id: "ev12-11", title: "Leveraging New Mechanisms", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/11. Leveraging New Mechanisms.mp4", resources: [] },
+          { id: "ev12-12", title: "Retention - Calling For Help", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/12. Retention - Calling For Help.mp4", resources: [] },
+          { id: "ev12-13", title: "Retention - Setting Expectations", duration: "15m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/13. Retention - ﻿﻿Setting Expectations.mp4", resources: [] },
+          { id: "ev12-14", title: "Retention - Just Give A", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/14. Retention - ﻿﻿Just Give A.mp4", resources: [] },
+          { id: "ev12-15", title: "Retention - Death By a Thousand Cuts", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/15. Retention - ﻿﻿Death By a Thousand Cuts.mp4", resources: [] },
+          { id: "ev12-16", title: "Retention - When To Upsell & Propose Services", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/16. Retention - ﻿﻿When To Upsell & Propose Services.mp4", resources: [] },
+          { id: "ev12-17", title: "Retention Masterclass - Recap", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/13. Evolve - Agency Edition (from old version of Evolve)/17. Retention Masterclass - Recap.mp4", resources: [] },
+          { id: "ev12-18", title: "#Evolve - Agency Edition", duration: "", src: "", resources: [] }
+        ],
+      },
+      {
+        id: "ev13",
+        title: "Evolve AI (Legacy)",
+        sections: [
+          {
+            id: "ev13-s1",
+            title: "Overview of AI Program",
+            lessons: [
+              { id: "ev13-s1-1", title: "🆕 October 2025 - AI Program Overview", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/1.Overview of AI Program/🆕 October 2025 - AI Program Overview - 🤖 Evolve AI · Evolve (online-video-cutter.com).mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev13-s2",
+            title: "🛠️ Tools & Set Up",
+            lessons: [
+              { id: "ev13-s2-1", title: "My 1 AI Hack", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/1.My 1 AI Hack - Evolve AI Evolve.mp4", resources: [] },
+              { id: "ev13-s2-2", title: "Claude AI vs Chat GPT", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/2.Claude AI vs Chat GPT.mp4", resources: [] },
+              { id: "ev13-s2-3", title: "How To Optimize Claude", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/3.How To Optimize Claude.mp4", resources: [] },
+              { id: "ev13-s2-4", title: "🆕 How To Use Claude Projects", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/4.🆕 How To Use Claude Projects.mp4", resources: [] },
+              { id: "ev13-s2-5", title: "🆕 Google Ai Studio - Video + Ad Review", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/5.🆕 Google Ai Studio - Video + Ad Review.mp4", resources: [] },
+              { id: "ev13-s2-6", title: "How To Make Personas Avatars With Claude", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/6.How To Make Personas Avatars With Claude - 🤖 Evolve AI · Evolve.mp4", resources: [] },
+              { id: "ev13-s2-7", title: "Multiple PersonasAvatars With Claude", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/7.Multiple PersonasAvatars With Claude.mp4", resources: [] },
+              { id: "ev13-s2-8", title: "Organize For Best Reviews (500+ Reviews)", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/2.🛠️ Tools & Set Up/8.Organize For Best Reviews (500+ Reviews).mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev13-s3",
+            title: "✍️ Ad Briefs & Scripts",
+            lessons: [
+              { id: "ev13-s3-1", title: "🆕 How To Optimize Your Own Prompts", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/1.🆕 How To Optimize Your Own Prompts.mp4", resources: [] },
+              { id: "ev13-s3-2", title: "How To Write Basic AI Static Ads", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/3.How To Write Basic AI Static Ads.mp4", resources: [] },
+              { id: "ev13-s3-3", title: "How To Write Banger AI Static Ads - Part 1", duration: "8m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/4.How To Write Banger AI Static Ads - Part 1.mp4", resources: [] },
+              { id: "ev13-s3-4", title: "How To Write Banger AI Static Ads - Part 2", duration: "2m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/5.How To Write Banger AI Static Ads - Part 2.mp4", resources: [] },
+              { id: "ev13-s3-5", title: "How To Get Inspo & Insights From Reviews", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/6.How To Get Inspo & Insights From Reviews.mp4", resources: [] },
+              { id: "ev13-s3-6", title: "How To Get HeadlinesHooks From Reviews", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/7.How To Get HeadlinesHooks From Reviews.mp4", resources: [] },
+              { id: "ev13-s3-7", title: "AI Viral Video Ads With Voiceover - Part 1", duration: "18m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/9.AI Viral Video Ads With Voiceover - Part 1.mp4", resources: [] },
+              { id: "ev13-s3-8", title: "AI Viral Video Ads With Voiceover - Part 2", duration: "3m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/10.AI Viral Video Ads With Voiceover - Part 2.mp4", resources: [] },
+              { id: "ev13-s3-9", title: "AI Viral Video Ads With Voiceover - Part 3", duration: "6m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/11.AI Viral Video Ads With Voiceover - Part 3.mp4", resources: [] },
+              { id: "ev13-s3-10", title: "How To Write AI UGC Briefs", duration: "13m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/12.How To Write AI UGC Briefs.mp4", resources: [] },
+              { id: "ev13-s3-11", title: "How To Use ElevenLabs For Voiceovers", duration: "42m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/3.✍️ Ad Briefs & Scripts/13.How To Use ElevenLabs For Voiceovers.mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev13-s4",
+            title: "📸 Ad Content",
+            lessons: [
+              { id: "ev13-s4-1", title: "🆕 How To Train Editors On AI (Getting Content)", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/4.📸 Ad Content/1.🆕 How To Train Editors On AI (Getting Content).mp4", resources: [] }
+            ],
+          },
+          {
+            id: "ev13-s6",
+            title: "🧠 Additional AI Tools",
+            lessons: [
+              { id: "ev13-s6-1", title: "FreeAdCopy.com - Unlimited AI Copywriting", duration: "11m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/6.🧠 Additional AI Tools/1.FreeAdCopy.com - Unlimited AI Copywriting.mp4", resources: [] },
+              { id: "ev13-s6-2", title: "Recharm - AI Content Organization - Part 1", duration: "7m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/6.🧠 Additional AI Tools/2.Recharm - AI Content Organization - Part 1.mp4", resources: [] },
+              { id: "ev13-s6-3", title: "Recharm - AI Content Organization - Part 2", duration: "5m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/6.🧠 Additional AI Tools/3.Recharm - AI Content Organization - Part 2.mp4", resources: [] },
+              { id: "ev13-s6-4", title: "🆕 Kitchn.io - AI Tool to Launch Ads Faster", duration: "9m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/6.🧠 Additional AI Tools/4.🆕 Kitchn.io - AI Tool to Launch Ads Faster.mp4", resources: [] },
+              { id: "ev13-s6-5", title: "🆕 Otto SEO - AI Search Engine Optimization Tool", duration: "4m", src: "Evolve E-Commerce by Spencer Pawliw/14.Evolve AI (from old version of Evolve)/6.🧠 Additional AI Tools/5.🆕 Otto SEO - AI Search Engine Optimization Tool.mp4", resources: [] }
+            ],
+          }
+        ],
+      }
+    ],
   },
   {
     id: "highticket-ecommerce",
@@ -8255,6 +9217,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$6,000",
+    vipOnly: true,
     chapters: [],
   },
   {
@@ -8413,7 +9376,9 @@ function userChip(user) {
   var av = user && user.avatar
     ? '<img class="userchip__img" src="' + user.avatar + '" alt="">'
     : '<span class="userchip__av">' + initials(name) + '</span>';
-  return av + '<span>' + name + '</span>';
+  var nameHtml = user && user.vip ? '<span class="userchip__name--vip">' + name + '</span>' : '<span>' + name + '</span>';
+  var vipBadge = user && user.vip ? '<span class="userchip__vip">VIP</span>' : '';
+  return av + nameHtml + vipBadge;
 }
 </script>
   <script>
@@ -8468,6 +9433,16 @@ function userChip(user) {
       document.getElementById("requestModalClose").addEventListener("click", closeRequestModal);
       reqModal.addEventListener("click", function (e) { if (e.target === reqModal) closeRequestModal(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape" && reqModal.classList.contains("open")) closeRequestModal(); });
+
+      // VIP modal
+      var vipModal = document.getElementById("vipModal");
+      document.getElementById("vipPurchaseBtn").href = "https://whop.com/shipexacademy/shipex-academy-vip/";
+      document.getElementById("vipPrice").textContent = "$47 / month";
+      function openVipModal() { vipModal.classList.add("open"); }
+      function closeVipModal() { vipModal.classList.remove("open"); }
+      document.getElementById("vipModalClose").addEventListener("click", closeVipModal);
+      vipModal.addEventListener("click", function (e) { if (e.target === vipModal) closeVipModal(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && vipModal.classList.contains("open")) closeVipModal(); });
 
       reqForm.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -8538,6 +9513,12 @@ function userChip(user) {
           var requestPill = el("button", "cat-pill cat-pill--request", "+ Request a course");
           requestPill.addEventListener("click", openRequestModal);
           filterWrap.appendChild(requestPill);
+
+          if (!(user && user.vip)) {
+            var vipPill = el("button", "cat-pill cat-pill--vip", "★ Get VIP");
+            vipPill.addEventListener("click", openVipModal);
+            filterWrap.appendChild(vipPill);
+          }
         }
 
         function renderGrid() {
@@ -8556,18 +9537,28 @@ function userChip(user) {
             var s = courseStats(c);
             var pct = Progress.percent(c);
             var cat = getCategory(c.category);
-            var tag = cat
-              ? '<span class="ccard__tag" style="background:' + hexToRgba(cat.color, 0.25) +
-                ';color:#fff;border:1px solid ' + hexToRgba(cat.color, 0.6) + '">' + cat.label + '</span>'
-              : '';
+            var locked = Boolean(c.vipOnly) && !(user && user.vip);
+            var tag = locked
+              ? '<span class="ccard__tag ccard__tag--vip">Reserved for VIP</span>'
+              : (cat
+                ? '<span class="ccard__tag" style="background:' + hexToRgba(cat.color, 0.25) +
+                  ';color:#fff;border:1px solid ' + hexToRgba(cat.color, 0.6) + '">' + cat.label + '</span>'
+                : '');
             var priceTag = c.price ? '<span class="ccard__price">' + c.price + '</span>' : '';
-            var card = el("a", "ccard");
+            var lockOverlay = locked
+              ? '<div class="ccard__lock"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>VIP Only</div>'
+              : '';
+            var card = el("a", "ccard" + (locked ? " ccard--locked" : ""));
             card.href = "course?c=" + c.id;
+            if (locked) {
+              card.addEventListener("click", function (e) { e.preventDefault(); openVipModal(); });
+            }
             card.innerHTML =
               '<div class="ccard__cover">' +
                 '<div class="ccard__tags">' + tag + priceTag + '</div>' +
                 (c.cover ? '<img src="' + c.cover + '" alt="">' : '') +
                 '<div class="ccard__prog"><i style="width:' + pct + '%"></i></div>' +
+                lockOverlay +
               '</div>' +
               '<div class="ccard__body">' +
                 '<div class="ccard__title">' + c.title + '</div>' +

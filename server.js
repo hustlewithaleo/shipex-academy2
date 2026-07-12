@@ -37,6 +37,8 @@ const {
   R2_ACCESS_KEY_ID,
   R2_SECRET_ACCESS_KEY,
   R2_BUCKET_NAME,
+  WHOP_CHECKOUT_URL,           // optional — only needed for the VIP purchase flow
+  WHOP_WEBHOOK_SECRET,
   PORT = 3000,
   NODE_ENV = "development",
 } = process.env;
@@ -59,7 +61,8 @@ app.get(/\.html$/, (req, res) => {
   res.redirect(301, req.path.slice(0, -".html".length) + req.url.slice(req.path.length));
 });
 
-app.use(express.json());
+// keep the raw body around too — needed to verify the Whop webhook signature
+app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Serve pretty URLs: /dashboard -> public/dashboard.html, if that file exists.
@@ -170,6 +173,45 @@ if (VIDEO_STORAGE_CONFIGURED) {
 }
 const VIDEO_URL_TTL_SECONDS = 4 * 60 * 60; // 4 hours — comfortably covers watching one lesson
 
+// ---- VIP membership (Whop) ----
+// No database here, so VIP membership is tracked as a small JSON file sitting
+// in the same R2 bucket as the videos: { "<discordId>": { at, whopUserId } }.
+const WHOP_CONFIGURED = Boolean(WHOP_CHECKOUT_URL && WHOP_WEBHOOK_SECRET);
+if (!WHOP_CONFIGURED) {
+  console.log("[whop] WHOP_CHECKOUT_URL / WHOP_WEBHOOK_SECRET not set — VIP purchase flow is disabled.");
+}
+const VIP_STORE_KEY = "_vip-members.json";
+let R2PutObjectCommand = null;
+if (VIDEO_STORAGE_CONFIGURED) {
+  R2PutObjectCommand = require("@aws-sdk/client-s3").PutObjectCommand;
+}
+async function readVipMembers() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: VIP_STORE_KEY }));
+    const text = await res.Body.transformToString();
+    return JSON.parse(text);
+  } catch (e) {
+    return {}; // file doesn't exist yet, or is unreadable — treat as "no VIPs yet"
+  }
+}
+async function addVipMember(discordId, extra) {
+  const members = await readVipMembers();
+  members[discordId] = { at: Date.now(), ...extra };
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: VIP_STORE_KEY,
+    Body: JSON.stringify(members, null, 2),
+    ContentType: "application/json",
+  }));
+  return members;
+}
+async function isVip(discordId) {
+  if (!discordId) return false;
+  const members = await readVipMembers();
+  return Boolean(members[discordId]);
+}
+
 /* ---- 1. Start OAuth: send the user to Discord ---- */
 app.get("/auth/discord", (req, res) => {
   // CSRF protection: random state stored in a short-lived cookie, checked on return.
@@ -247,12 +289,13 @@ app.get("/auth/discord/callback", async (req, res) => {
 });
 
 /* ---- 3. Who am I? (used by the front-end to gate pages) ---- */
-app.get("/api/me", (req, res) => {
+app.get("/api/me", async (req, res) => {
   const t = req.cookies[COOKIE];
   if (!t) return res.status(401).json({ error: "not_authenticated" });
   try {
     const user = jwt.verify(t, SESSION_SECRET);
-    res.json({ id: user.id, username: user.username, displayName: user.displayName, avatar: user.avatar });
+    const vip = await isVip(user.id);
+    res.json({ id: user.id, username: user.username, displayName: user.displayName, avatar: user.avatar, vip });
   } catch {
     res.status(401).json({ error: "invalid_session" });
   }
@@ -342,6 +385,70 @@ app.post("/api/request-course", async (req, res) => {
   } catch (e) {
     console.error("[discord] course request error:", e.message);
     res.status(500).json({ error: "post_failed" });
+  }
+});
+
+/* ---- am I VIP? used by the front-end for the badge + course gating ---- */
+app.get("/api/vip-status", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  res.json({ vip: await isVip(user.id) });
+});
+
+/* ---- Whop webhook: fires when a VIP purchase completes ---- */
+app.post("/api/whop-webhook", async (req, res) => {
+  if (!WHOP_CONFIGURED) return res.status(503).end();
+
+  const signature = req.get("x-whop-signature") || req.get("whop-signature") || "";
+  const expected = crypto.createHmac("sha256", WHOP_WEBHOOK_SECRET).update(req.rawBody || Buffer.from("")).digest("hex");
+  const valid = signature && signature.length === expected.length &&
+    crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+  if (!valid) {
+    console.error("[whop] webhook signature mismatch — headers:", JSON.stringify(req.headers));
+    return res.status(401).end();
+  }
+
+  const event = req.body || {};
+  console.log("[whop] webhook received:", event.action || event.type || "(no action field)");
+
+  const successActions = ["payment.succeeded", "membership.went_valid", "membership.valid"];
+  const action = event.action || event.type;
+  if (!successActions.includes(action)) {
+    return res.json({ ok: true, ignored: true });
+  }
+
+  const data = event.data || {};
+  // Whop's payload shape can vary — check the likely spots for the buyer's Discord ID.
+  const discordId =
+    data.discord_id ||
+    data.user?.discord_id ||
+    data.discord?.id ||
+    data.user?.social_accounts?.discord?.id ||
+    null;
+  const discordUsername =
+    data.discord_username ||
+    data.user?.discord_username ||
+    data.discord?.username ||
+    null;
+
+  if (!discordId) {
+    console.error("[whop] could not find a Discord ID in webhook payload:", JSON.stringify(event));
+    return res.status(200).json({ ok: true, warning: "no_discord_id" });
+  }
+
+  try {
+    await addVipMember(discordId, { whopUserId: data.user?.id || null, username: discordUsername });
+    if (ANNOUNCE_JOINS) {
+      await fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
+        method: "POST",
+        headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ content: `💎 <@${discordId}> just purchased **VIP**! Welcome to the inner circle.` }),
+      });
+    }
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("[whop] failed to record VIP membership:", e.message);
+    res.status(500).json({ error: "vip_store_failed" });
   }
 });
 
