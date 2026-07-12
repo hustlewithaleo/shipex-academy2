@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VIP admin — Shipex</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Host+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #121212;
+  --surface-2: #171717;
+  --text: #ffffff;
+  --muted: #8a8a8a;
+  --muted-2: #a9a9a9;
+  --border-soft: rgba(255, 255, 255, 0.07);
+  --accent: #FF4211;
+  --accent-dim: rgba(255, 179, 156, 0.18);
+  --radius: 18px;
+  --font-head: 'Host Grotesk', -apple-system, system-ui, sans-serif;
+  --font-body: 'DM Sans', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--font-body); min-height: 100vh;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
+.head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+.head a { color: var(--muted); text-decoration: none; font-size: 14px; }
+.head a:hover { color: #fff; }
+h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; margin: 0 0 6px; }
+.sub { color: var(--muted-2); font-size: 14px; margin: 0 0 32px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border-soft);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
+}
+.card h2 { font-family: var(--font-head); font-size: 16px; margin: 0 0 16px; letter-spacing: -0.01em; }
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.form-row input {
+  flex: 1; min-width: 180px; padding: 11px 13px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  color: #fff; font-size: 14px; font-family: var(--font-body);
+}
+.form-row input:focus { outline: none; border-color: var(--accent-dim); }
+.btn {
+  padding: 11px 18px; border-radius: 10px; border: 0; cursor: pointer;
+  font-family: var(--font-body); font-size: 14px; font-weight: 600;
+  background: var(--accent); color: #fff; transition: opacity .15s;
+}
+.btn:hover { opacity: 0.9; }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn--ghost { background: rgba(255,255,255,0.06); color: var(--muted-2); }
+.msg { font-size: 13px; margin-top: 10px; min-height: 16px; }
+.msg.error { color: #ff6b5c; }
+.msg.success { color: #22C55E; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border-soft); }
+th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+td { color: #fff; }
+td.muted { color: var(--muted-2); font-size: 13px; }
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px;
+  font-weight: 700; border: 1px solid rgba(255, 168, 60, 0.4); color: #FFA83C;
+  background: rgba(255, 168, 60, 0.12);
+}
+.tag--manual { border-color: rgba(124, 92, 255, 0.4); color: #A78BFA; background: rgba(124, 92, 255, 0.12); }
+.remove-btn {
+  background: none; border: 1px solid var(--border-soft); color: var(--muted-2);
+  padding: 5px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: var(--font-body);
+}
+.remove-btn:hover { color: #ff6b5c; border-color: rgba(255,107,92,0.4); }
+.empty { color: var(--muted); font-size: 14px; padding: 20px 0; text-align: center; }
+.gate { display: flex; align-items: center; justify-content: center; min-height: 60vh; text-align: center; }
+.gate p { color: var(--muted-2); font-size: 15px; }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app" style="display:none;">
+    <div class="head">
+      <div>
+        <h1>VIP members</h1>
+        <p class="sub">View, add, or remove VIP access. Removing here also pulls the Discord role.</p>
+      </div>
+      <a href="/dashboard">&larr; Back to dashboard</a>
+    </div>
+
+    <div class="card">
+      <h2>Add VIP manually</h2>
+      <div class="form-row">
+        <input type="text" id="addDiscordId" placeholder="Discord user ID (e.g. 123456789012345678)">
+        <input type="text" id="addUsername" placeholder="Discord username (optional)">
+        <button class="btn" id="addBtn">Add VIP</button>
+      </div>
+      <div class="msg" id="addMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2 id="countLabel">Members</h2>
+      <table id="table" style="display:none;">
+        <thead>
+          <tr><th>Discord ID</th><th>Username</th><th>Source</th><th>Added</th><th></th></tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty" id="emptyState" style="display:none;">No VIP members yet.</div>
+    </div>
+  </div>
+
+  <div class="gate" id="gate" style="display:none;">
+    <p id="gateMsg">Checking access…</p>
+  </div>
+
+  <script>
+    function fetchJson(url, opts) {
+      return fetch(url, Object.assign({ credentials: "same-origin" }, opts || {}))
+        .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); });
+    }
+
+    function fmtDate(ms) {
+      if (!ms) return "";
+      var d = new Date(ms);
+      return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function renderMembers(members) {
+      var tbody = document.getElementById("tbody");
+      var table = document.getElementById("table");
+      var empty = document.getElementById("emptyState");
+      var ids = Object.keys(members);
+      document.getElementById("countLabel").textContent = "Members (" + ids.length + ")";
+      tbody.innerHTML = "";
+      if (!ids.length) {
+        table.style.display = "none";
+        empty.style.display = "block";
+        return;
+      }
+      table.style.display = "table";
+      empty.style.display = "none";
+      ids.sort(function (a, b) { return (members[b].at || 0) - (members[a].at || 0); });
+      ids.forEach(function (id) {
+        var m = members[id];
+        var tr = document.createElement("tr");
+        var tag = m.manual
+          ? '<span class="tag tag--manual">Manual</span>'
+          : '<span class="tag">Whop</span>';
+        tr.innerHTML =
+          '<td class="muted">' + id + '</td>' +
+          '<td>' + (m.username ? m.username : '<span class="muted">—</span>') + '</td>' +
+          '<td>' + tag + '</td>' +
+          '<td class="muted">' + fmtDate(m.at) + '</td>' +
+          '<td><button class="remove-btn" data-id="' + id + '">Remove</button></td>';
+        tbody.appendChild(tr);
+      });
+      Array.prototype.forEach.call(tbody.querySelectorAll(".remove-btn"), function (btn) {
+        btn.addEventListener("click", function () {
+          var id = btn.getAttribute("data-id");
+          if (!confirm("Remove VIP from " + id + "? This also removes their Discord VIP role.")) return;
+          btn.disabled = true;
+          btn.textContent = "Removing…";
+          fetchJson("/api/admin/vip-members/" + encodeURIComponent(id), { method: "DELETE" })
+            .then(function () { loadMembers(); });
+        });
+      });
+    }
+
+    function loadMembers() {
+      fetchJson("/api/admin/vip-members").then(function (res) {
+        if (res.ok) renderMembers(res.data.members || {});
+      });
+    }
+
+    document.getElementById("addBtn").addEventListener("click", function () {
+      var idInput = document.getElementById("addDiscordId");
+      var nameInput = document.getElementById("addUsername");
+      var msg = document.getElementById("addMsg");
+      var discordId = idInput.value.trim();
+      if (!discordId) { msg.className = "msg error"; msg.textContent = "Enter a Discord user ID."; return; }
+      var btn = document.getElementById("addBtn");
+      btn.disabled = true;
+      msg.className = "msg"; msg.textContent = "Adding…";
+      fetchJson("/api/admin/vip-members", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ discordId: discordId, username: nameInput.value.trim() }),
+      }).then(function (res) {
+        btn.disabled = false;
+        if (res.ok) {
+          msg.className = "msg success"; msg.textContent = "Added.";
+          idInput.value = ""; nameInput.value = "";
+          loadMembers();
+        } else {
+          msg.className = "msg error"; msg.textContent = "Failed to add — try again.";
+        }
+      });
+    });
+
+    fetch("/api/me", { credentials: "same-origin" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (user) {
+        if (!user) { location.href = "/login"; return; }
+        return fetchJson("/api/admin/me").then(function (res) {
+          if (res.ok && res.data.admin) {
+            document.getElementById("app").style.display = "block";
+            loadMembers();
+          } else {
+            document.getElementById("gate").style.display = "flex";
+            document.getElementById("gateMsg").textContent = "You don't have access to this page.";
+          }
+        });
+      })
+      .catch(function () {
+        document.getElementById("gate").style.display = "flex";
+        document.getElementById("gateMsg").textContent = "Something went wrong — try refreshing.";
+      });
+  </script>
+</body>
+</html>

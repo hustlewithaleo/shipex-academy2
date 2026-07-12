@@ -41,6 +41,7 @@ const {
   WHOP_WEBHOOK_SECRET,
   WHOP_API_KEY,                // optional — enables per-user checkout links with Discord ID metadata
   WHOP_PLAN_ID,
+  ADMIN_DISCORD_IDS,           // optional — comma-separated Discord user IDs allowed on /admin
   PORT = 3000,
   NODE_ENV = "development",
 } = process.env;
@@ -109,6 +110,33 @@ async function joinGuild(accessToken, discordUserId) {
   }
 }
 
+// Discord role granted on VIP purchase. Whop also grants a role natively via
+// its own Discord integration — this is our own bot doing it too, so VIP
+// access on Discord doesn't depend solely on that separate integration.
+const VIP_ROLE_ID = "1518038773990952960";
+async function addVipRole(discordUserId) {
+  if (!DISCORD_BOT_TOKEN || !DISCORD_GUILD_ID) return;
+  const res = await fetch(
+    `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}/roles/${VIP_ROLE_ID}`,
+    { method: "PUT", headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` } }
+  );
+  if (!res.ok && res.status !== 204) {
+    const body = await res.text().catch(() => "");
+    console.error("[discord] failed to add VIP role:", res.status, body);
+  }
+}
+async function removeVipRole(discordUserId) {
+  if (!DISCORD_BOT_TOKEN || !DISCORD_GUILD_ID) return;
+  const res = await fetch(
+    `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/members/${discordUserId}/roles/${VIP_ROLE_ID}`,
+    { method: "DELETE", headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` } }
+  );
+  if (!res.ok && res.status !== 204) {
+    const body = await res.text().catch(() => "");
+    console.error("[discord] failed to remove VIP role:", res.status, body);
+  }
+}
+
 const ANNOUNCE_JOINS = Boolean(DISCORD_BOT_TOKEN && DISCORD_ANNOUNCE_CHANNEL_ID);
 if (DISCORD_BOT_TOKEN && !DISCORD_ANNOUNCE_CHANNEL_ID) {
   console.log("[discord] DISCORD_ANNOUNCE_CHANNEL_ID not set — skipping join announcements.");
@@ -153,6 +181,14 @@ function currentUser(req) {
   } catch {
     return null;
   }
+}
+
+const ADMIN_IDS = new Set(
+  (ADMIN_DISCORD_IDS || "").split(",").map((s) => s.trim()).filter(Boolean)
+);
+function isAdmin(req) {
+  const user = currentUser(req);
+  return Boolean(user && ADMIN_IDS.has(user.id));
 }
 
 // ---- course video: private R2 bucket, unlocked with short-lived signed URLs ----
@@ -206,6 +242,17 @@ async function readVipMembers() {
 async function addVipMember(discordId, extra) {
   const members = await readVipMembers();
   members[discordId] = { at: Date.now(), ...extra };
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: VIP_STORE_KEY,
+    Body: JSON.stringify(members, null, 2),
+    ContentType: "application/json",
+  }));
+  return members;
+}
+async function removeVipMember(discordId) {
+  const members = await readVipMembers();
+  delete members[discordId];
   await s3Client.send(new R2PutObjectCommand({
     Bucket: R2_BUCKET_NAME,
     Key: VIP_STORE_KEY,
@@ -417,6 +464,35 @@ app.get("/api/vip-status", async (req, res) => {
   res.json({ vip: await isVip(user.id) });
 });
 
+/* ---- admin: manage VIP members (view / add / remove), gated to ADMIN_DISCORD_IDS ---- */
+app.get("/api/admin/me", (req, res) => {
+  res.json({ admin: isAdmin(req) });
+});
+
+app.get("/api/admin/vip-members", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  const members = await readVipMembers();
+  res.json({ members });
+});
+
+app.post("/api/admin/vip-members", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  const discordId = String(req.body?.discordId || "").trim();
+  const username = String(req.body?.username || "").trim() || null;
+  if (!discordId) return res.status(400).json({ error: "missing_discord_id" });
+  await addVipMember(discordId, { username, addedBy: currentUser(req).id, manual: true });
+  await addVipRole(discordId);
+  res.json({ ok: true });
+});
+
+app.delete("/api/admin/vip-members/:discordId", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  const discordId = req.params.discordId;
+  await removeVipMember(discordId);
+  await removeVipRole(discordId);
+  res.json({ ok: true });
+});
+
 /* ---- mint a per-user Whop checkout link carrying the buyer's Discord ID as metadata ---- */
 app.get("/api/vip-checkout-url", async (req, res) => {
   const user = currentUser(req);
@@ -523,6 +599,7 @@ app.post("/api/whop-webhook", async (req, res) => {
 
   try {
     await addVipMember(discordId, { whopUserId: data.user?.id || null, username: discordUsername });
+    await addVipRole(discordId);
     if (ANNOUNCE_JOINS) {
       await fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
         method: "POST",
