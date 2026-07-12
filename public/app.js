@@ -22,7 +22,7 @@ var Auth = {
   // Gate a page: run cb(user) if signed in, else redirect to login.
   guard: function (cb) {
     this.me().then(function (user) {
-      if (!user) { location.href = "login.html"; return; }
+      if (!user) { location.href = "login"; return; }
       cb(user);
     });
   },

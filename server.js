@@ -7,9 +7,12 @@
 
    Flow:
      GET  /auth/discord           -> redirect user to Discord
-     GET  /auth/discord/callback  -> exchange code, set cookie, -> /dashboard.html
+     GET  /auth/discord/callback  -> exchange code, set cookie, -> /dashboard
      GET  /api/me                 -> { id, username, avatar } or 401
-     GET  /auth/logout            -> clear cookie, -> /login.html
+     GET  /auth/logout            -> clear cookie, -> /login
+
+   Pages are served without their .html extension (e.g. /dashboard instead
+   of /dashboard.html) — see the two middlewares right below express.static.
 
    Fill in the values in .env (copy from .env.example) before running.
    ============================================================ */
@@ -19,6 +22,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const fs = require("fs");
 const path = require("path");
 
 const {
@@ -45,7 +49,22 @@ for (const [k, v] of Object.entries({
 
 const app = express();
 app.use(cookieParser());
+
+// Canonicalize away the .html extension: /dashboard.html -> /dashboard.
+app.get(/\.html$/, (req, res) => {
+  res.redirect(301, req.path.slice(0, -".html".length) + req.url.slice(req.path.length));
+});
+
 app.use(express.static(path.join(__dirname, "public")));
+
+// Serve pretty URLs: /dashboard -> public/dashboard.html, if that file exists.
+app.get(/^[^.]+$/, (req, res, next) => {
+  const htmlFile = path.join(__dirname, "public", req.path + ".html");
+  fs.access(htmlFile, fs.constants.R_OK, (err) => {
+    if (err) return next();
+    res.sendFile(htmlFile);
+  });
+});
 
 const COOKIE = "shipex_session";
 const isProd = NODE_ENV === "production";
@@ -135,10 +154,10 @@ app.get("/auth/discord", (req, res) => {
 /* ---- 2. Callback: exchange code, fetch profile, set session ---- */
 app.get("/auth/discord/callback", async (req, res) => {
   const { code, state, error } = req.query;
-  if (error) return res.redirect("/login.html?error=" + encodeURIComponent(error));
-  if (!code) return res.redirect("/login.html?error=no_code");
+  if (error) return res.redirect("/login?error=" + encodeURIComponent(error));
+  if (!code) return res.redirect("/login?error=no_code");
   if (!state || state !== req.cookies.oauth_state) {
-    return res.redirect("/login.html?error=bad_state");
+    return res.redirect("/login?error=bad_state");
   }
   res.clearCookie("oauth_state");
 
@@ -184,10 +203,10 @@ app.get("/auth/discord/callback", async (req, res) => {
       await announceJoin(user);
     }
 
-    res.redirect("/dashboard.html");
+    res.redirect("/dashboard");
   } catch (e) {
     console.error("[oauth]", e.message);
-    res.redirect("/login.html?error=oauth_failed");
+    res.redirect("/login?error=oauth_failed");
   }
 });
 
@@ -206,7 +225,7 @@ app.get("/api/me", (req, res) => {
 /* ---- 4. Log out ---- */
 app.get("/auth/logout", (req, res) => {
   res.clearCookie(COOKIE);
-  res.redirect("/login.html");
+  res.redirect("/login");
 });
 
 // Vercel imports this file as a serverless function and calls the exported

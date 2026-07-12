@@ -38,7 +38,16 @@
       "Bash(rm public/server.js public/package.json public/package-lock.json public/README.md)",
       "Bash(git commit -m ' *)",
       "Bash(rm -rf .git)",
-      "Bash(timeout 60 git add -A)"
+      "Bash(timeout 60 git add -A)",
+      "Bash(git ls-remote *)",
+      "Bash(git fetch *)",
+      "Bash(git ls-tree *)",
+      "Bash(git remote *)",
+      "Bash(git merge *)",
+      "Bash(git push *)",
+      "Bash(git branch *)",
+      "Bash(kill %1)",
+      "Bash(timeout 15 git fetch origin)"
     ]
   }
 }

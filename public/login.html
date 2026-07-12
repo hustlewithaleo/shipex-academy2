@@ -1375,7 +1375,7 @@ p {
         <span>Log in with Discord</span>
       </button>
 
-      <p class="auth__alt">New here? <a href="register.html">Create an account</a></p>
+      <p class="auth__alt">New here? <a href="register">Create an account</a></p>
     </div>
   </main>
 
@@ -3692,7 +3692,7 @@ function discordMark() {
 
 </script>
   <script>
-    Auth.me().then(function (user) { if (user) location.href = "dashboard.html"; });
+    Auth.me().then(function (user) { if (user) location.href = "dashboard"; });
     var btn = document.getElementById("discordBtn");
     btn.querySelector(".dc-mark").innerHTML = discordMark();
     btn.addEventListener("click", function () { startDiscordAuth(btn); });

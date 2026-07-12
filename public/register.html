@@ -1392,7 +1392,7 @@ p {
         <span>Continue with Discord</span>
       </button>
 
-      <p class="auth__alt">Already have an account? <a href="login.html">Log in</a></p>
+      <p class="auth__alt">Already have an account? <a href="login">Log in</a></p>
       <p class="auth__fine">By continuing you agree these materials are for educational use. You're responsible for what you do with them.</p>
     </div>
   </main>
@@ -3711,7 +3711,7 @@ function discordMark() {
 </script>
   <script>
     // If already signed in, skip straight to the dashboard.
-    Auth.me().then(function (user) { if (user) location.href = "dashboard.html"; });
+    Auth.me().then(function (user) { if (user) location.href = "dashboard"; });
     var btn = document.getElementById("discordBtn");
     btn.querySelector(".dc-mark").innerHTML = discordMark();
     btn.addEventListener("click", function () { startDiscordAuth(btn); });
