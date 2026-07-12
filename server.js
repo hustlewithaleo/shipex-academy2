@@ -457,10 +457,10 @@ app.get("/api/vip-checkout-url", async (req, res) => {
 app.post("/api/whop-webhook", async (req, res) => {
   if (!WHOP_CONFIGURED) return res.status(503).end();
 
-  // Whop signs webhooks per the Standard Webhooks spec: headers webhook-id /
-  // webhook-timestamp / webhook-signature, signed content "{id}.{timestamp}.{body}",
-  // secret is "ws_"-prefixed + base64, signature is "v1,<base64 hmac>" (space-separated
-  // if there are multiple, e.g. during secret rotation).
+  // Whop signs webhooks with headers webhook-id / webhook-timestamp /
+  // webhook-signature, signed content "{id}.{timestamp}.{body}", HMAC-SHA256
+  // keyed with the literal secret string as-is (no "ws_" stripping, no base64
+  // decoding — confirmed empirically via a real delivery, see commit history).
   const webhookId = req.get("webhook-id");
   const webhookTimestamp = req.get("webhook-timestamp");
   const webhookSignature = req.get("webhook-signature") || "";
@@ -469,12 +469,7 @@ app.post("/api/whop-webhook", async (req, res) => {
     return res.status(401).end();
   }
 
-  const secretB64 = WHOP_WEBHOOK_SECRET.startsWith("whsec_")
-    ? WHOP_WEBHOOK_SECRET.slice(6)
-    : WHOP_WEBHOOK_SECRET.startsWith("ws_")
-    ? WHOP_WEBHOOK_SECRET.slice(3)
-    : WHOP_WEBHOOK_SECRET;
-  const secretBytes = Buffer.from(secretB64, "base64");
+  const secretBytes = Buffer.from(WHOP_WEBHOOK_SECRET, "utf8");
   const signedContent = `${webhookId}.${webhookTimestamp}.${(req.rawBody || Buffer.from("")).toString("utf8")}`;
   const expectedSig = crypto.createHmac("sha256", secretBytes).update(signedContent).digest("base64");
 
@@ -487,49 +482,6 @@ app.post("/api/whop-webhook", async (req, res) => {
     }
   });
   if (!valid) {
-    // TEMP DIAGNOSTIC — try every plausible secret-parsing / signed-content
-    // combination against the real bytes this request actually arrived with,
-    // and log which one (if any) matches what Whop sent. Remove once fixed.
-    try {
-      const rawBodyStr = (req.rawBody || Buffer.from("")).toString("utf8");
-      const rawSecret = WHOP_WEBHOOK_SECRET;
-      const strippedSecret = rawSecret.startsWith("whsec_")
-        ? rawSecret.slice(6)
-        : rawSecret.startsWith("ws_")
-        ? rawSecret.slice(3)
-        : rawSecret;
-      const secretVariants = {
-        strip_b64: Buffer.from(strippedSecret, "base64"),
-        strip_utf8: Buffer.from(strippedSecret, "utf8"),
-        full_utf8: Buffer.from(rawSecret, "utf8"),
-        full_b64: Buffer.from(rawSecret, "base64"),
-      };
-      const contentVariants = {
-        "id.ts.body": `${webhookId}.${webhookTimestamp}.${rawBodyStr}`,
-        "ts.id.body": `${webhookTimestamp}.${webhookId}.${rawBodyStr}`,
-        body_only: rawBodyStr,
-      };
-      const results = {};
-      let foundMatch = null;
-      for (const [sName, sBytes] of Object.entries(secretVariants)) {
-        for (const [cName, content] of Object.entries(contentVariants)) {
-          const sig = crypto.createHmac("sha256", sBytes).update(content).digest("base64");
-          const isMatch = providedSigs.includes(sig);
-          results[`${sName}__${cName}`] = sig;
-          if (isMatch) foundMatch = `${sName}__${cName}`;
-        }
-      }
-      console.error("[whop] DIAGNOSTIC", {
-        webhookId,
-        webhookTimestamp,
-        providedSigs,
-        bodyLength: rawBodyStr.length,
-        foundMatch,
-        candidates: results,
-      });
-    } catch (diagErr) {
-      console.error("[whop] diagnostic failed:", diagErr.message);
-    }
     console.error("[whop] webhook signature mismatch", { webhookId, providedSigs, expectedSig });
     return res.status(401).end();
   }
@@ -537,14 +489,19 @@ app.post("/api/whop-webhook", async (req, res) => {
   const event = req.body || {};
   console.log("[whop] webhook received:", event.action || event.type || "(no action field)");
 
-  const successActions = ["payment.succeeded", "membership.activated", "membership.went_valid", "membership.valid"];
   const action = event.action || event.type;
-  if (!successActions.includes(action)) {
+  const data = event.data || {};
+  // "payment.created" fires for every payment attempt regardless of outcome —
+  // only treat it as a success once it's actually paid.
+  const successActions = ["payment.succeeded", "membership.activated", "membership.went_valid", "membership.valid"];
+  const paymentCreatedAndPaid = action === "payment.created" && (data.status === "paid" || data.substatus === "succeeded");
+  if (!successActions.includes(action) && !paymentCreatedAndPaid) {
     return res.json({ ok: true, ignored: true });
   }
 
-  const data = event.data || {};
-  // Whop's payload shape can vary — check the likely spots for the buyer's Discord ID.
+  // We attach the buyer's Discord ID as checkout metadata ourselves (see
+  // /api/vip-checkout-url) since Whop's own payload has no such field —
+  // that's the reliable path; the rest are speculative fallbacks.
   const discordId =
     data.metadata?.discord_id ||
     data.discord_id ||
@@ -553,6 +510,7 @@ app.post("/api/whop-webhook", async (req, res) => {
     data.user?.social_accounts?.discord?.id ||
     null;
   const discordUsername =
+    data.metadata?.discord_username ||
     data.discord_username ||
     data.user?.discord_username ||
     data.discord?.username ||
