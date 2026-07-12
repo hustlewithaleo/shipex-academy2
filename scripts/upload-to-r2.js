@@ -33,6 +33,7 @@ const COURSE_DIRS = [
   "Impact Team - VIP (High-Ticket Sales System)",
   "Evolve E-Commerce by Spencer Pawliw",
   "AB Inner Circle",
+  "Ai Video Wizards",
 ];
 
 const s3 = new S3Client({
