@@ -1198,7 +1198,23 @@ p {
 .ccard__dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); }
 
 /* category filter pills */
-.cat-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+.cat-filter-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 0 0 24px; }
+.cat-filter { display: flex; flex-wrap: wrap; gap: 8px; }
+.search-box {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
+  min-width: 220px;
+}
+.search-box svg { flex: 0 0 auto; }
+.search-box input {
+  flex: 1; min-width: 0; background: none; border: 0; outline: none;
+  padding: 9px 0; color: #fff; font-size: 14px; font-family: var(--font-body);
+}
+.search-box input::placeholder { color: var(--muted); }
 .cat-pill {
   padding: 7px 14px;
   border-radius: 999px;
@@ -1477,7 +1493,13 @@ p {
 
     <div id="resumeSlot"></div>
 
-    <div class="cat-filter" id="catFilter"></div>
+    <div class="cat-filter-row">
+      <div class="cat-filter" id="catFilter"></div>
+      <div class="search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="courseSearch" placeholder="Search courses..." autocomplete="off">
+      </div>
+    </div>
     <div class="courses" id="courses"></div>
   </main>
 
@@ -8484,6 +8506,11 @@ function userChip(user) {
         var grid = document.getElementById("courses");
         var filterWrap = document.getElementById("catFilter");
         var activeCat = "all";
+        var searchTerm = "";
+        document.getElementById("courseSearch").addEventListener("input", function (e) {
+          searchTerm = e.target.value.trim().toLowerCase();
+          renderGrid();
+        });
 
         function hexToRgba(hex, alpha) {
           var r = parseInt(hex.slice(1, 3), 16);
@@ -8516,8 +8543,13 @@ function userChip(user) {
         function renderGrid() {
           grid.innerHTML = "";
           var list = activeCat === "all" ? COURSES : COURSES.filter(function (c) { return c.category === activeCat; });
+          if (searchTerm) {
+            list = list.filter(function (c) { return c.title.toLowerCase().indexOf(searchTerm) !== -1; });
+          }
           if (!list.length) {
-            grid.innerHTML = '<p style="color:var(--muted-2);font-size:14px;">No courses in this category yet.</p>';
+            grid.innerHTML = '<p style="color:var(--muted-2);font-size:14px;">' +
+              (searchTerm ? "No courses match “" + searchTerm + "”." : "No courses in this category yet.") +
+              '</p>';
             return;
           }
           list.forEach(function (c) {
