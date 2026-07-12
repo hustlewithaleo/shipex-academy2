@@ -275,6 +275,29 @@ app.get("/api/video-url", async (req, res) => {
   }
 });
 
+/* ---- resource downloads (PDFs, worksheets, etc.) — same gate as video ---- */
+app.get("/api/download-url", async (req, res) => {
+  if (!currentUser(req)) return res.status(401).json({ error: "not_authenticated" });
+  if (!VIDEO_STORAGE_CONFIGURED) return res.status(503).json({ error: "video_storage_not_configured" });
+
+  const key = req.query.key;
+  if (!key) return res.status(400).json({ error: "missing_key" });
+  const filename = req.query.name ? String(req.query.name) : path.basename(String(key));
+
+  try {
+    const command = new R2GetObjectCommand({
+      Bucket: R2_BUCKET_NAME,
+      Key: String(key),
+      ResponseContentDisposition: `attachment; filename="${filename.replace(/"/g, "")}"`,
+    });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: VIDEO_URL_TTL_SECONDS });
+    res.json({ url });
+  } catch (e) {
+    console.error("[r2] failed to sign download URL for", key, e.message);
+    res.status(500).json({ error: "sign_failed" });
+  }
+});
+
 /* ---- 4. Log out ---- */
 app.get("/auth/logout", (req, res) => {
   res.clearCookie(COOKIE);
