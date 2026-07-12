@@ -319,6 +319,20 @@ app.get("/api/video-url", async (req, res) => {
   }
 });
 
+/* ---- public homepage preview video: signed URL for one fixed key, no login required ---- */
+const PREVIEW_VIDEO_KEY = "preview1.mp4";
+app.get("/api/preview-video-url", async (req, res) => {
+  if (!VIDEO_STORAGE_CONFIGURED) return res.status(503).json({ error: "video_storage_not_configured" });
+  try {
+    const command = new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: PREVIEW_VIDEO_KEY });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: VIDEO_URL_TTL_SECONDS });
+    res.json({ url });
+  } catch (e) {
+    console.error("[r2] failed to sign URL for preview video", e.message);
+    res.status(500).json({ error: "sign_failed" });
+  }
+});
+
 /* ---- resource downloads (PDFs, worksheets, etc.) — same gate as video ---- */
 app.get("/api/download-url", async (req, res) => {
   if (!currentUser(req)) return res.status(401).json({ error: "not_authenticated" });
