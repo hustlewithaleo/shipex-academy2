@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.local
+
+# course video/resource folders — too large for git, hosted externally instead
+public/HighTicket E-Commerce Course/
+public/Impact Team - VIP (High-Ticket Sales System)/
+public/Zakaria Airakaz - ECOM Masterclass  \[ JUN-2026 \]/
+
+# not part of the deployable app
+private/
+mnt/
+Shipex Academy/
+
+.DS_Store
+Thumbs.db
