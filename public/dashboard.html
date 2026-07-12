@@ -10148,9 +10148,23 @@ function userChip(user) {
 
       // VIP modal
       var vipModal = document.getElementById("vipModal");
-      document.getElementById("vipPurchaseBtn").href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
+      var vipPurchaseBtn = document.getElementById("vipPurchaseBtn");
+      var vipPurchaseBtnLabel = vipPurchaseBtn.textContent;
+      vipPurchaseBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV"; // fallback until the personalized link loads
       document.getElementById("vipPrice").textContent = "$29 / month";
-      function openVipModal() { vipModal.classList.add("open"); }
+      function openVipModal() {
+        vipModal.classList.add("open");
+        vipPurchaseBtn.textContent = "Loading…";
+        // ask the server for a checkout link tagged with this user's Discord ID,
+        // so the purchase webhook can grant VIP to the right person
+        fetch("/api/vip-checkout-url", { credentials: "same-origin" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            if (data && data.url) vipPurchaseBtn.href = data.url;
+          })
+          .catch(function () {})
+          .then(function () { vipPurchaseBtn.textContent = vipPurchaseBtnLabel; });
+      }
       function closeVipModal() { vipModal.classList.remove("open"); }
       document.getElementById("vipModalClose").addEventListener("click", closeVipModal);
       vipModal.addEventListener("click", function (e) { if (e.target === vipModal) closeVipModal(); });

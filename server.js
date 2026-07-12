@@ -39,6 +39,8 @@ const {
   R2_BUCKET_NAME,
   WHOP_CHECKOUT_URL,           // optional — only needed for the VIP purchase flow
   WHOP_WEBHOOK_SECRET,
+  WHOP_API_KEY,                // optional — enables per-user checkout links with Discord ID metadata
+  WHOP_PLAN_ID,
   PORT = 3000,
   NODE_ENV = "development",
 } = process.env;
@@ -179,6 +181,12 @@ const VIDEO_URL_TTL_SECONDS = 4 * 60 * 60; // 4 hours — comfortably covers wat
 const WHOP_CONFIGURED = Boolean(WHOP_CHECKOUT_URL && WHOP_WEBHOOK_SECRET);
 if (!WHOP_CONFIGURED) {
   console.log("[whop] WHOP_CHECKOUT_URL / WHOP_WEBHOOK_SECRET not set — VIP purchase flow is disabled.");
+}
+// Per-user checkout links (so the webhook gets the buyer's Discord ID back as
+// metadata — Whop's own webhook payload doesn't otherwise include it).
+const WHOP_PERSONALIZED_CHECKOUT = Boolean(WHOP_API_KEY && WHOP_PLAN_ID);
+if (!WHOP_PERSONALIZED_CHECKOUT) {
+  console.log("[whop] WHOP_API_KEY / WHOP_PLAN_ID not set — VIP purchase button will use the generic checkout link.");
 }
 const VIP_STORE_KEY = "_vip-members.json";
 let R2PutObjectCommand = null;
@@ -407,6 +415,42 @@ app.get("/api/vip-status", async (req, res) => {
   const user = currentUser(req);
   if (!user) return res.status(401).json({ error: "not_authenticated" });
   res.json({ vip: await isVip(user.id) });
+});
+
+/* ---- mint a per-user Whop checkout link carrying the buyer's Discord ID as metadata ---- */
+app.get("/api/vip-checkout-url", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!WHOP_PERSONALIZED_CHECKOUT) {
+    return res.json({ url: WHOP_CHECKOUT_URL || null });
+  }
+  try {
+    const whopRes = await fetch("https://api.whop.com/api/v1/checkout_configurations", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${WHOP_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        plan_id: WHOP_PLAN_ID,
+        mode: "payment",
+        metadata: { discord_id: user.id, discord_username: user.username },
+      }),
+    });
+    if (!whopRes.ok) {
+      const body = await whopRes.text().catch(() => "");
+      console.error("[whop] failed to create checkout configuration:", whopRes.status, body);
+      return res.json({ url: WHOP_CHECKOUT_URL || null });
+    }
+    const config = await whopRes.json();
+    const purchaseUrl = config.purchase_url && config.purchase_url.startsWith("http")
+      ? config.purchase_url
+      : `https://whop.com${config.purchase_url}`;
+    res.json({ url: purchaseUrl });
+  } catch (e) {
+    console.error("[whop] checkout configuration request failed:", e.message);
+    res.json({ url: WHOP_CHECKOUT_URL || null });
+  }
 });
 
 /* ---- Whop webhook: fires when a VIP purchase completes ---- */
