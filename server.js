@@ -59,6 +59,7 @@ app.get(/\.html$/, (req, res) => {
   res.redirect(301, req.path.slice(0, -".html".length) + req.url.slice(req.path.length));
 });
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Serve pretty URLs: /dashboard -> public/dashboard.html, if that file exists.
@@ -295,6 +296,52 @@ app.get("/api/download-url", async (req, res) => {
   } catch (e) {
     console.error("[r2] failed to sign download URL for", key, e.message);
     res.status(500).json({ error: "sign_failed" });
+  }
+});
+
+/* ---- "request a course" — logged-in users only, posts into your Discord channel ---- */
+const CATEGORY_LABELS = {
+  "ecommerce": "E-Commerce",
+  "ai-automation": "AI & Automation",
+  "affiliate": "Affiliate Marketing",
+  "copywriting": "Sales & Copywriting",
+};
+app.post("/api/request-course", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!ANNOUNCE_JOINS) return res.status(503).json({ error: "announce_channel_not_configured" });
+
+  const name = String(req.body?.name || "").trim().slice(0, 200);
+  const category = String(req.body?.category || "").trim();
+  const price = String(req.body?.price || "").trim().slice(0, 60);
+  if (!name || !price) return res.status(400).json({ error: "missing_fields" });
+
+  const categoryLabel = CATEGORY_LABELS[category] || category || "—";
+
+  try {
+    const r = await fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content:
+          `📚 New course request from <@${user.id}>\n` +
+          `**Name:** ${name}\n` +
+          `**Category:** ${categoryLabel}\n` +
+          `**Price:** ${price}`,
+      }),
+    });
+    if (!r.ok) {
+      const body = await r.text().catch(() => "");
+      console.error("[discord] failed to post course request:", r.status, body);
+      return res.status(502).json({ error: "post_failed" });
+    }
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("[discord] course request error:", e.message);
+    res.status(500).json({ error: "post_failed" });
   }
 });
 
