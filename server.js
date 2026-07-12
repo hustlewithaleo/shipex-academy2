@@ -487,6 +487,49 @@ app.post("/api/whop-webhook", async (req, res) => {
     }
   });
   if (!valid) {
+    // TEMP DIAGNOSTIC — try every plausible secret-parsing / signed-content
+    // combination against the real bytes this request actually arrived with,
+    // and log which one (if any) matches what Whop sent. Remove once fixed.
+    try {
+      const rawBodyStr = (req.rawBody || Buffer.from("")).toString("utf8");
+      const rawSecret = WHOP_WEBHOOK_SECRET;
+      const strippedSecret = rawSecret.startsWith("whsec_")
+        ? rawSecret.slice(6)
+        : rawSecret.startsWith("ws_")
+        ? rawSecret.slice(3)
+        : rawSecret;
+      const secretVariants = {
+        strip_b64: Buffer.from(strippedSecret, "base64"),
+        strip_utf8: Buffer.from(strippedSecret, "utf8"),
+        full_utf8: Buffer.from(rawSecret, "utf8"),
+        full_b64: Buffer.from(rawSecret, "base64"),
+      };
+      const contentVariants = {
+        "id.ts.body": `${webhookId}.${webhookTimestamp}.${rawBodyStr}`,
+        "ts.id.body": `${webhookTimestamp}.${webhookId}.${rawBodyStr}`,
+        body_only: rawBodyStr,
+      };
+      const results = {};
+      let foundMatch = null;
+      for (const [sName, sBytes] of Object.entries(secretVariants)) {
+        for (const [cName, content] of Object.entries(contentVariants)) {
+          const sig = crypto.createHmac("sha256", sBytes).update(content).digest("base64");
+          const isMatch = providedSigs.includes(sig);
+          results[`${sName}__${cName}`] = sig;
+          if (isMatch) foundMatch = `${sName}__${cName}`;
+        }
+      }
+      console.error("[whop] DIAGNOSTIC", {
+        webhookId,
+        webhookTimestamp,
+        providedSigs,
+        bodyLength: rawBodyStr.length,
+        foundMatch,
+        candidates: results,
+      });
+    } catch (diagErr) {
+      console.error("[whop] diagnostic failed:", diagErr.message);
+    }
     console.error("[whop] webhook signature mismatch", { webhookId, providedSigs, expectedSig });
     return res.status(401).end();
   }
