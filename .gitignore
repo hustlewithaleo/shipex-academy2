@@ -1,6 +1,7 @@
 node_modules/
 .env
 .env.local
+.claude/
 
 # course video/resource folders — too large for git, hosted externally instead
 public/HighTicket E-Commerce Course/

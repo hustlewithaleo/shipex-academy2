@@ -33,6 +33,10 @@ const {
   DISCORD_BOT_TOKEN,          // optional — only needed to auto-join members into your server
   DISCORD_GUILD_ID,           // optional — the server (guild) ID to auto-join members into
   DISCORD_ANNOUNCE_CHANNEL_ID, // optional — channel to post "X just joined" messages into
+  R2_ACCOUNT_ID,               // optional — only needed to serve course video from R2
+  R2_ACCESS_KEY_ID,
+  R2_SECRET_ACCESS_KEY,
+  R2_BUCKET_NAME,
   PORT = 3000,
   NODE_ENV = "development",
 } = process.env;
@@ -134,6 +138,37 @@ function setSession(res, user) {
   });
 }
 
+// Reads the session cookie and returns the user, or null if missing/invalid.
+function currentUser(req) {
+  const t = req.cookies[COOKIE];
+  if (!t) return null;
+  try {
+    return jwt.verify(t, SESSION_SECRET);
+  } catch {
+    return null;
+  }
+}
+
+// ---- course video: private R2 bucket, unlocked with short-lived signed URLs ----
+const VIDEO_STORAGE_CONFIGURED = Boolean(R2_ACCOUNT_ID && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY && R2_BUCKET_NAME);
+if (!VIDEO_STORAGE_CONFIGURED) {
+  console.log("[r2] R2 credentials not set in .env — /api/video-url will return 503 until configured.");
+}
+let s3Client = null;
+let R2GetObjectCommand = null;
+let getSignedUrl = null;
+if (VIDEO_STORAGE_CONFIGURED) {
+  const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+  R2GetObjectCommand = GetObjectCommand;
+  getSignedUrl = require("@aws-sdk/s3-request-presigner").getSignedUrl;
+  s3Client = new S3Client({
+    region: "auto",
+    endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    credentials: { accessKeyId: R2_ACCESS_KEY_ID, secretAccessKey: R2_SECRET_ACCESS_KEY },
+  });
+}
+const VIDEO_URL_TTL_SECONDS = 4 * 60 * 60; // 4 hours — comfortably covers watching one lesson
+
 /* ---- 1. Start OAuth: send the user to Discord ---- */
 app.get("/auth/discord", (req, res) => {
   // CSRF protection: random state stored in a short-lived cookie, checked on return.
@@ -219,6 +254,24 @@ app.get("/api/me", (req, res) => {
     res.json({ id: user.id, username: user.username, displayName: user.displayName, avatar: user.avatar });
   } catch {
     res.status(401).json({ error: "invalid_session" });
+  }
+});
+
+/* ---- video: mint a short-lived signed URL for a lesson, logged-in users only ---- */
+app.get("/api/video-url", async (req, res) => {
+  if (!currentUser(req)) return res.status(401).json({ error: "not_authenticated" });
+  if (!VIDEO_STORAGE_CONFIGURED) return res.status(503).json({ error: "video_storage_not_configured" });
+
+  const key = req.query.key;
+  if (!key) return res.status(400).json({ error: "missing_key" });
+
+  try {
+    const command = new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: String(key) });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: VIDEO_URL_TTL_SECONDS });
+    res.json({ url });
+  } catch (e) {
+    console.error("[r2] failed to sign URL for", key, e.message);
+    res.status(500).json({ error: "sign_failed" });
   }
 });
 
