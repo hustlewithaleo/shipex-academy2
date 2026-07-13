@@ -421,6 +421,7 @@ const CATEGORY_LABELS = {
 app.post("/api/request-course", async (req, res) => {
   const user = currentUser(req);
   if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!(await isVip(user.id))) return res.status(403).json({ error: "vip_only" });
   if (!ANNOUNCE_JOINS) return res.status(503).json({ error: "announce_channel_not_configured" });
 
   const name = String(req.body?.name || "").trim().slice(0, 200);

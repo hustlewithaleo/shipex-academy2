@@ -10662,8 +10662,9 @@ function userChip(user) {
             });
             filterWrap.appendChild(pill);
           });
-          var requestPill = el("button", "cat-pill cat-pill--request", "+ Request a course");
-          requestPill.addEventListener("click", openRequestModal);
+          var isVipUser = Boolean(user && user.vip);
+          var requestPill = el("button", "cat-pill cat-pill--request", isVipUser ? "+ Request a course" : "+ Request a course (VIP)");
+          requestPill.addEventListener("click", isVipUser ? openRequestModal : openVipModal);
           filterWrap.appendChild(requestPill);
 
           if (!(user && user.vip)) {
