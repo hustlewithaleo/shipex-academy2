@@ -8696,6 +8696,36 @@ const COURSES = [
     category: "lead-generation",
     price: "$199",
     chapters: [],
+  },
+  {
+    id: "crypto-accelerator",
+    title: "The Crypto Accelerator by Craig Percoco",
+    tagline: "Coming soon — course content is being added.",
+    cover: "./inevitrade.jpg",
+    accent: "#FF4211",
+    category: "finance-trading",
+    price: "$697",
+    chapters: [],
+  },
+  {
+    id: "ultimate-editors-2",
+    title: "Ultimate Editors 2.0 by Joseph Eid",
+    tagline: "Coming soon — course content is being added.",
+    cover: "./ultimateeditors.png",
+    accent: "#FF4211",
+    category: "video-editing",
+    price: "$497",
+    chapters: [],
+  },
+  {
+    id: "viral-content-accelerator",
+    title: "Viral Content Accelerator by One Peak Creative",
+    tagline: "Coming soon — course content is being added.",
+    cover: "./viralcontent.webp",
+    accent: "#FF4211",
+    category: "viral-content",
+    price: "$1650",
+    chapters: [],
   }
 ];
 
