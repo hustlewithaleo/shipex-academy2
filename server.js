@@ -375,7 +375,7 @@ app.get("/api/video-url", async (req, res) => {
 });
 
 /* ---- public homepage preview video: signed URL for one fixed key, no login required ---- */
-const PREVIEW_VIDEO_KEY = "preview1.mp4";
+const PREVIEW_VIDEO_KEY = "preview2.mp4";
 app.get("/api/preview-video-url", async (req, res) => {
   if (!VIDEO_STORAGE_CONFIGURED) return res.status(503).json({ error: "video_storage_not_configured" });
   try {
