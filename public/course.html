@@ -1479,7 +1479,7 @@ p {
 
     <main class="stage">
       <div class="player">
-        <video id="video" controls controlsList="nodownload" playsinline poster="" style="display:none"></video>
+        <video id="video" controls controlsList="nodownload noremoteplayback noplaybackrate" disablePictureInPicture disableRemotePlayback playsinline poster="" style="display:none" oncontextmenu="return false"></video>
         <div class="player__placeholder" id="placeholder">
           <div>
             <div class="player__play">
@@ -10545,6 +10545,14 @@ function userChip(user) {
     /* ---- load a lesson into the stage ---- */
     var video = document.getElementById("video");
     var placeholder = document.getElementById("placeholder");
+
+    // basic anti-download friction — stops casual saving, not a determined user
+    video.addEventListener("dragstart", function (e) { e.preventDefault(); });
+    video.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+    document.addEventListener("keydown", function (e) {
+      var key = (e.key || "").toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && key === "s") e.preventDefault();
+    });
 
     function loadLesson(id) {
       var found = flat[indexOfLesson(id)];
