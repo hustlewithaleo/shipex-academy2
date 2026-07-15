@@ -7,12 +7,12 @@
 
    Flow:
      GET  /auth/discord           -> redirect user to Discord
-     GET  /auth/discord/callback  -> exchange code, set cookie, -> /dashboard
+     GET  /auth/discord/callback  -> exchange code, set cookie, -> /library
      GET  /api/me                 -> { id, username, avatar } or 401
      GET  /auth/logout            -> clear cookie, -> /login
 
-   Pages are served without their .html extension (e.g. /dashboard instead
-   of /dashboard.html) — see the two middlewares right below express.static.
+   Pages are served without their .html extension (e.g. /library instead
+   of /library.html) — see the two middlewares right below express.static.
 
    Fill in the values in .env (copy from .env.example) before running.
    ============================================================ */
@@ -70,7 +70,10 @@ app.get(/\.html$/, (req, res) => {
 app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Serve pretty URLs: /dashboard -> public/dashboard.html, if that file exists.
+// Old bookmarks/links to /dashboard still work — it's now /library.
+app.get("/dashboard", (req, res) => res.redirect(301, "/library"));
+
+// Serve pretty URLs: /library -> public/library.html, if that file exists.
 app.get(/^[^.]+$/, (req, res, next) => {
   const htmlFile = path.join(__dirname, "public", req.path + ".html");
   fs.access(htmlFile, fs.constants.R_OK, (err) => {
@@ -367,7 +370,7 @@ app.get("/auth/discord/callback", async (req, res) => {
       await announceJoin(user);
     }
 
-    res.redirect("/dashboard");
+    res.redirect("/library");
   } catch (e) {
     console.error("[oauth]", e.message);
     res.redirect("/login?error=oauth_failed");

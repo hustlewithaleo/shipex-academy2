@@ -10329,7 +10329,7 @@ function discordMark() {
 </script>
   <script>
     // If already signed in, skip straight to the dashboard.
-    Auth.me().then(function (user) { if (user) location.href = "dashboard"; });
+    Auth.me().then(function (user) { if (user) location.href = "library"; });
     var btn = document.getElementById("discordBtn");
     btn.querySelector(".dc-mark").innerHTML = discordMark();
     btn.addEventListener("click", function () { startDiscordAuth(btn); });
@@ -10371,7 +10371,7 @@ function discordMark() {
           if (res.ok) {
             registerMsg.className = "modal__msg success";
             registerMsg.textContent = "Account created — redirecting…";
-            location.href = "dashboard";
+            location.href = "library";
           } else {
             registerSubmit.disabled = false;
             registerMsg.className = "modal__msg error";

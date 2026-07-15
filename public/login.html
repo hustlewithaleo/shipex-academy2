@@ -10309,7 +10309,7 @@ function discordMark() {
 
 </script>
   <script>
-    Auth.me().then(function (user) { if (user) location.href = "dashboard"; });
+    Auth.me().then(function (user) { if (user) location.href = "library"; });
     var btn = document.getElementById("discordBtn");
     btn.querySelector(".dc-mark").innerHTML = discordMark();
     btn.addEventListener("click", function () { startDiscordAuth(btn); });
@@ -10346,7 +10346,7 @@ function discordMark() {
           if (res.ok) {
             loginMsg.className = "modal__msg success";
             loginMsg.textContent = "Welcome back — redirecting…";
-            location.href = "dashboard";
+            location.href = "library";
           } else {
             loginSubmit.disabled = false;
             loginMsg.className = "modal__msg error";

@@ -1463,7 +1463,7 @@ p {
   <div class="watch">
     <aside class="rail" id="rail">
       <div class="rail__head">
-        <a href="dashboard" class="rail__back">← All courses</a>
+        <a href="library" class="rail__back">← All courses</a>
         <div class="rail__title" id="railTitle"></div>
         <div class="rail__prog">
           <div class="rail__bar"><i id="railBar"></i></div>
@@ -10422,7 +10422,7 @@ function userChip(user) {
       document.getElementById("crumb").textContent = "";
       document.getElementById("lessonTitle").textContent = "Reserved for VIP";
       document.querySelector(".player__note").innerHTML =
-        '<b>VIP only</b> — <a href="/?vip=1" style="color:var(--accent);">upgrade to VIP</a> from the dashboard to unlock this course.';
+        '<b>VIP only</b> — <a href="/?vip=1" style="color:var(--accent);">upgrade to VIP</a> from the library to unlock this course.';
       document.querySelector(".stage__row").style.display = "none";
       document.querySelector(".tabs__nav").style.display = "none";
       document.getElementById("tab-res").classList.remove("active");
