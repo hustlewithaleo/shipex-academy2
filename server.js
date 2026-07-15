@@ -58,6 +58,7 @@ for (const [k, v] of Object.entries({
 }
 
 const app = express();
+app.set("trust proxy", true); // behind Vercel's proxy — needed for req.ip to be the real client IP
 app.use(cookieParser());
 
 // Canonicalize away the .html extension: /dashboard.html -> /dashboard.
@@ -447,6 +448,11 @@ const CATEGORY_LABELS = {
   "ai-automation": "AI & Automation",
   "affiliate": "Affiliate Marketing",
   "copywriting": "Sales & Copywriting",
+  "growth": "Growth",
+  "lead-generation": "Lead Generation",
+  "finance-trading": "Finance & Trading",
+  "video-editing": "Video Editing",
+  "viral-content": "Viral Content",
 };
 app.post("/api/request-course", async (req, res) => {
   const user = currentUser(req);
@@ -686,6 +692,23 @@ app.post("/auth/register", async (req, res) => {
     await writeUsers(users);
 
     setSession(res, { id, username, displayName: username, avatar: null, authProvider: "local" });
+
+    if (ANNOUNCE_JOINS) {
+      const niches = CATEGORY_LABELS[niche] || niche;
+      fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
+        method: "POST",
+        headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content:
+            `📝 **New registration**\n` +
+            `Email: ${email}\n` +
+            `Username: ${username}\n` +
+            `IP: ${req.ip}\n` +
+            `Niche: ${niches}`,
+        }),
+      }).catch((e) => console.error("[discord] registration announcement failed:", e.message));
+    }
+
     res.json({ ok: true });
   } catch (e) {
     console.error("[auth] registration failed:", e.message);
