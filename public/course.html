@@ -10554,6 +10554,44 @@ function userChip(user) {
       if ((e.ctrlKey || e.metaKey) && key === "s") e.preventDefault();
     });
 
+    var videoRefreshTimer = null;
+    function clearVideoRefreshTimer() {
+      if (videoRefreshTimer) { clearTimeout(videoRefreshTimer); videoRefreshTimer = null; }
+    }
+    // Fetches a signed URL for `src` and, once it's close to expiring, quietly
+    // fetches a new one and swaps it in mid-playback (same position, same
+    // play/pause state) so the short TTL never interrupts a real viewer.
+    function fetchVideoUrl(src, forLessonId, isRefresh) {
+      fetch("/api/video-url?key=" + encodeURIComponent(src), { credentials: "same-origin" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (current !== forLessonId) return; // navigated away since this was requested
+          if (!data || !data.url) {
+            if (!isRefresh) { video.style.display = "none"; placeholder.style.display = "grid"; }
+            return;
+          }
+          if (isRefresh) {
+            var resumeAt = video.currentTime;
+            var wasPlaying = !video.paused;
+            video.src = data.url;
+            video.currentTime = resumeAt;
+            if (wasPlaying) video.play().catch(function () {});
+          } else {
+            video.src = data.url;
+          }
+          var ttl = data.expiresIn || 480;
+          clearVideoRefreshTimer();
+          videoRefreshTimer = setTimeout(function () {
+            fetchVideoUrl(src, forLessonId, true);
+          }, Math.max(30, ttl - 60) * 1000);
+        })
+        .catch(function () {
+          if (current !== forLessonId || isRefresh) return;
+          video.style.display = "none";
+          placeholder.style.display = "grid";
+        });
+    }
+
     function loadLesson(id) {
       var found = flat[indexOfLesson(id)];
       var ch = found.chapter, ls = found.lesson;
@@ -10574,20 +10612,11 @@ function userChip(user) {
           if (video.currentTime) Progress.setTime(course.id, ls.id, Math.floor(video.currentTime));
         };
         video.onended = function () { setDone(true); goNext(); };
-        // videos live in a private bucket — ask the server for a short-lived signed URL
-        var requestedFor = ls.id;
-        fetch("/api/video-url?key=" + encodeURIComponent(ls.src), { credentials: "same-origin" })
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (data) {
-            if (ls.id !== requestedFor) return; // user already navigated to a different lesson
-            if (!data || !data.url) { video.style.display = "none"; placeholder.style.display = "grid"; return; }
-            video.src = data.url;
-          })
-          .catch(function () {
-            if (ls.id !== requestedFor) return;
-            video.style.display = "none";
-            placeholder.style.display = "grid";
-          });
+        // videos live in a private bucket behind a short-lived signed URL (so a
+        // copied link stops working within minutes) — transparently re-fetch a
+        // fresh one shortly before it expires, without interrupting playback.
+        clearVideoRefreshTimer();
+        fetchVideoUrl(ls.src, ls.id, false);
       } else {
         video.style.display = "none";
         video.removeAttribute("src");

@@ -214,7 +214,11 @@ if (VIDEO_STORAGE_CONFIGURED) {
     credentials: { accessKeyId: R2_ACCESS_KEY_ID, secretAccessKey: R2_SECRET_ACCESS_KEY },
   });
 }
-const VIDEO_URL_TTL_SECONDS = 4 * 60 * 60; // 4 hours — comfortably covers watching one lesson
+const VIDEO_URL_TTL_SECONDS = 4 * 60 * 60; // 4 hours — for resource/preview downloads, fine to be long-lived
+// Lesson videos get a much shorter-lived URL — a leaked/copied link is only
+// useful for a few minutes. The player transparently re-fetches a fresh one
+// before this expires, so real viewers never notice.
+const LESSON_VIDEO_URL_TTL_SECONDS = 8 * 60; // 8 minutes
 
 // ---- VIP membership (Whop) ----
 // No database here, so VIP membership is tracked as a small JSON file sitting
@@ -400,8 +404,8 @@ app.get("/api/video-url", async (req, res) => {
 
   try {
     const command = new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: String(key) });
-    const url = await getSignedUrl(s3Client, command, { expiresIn: VIDEO_URL_TTL_SECONDS });
-    res.json({ url });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: LESSON_VIDEO_URL_TTL_SECONDS });
+    res.json({ url, expiresIn: LESSON_VIDEO_URL_TTL_SECONDS });
   } catch (e) {
     console.error("[r2] failed to sign URL for", key, e.message);
     res.status(500).json({ error: "sign_failed" });
