@@ -1140,6 +1140,21 @@ p {
 }
 .auth__perks { text-align: left; margin: 0 auto; max-width: 300px; display: grid; gap: 10px; }
 .auth__perk { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--muted-2); }
+.auth__form { text-align: left; }
+.modal__field { margin-bottom: 14px; }
+.modal__label { display: block; font-size: 13px; color: var(--muted-2); margin-bottom: 6px; }
+.modal__input, .modal__select {
+  width: 100%; padding: 11px 13px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  color: #fff; font-size: 14px; font-family: var(--font-body);
+  transition: border-color .15s;
+}
+.modal__input:focus, .modal__select:focus { outline: none; border-color: var(--accent-dim); }
+.modal__msg { font-size: 13px; margin-top: 4px; min-height: 18px; }
+.modal__msg.error { color: #ff6b5c; }
+.modal__msg.success { color: #22C55E; }
+.modal__submit { width: 100%; margin-top: 6px; justify-content: center; }
+.modal__submit:disabled { opacity: 0.6; cursor: default; }
 .auth__perk svg { flex: 0 0 auto; margin-top: 3px; color: var(--accent); }
 
 /* ---------- dashboard ---------- */
@@ -1379,12 +1394,27 @@ p {
         SHIPEX<span style="color:#FF4211;margin:0 -6px;">.</span>ACADEMY
       </a>
       <h1>Welcome back</h1>
-      <p class="auth__sub">Log in with the Discord account you joined with.</p>
+      <p class="auth__sub">Log in with Discord, or your email and password.</p>
 
       <button class="btn--discord" id="discordBtn">
         <span class="dc-mark"></span>
         <span>Log in with Discord</span>
       </button>
+
+      <div class="auth__divider">or</div>
+
+      <form class="auth__form" id="loginForm" novalidate>
+        <div class="modal__field">
+          <label class="modal__label" for="loginIdentifier">Email or username</label>
+          <input class="modal__input" type="text" id="loginIdentifier" autocomplete="username" required>
+        </div>
+        <div class="modal__field">
+          <label class="modal__label" for="loginPassword">Password</label>
+          <input class="modal__input" type="password" id="loginPassword" autocomplete="current-password" required>
+        </div>
+        <div class="modal__msg" id="loginMsg"></div>
+        <button type="submit" class="btn btn--accent modal__submit" id="loginSubmit">Log in</button>
+      </form>
 
       <p class="auth__alt">New here? <a href="register">Create an account</a></p>
     </div>
@@ -10283,6 +10313,52 @@ function discordMark() {
     var btn = document.getElementById("discordBtn");
     btn.querySelector(".dc-mark").innerHTML = discordMark();
     btn.addEventListener("click", function () { startDiscordAuth(btn); });
+
+    var loginMsg = document.getElementById("loginMsg");
+    var loginSubmit = document.getElementById("loginSubmit");
+    var LOGIN_ERRORS = {
+      missing_fields: "Enter your email/username and password.",
+      invalid_credentials: "That email/username or password is wrong.",
+      account_storage_not_configured: "Login isn't available right now — try Discord instead.",
+    };
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var payload = {
+        identifier: document.getElementById("loginIdentifier").value.trim(),
+        password: document.getElementById("loginPassword").value,
+      };
+      if (!payload.identifier || !payload.password) {
+        loginMsg.className = "modal__msg error";
+        loginMsg.textContent = "Enter your email/username and password.";
+        return;
+      }
+      loginSubmit.disabled = true;
+      loginMsg.className = "modal__msg";
+      loginMsg.textContent = "Logging in…";
+      fetch("/auth/login", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+        .then(function (res) {
+          if (res.ok) {
+            loginMsg.className = "modal__msg success";
+            loginMsg.textContent = "Welcome back — redirecting…";
+            location.href = "dashboard";
+          } else {
+            loginSubmit.disabled = false;
+            loginMsg.className = "modal__msg error";
+            loginMsg.textContent = LOGIN_ERRORS[res.data.error] || "Something went wrong — try again.";
+          }
+        })
+        .catch(function () {
+          loginSubmit.disabled = false;
+          loginMsg.className = "modal__msg error";
+          loginMsg.textContent = "Something went wrong — try again.";
+        });
+    });
   </script>
 </body>
 </html>

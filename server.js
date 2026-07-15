@@ -21,6 +21,7 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
@@ -265,6 +266,35 @@ async function isVip(discordId) {
   if (!discordId) return false;
   const members = await readVipMembers();
   return Boolean(members[discordId]);
+}
+
+// ---- local (email/username/password) accounts ----
+// Same "JSON file in the R2 bucket" pattern as VIP members — no real
+// database here either.
+const USERS_STORE_KEY = "_users.json";
+async function readUsers() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: USERS_STORE_KEY }));
+    const text = await res.Body.transformToString();
+    return JSON.parse(text);
+  } catch (e) {
+    return {};
+  }
+}
+async function writeUsers(users) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: USERS_STORE_KEY,
+    Body: JSON.stringify(users, null, 2),
+    ContentType: "application/json",
+  }));
+}
+function findUserByEmailOrUsername(users, identifier) {
+  const needle = String(identifier || "").trim().toLowerCase();
+  return Object.values(users).find(
+    (u) => u.email.toLowerCase() === needle || u.username.toLowerCase() === needle
+  );
 }
 
 /* ---- 1. Start OAuth: send the user to Discord ---- */
@@ -598,20 +628,91 @@ app.post("/api/whop-webhook", async (req, res) => {
     return res.status(200).json({ ok: true, warning: "no_discord_id" });
   }
 
+  // metadata.discord_id comes from whoever was logged in at checkout — local
+  // (email/password) accounts don't have a real Discord ID, so skip the
+  // Discord-side effects for those rather than pinging a bogus mention.
+  const looksLikeDiscordId = /^\d{17,20}$/.test(discordId);
+
   try {
     await addVipMember(discordId, { whopUserId: data.user?.id || null, username: discordUsername });
-    await addVipRole(discordId);
-    if (ANNOUNCE_JOINS) {
-      await fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
-        method: "POST",
-        headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ content: `💎 <@${discordId}> just purchased **VIP**! Welcome to the inner circle.` }),
-      });
+    if (looksLikeDiscordId) {
+      await addVipRole(discordId);
+      if (ANNOUNCE_JOINS) {
+        await fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
+          method: "POST",
+          headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ content: `💎 <@${discordId}> just purchased **VIP**! Welcome to the inner circle.` }),
+        });
+      }
     }
     res.json({ ok: true });
   } catch (e) {
     console.error("[whop] failed to record VIP membership:", e.message);
     res.status(500).json({ error: "vip_store_failed" });
+  }
+});
+
+/* ---- Local accounts: email/username/password, parallel to Discord login ---- */
+app.post("/auth/register", async (req, res) => {
+  if (!s3Client) return res.status(503).json({ error: "account_storage_not_configured" });
+
+  const email = String(req.body?.email || "").trim().toLowerCase();
+  const username = String(req.body?.username || "").trim();
+  const password = String(req.body?.password || "");
+  const niche = String(req.body?.niche || "").trim().slice(0, 60);
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: "invalid_email" });
+  }
+  if (username.length < 3 || username.length > 32) {
+    return res.status(400).json({ error: "invalid_username" });
+  }
+  if (password.length < 8) {
+    return res.status(400).json({ error: "weak_password" });
+  }
+  if (!niche) {
+    return res.status(400).json({ error: "missing_niche" });
+  }
+
+  try {
+    const users = await readUsers();
+    if (findUserByEmailOrUsername(users, email) || findUserByEmailOrUsername(users, username)) {
+      return res.status(409).json({ error: "already_exists" });
+    }
+
+    const id = "local_" + crypto.randomBytes(12).toString("hex");
+    const passwordHash = await bcrypt.hash(password, 10);
+    users[id] = { id, email, username, passwordHash, niche, createdAt: Date.now() };
+    await writeUsers(users);
+
+    setSession(res, { id, username, displayName: username, avatar: null, authProvider: "local" });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("[auth] registration failed:", e.message);
+    res.status(500).json({ error: "registration_failed" });
+  }
+});
+
+app.post("/auth/login", async (req, res) => {
+  if (!s3Client) return res.status(503).json({ error: "account_storage_not_configured" });
+
+  const identifier = String(req.body?.identifier || "").trim();
+  const password = String(req.body?.password || "");
+  if (!identifier || !password) return res.status(400).json({ error: "missing_fields" });
+
+  try {
+    const users = await readUsers();
+    const user = findUserByEmailOrUsername(users, identifier);
+    if (!user) return res.status(401).json({ error: "invalid_credentials" });
+
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) return res.status(401).json({ error: "invalid_credentials" });
+
+    setSession(res, { id: user.id, username: user.username, displayName: user.username, avatar: null, authProvider: "local" });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("[auth] login failed:", e.message);
+    res.status(500).json({ error: "login_failed" });
   }
 });
 

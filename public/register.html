@@ -1138,9 +1138,23 @@ p {
 .auth__divider::before, .auth__divider::after {
   content: ""; flex: 1; height: 1px; background: var(--border-soft);
 }
-.auth__perks { text-align: left; margin: 0 auto; max-width: 300px; display: grid; gap: 10px; }
-.auth__perk { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--muted-2); }
-.auth__perk svg { flex: 0 0 auto; margin-top: 3px; color: var(--accent); }
+.auth__form { text-align: left; }
+.modal__field { margin-bottom: 14px; }
+.modal__label { display: block; font-size: 13px; color: var(--muted-2); margin-bottom: 6px; }
+.modal__input, .modal__select {
+  width: 100%; padding: 11px 13px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  color: #fff; font-size: 14px; font-family: var(--font-body);
+  transition: border-color .15s;
+}
+.modal__input:focus, .modal__select:focus { outline: none; border-color: var(--accent-dim); }
+.modal__select { appearance: none; cursor: pointer; }
+.modal__select option { background: #14140f; color: #fff; }
+.modal__msg { font-size: 13px; margin-top: 4px; min-height: 18px; }
+.modal__msg.error { color: #ff6b5c; }
+.modal__msg.success { color: #22C55E; }
+.modal__submit { width: 100%; margin-top: 6px; justify-content: center; }
+.modal__submit:disabled { opacity: 0.6; cursor: default; }
 
 /* ---------- dashboard ---------- */
 .dash { padding: 40px 24px 96px; max-width: 1180px; margin: 0 auto; }
@@ -1379,29 +1393,46 @@ p {
         SHIPEX<span style="color:#FF4211;margin:0 -6px;">.</span>ACADEMY
       </a>
       <h1>Create your account</h1>
-      <p class="auth__sub">Connect Discord once and the whole academy unlocks — free, permanently.</p>
-
-      <div class="auth__perks">
-        <div class="auth__perk">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Every masterclass, watchable on-site</span>
-        </div>
-        <div class="auth__perk">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Templates &amp; scripts attached to each lesson</span>
-        </div>
-        <div class="auth__perk">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Picks up right where you left off</span>
-        </div>
-      </div>
-
-      <div class="auth__divider">then</div>
+      <p class="auth__sub">Free, permanent access — pick how you want to sign up.</p>
 
       <button class="btn--discord" id="discordBtn">
         <span class="dc-mark"></span>
         <span>Continue with Discord</span>
       </button>
+
+      <div class="auth__divider">or</div>
+
+      <form class="auth__form" id="registerForm" novalidate>
+        <div class="modal__field">
+          <label class="modal__label" for="regEmail">Email</label>
+          <input class="modal__input" type="email" id="regEmail" autocomplete="email" required>
+        </div>
+        <div class="modal__field">
+          <label class="modal__label" for="regUsername">Username</label>
+          <input class="modal__input" type="text" id="regUsername" autocomplete="username" required>
+        </div>
+        <div class="modal__field">
+          <label class="modal__label" for="regPassword">Password</label>
+          <input class="modal__input" type="password" id="regPassword" autocomplete="new-password" required>
+        </div>
+        <div class="modal__field">
+          <label class="modal__label" for="regNiche">What niche are you interested in?</label>
+          <select class="modal__select" id="regNiche" required>
+            <option value="">Select one…</option>
+            <option value="ecommerce">E-Commerce</option>
+            <option value="ai-automation">AI &amp; Automation</option>
+            <option value="affiliate">Affiliate Marketing</option>
+            <option value="copywriting">Sales &amp; Copywriting</option>
+            <option value="growth">Growth</option>
+            <option value="lead-generation">Lead Generation</option>
+            <option value="finance-trading">Finance &amp; Trading</option>
+            <option value="video-editing">Video Editing</option>
+            <option value="viral-content">Viral Content</option>
+          </select>
+        </div>
+        <div class="modal__msg" id="registerMsg"></div>
+        <button type="submit" class="btn btn--accent modal__submit" id="registerSubmit">Create account</button>
+      </form>
 
       <p class="auth__alt">Already have an account? <a href="login">Log in</a></p>
       <p class="auth__fine">By continuing you agree these materials are for educational use. You're responsible for what you do with them.</p>
@@ -10302,6 +10333,57 @@ function discordMark() {
     var btn = document.getElementById("discordBtn");
     btn.querySelector(".dc-mark").innerHTML = discordMark();
     btn.addEventListener("click", function () { startDiscordAuth(btn); });
+
+    var registerMsg = document.getElementById("registerMsg");
+    var registerSubmit = document.getElementById("registerSubmit");
+    var REGISTER_ERRORS = {
+      invalid_email: "Enter a valid email address.",
+      invalid_username: "Username must be 3–32 characters.",
+      weak_password: "Password must be at least 8 characters.",
+      missing_niche: "Pick a niche you're interested in.",
+      already_exists: "That email or username is already taken.",
+      account_storage_not_configured: "Sign-ups aren't available right now — try Discord instead.",
+    };
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var payload = {
+        email: document.getElementById("regEmail").value.trim(),
+        username: document.getElementById("regUsername").value.trim(),
+        password: document.getElementById("regPassword").value,
+        niche: document.getElementById("regNiche").value,
+      };
+      if (!payload.email || !payload.username || !payload.password || !payload.niche) {
+        registerMsg.className = "modal__msg error";
+        registerMsg.textContent = "Fill in every field.";
+        return;
+      }
+      registerSubmit.disabled = true;
+      registerMsg.className = "modal__msg";
+      registerMsg.textContent = "Creating your account…";
+      fetch("/auth/register", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+        .then(function (res) {
+          if (res.ok) {
+            registerMsg.className = "modal__msg success";
+            registerMsg.textContent = "Account created — redirecting…";
+            location.href = "dashboard";
+          } else {
+            registerSubmit.disabled = false;
+            registerMsg.className = "modal__msg error";
+            registerMsg.textContent = REGISTER_ERRORS[res.data.error] || "Something went wrong — try again.";
+          }
+        })
+        .catch(function () {
+          registerSubmit.disabled = false;
+          registerMsg.className = "modal__msg error";
+          registerMsg.textContent = "Something went wrong — try again.";
+        });
+    });
   </script>
 </body>
 </html>
