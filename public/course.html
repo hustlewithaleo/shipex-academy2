@@ -1229,7 +1229,18 @@ p {
   overflow-y: auto;
   max-height: calc(100vh - 64px);
   position: sticky; top: 64px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-dim) transparent;
 }
+.rail::-webkit-scrollbar { width: 8px; }
+.rail::-webkit-scrollbar-track { background: transparent; }
+.rail::-webkit-scrollbar-thumb {
+  background: rgba(255, 66, 17, 0.35);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.rail::-webkit-scrollbar-thumb:hover { background: rgba(255, 66, 17, 0.55); background-clip: padding-box; }
 .rail__head { padding: 22px 20px 16px; border-bottom: 1px solid var(--border-soft); }
 .rail__back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); margin-bottom: 14px; }
 .rail__back:hover { color: #fff; }
@@ -1238,6 +1249,20 @@ p {
 .rail__bar { height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .rail__bar i { display: block; height: 100%; background: var(--accent); transition: width .3s; }
 .rail__pct { font-size: 12px; color: var(--muted); margin-top: 7px; }
+.rail__search {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 12px; margin-top: 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
+}
+.rail__search svg { flex: 0 0 auto; }
+.rail__search input {
+  flex: 1; min-width: 0; background: none; border: 0; outline: none;
+  padding: 8px 0; color: #fff; font-size: 13px; font-family: var(--font-body);
+}
+.rail__search input::placeholder { color: var(--muted); }
 
 .chap { border-bottom: 1px solid var(--border-soft); }
 .chap__sum {
@@ -1443,6 +1468,10 @@ p {
         <div class="rail__prog">
           <div class="rail__bar"><i id="railBar"></i></div>
           <div class="rail__pct" id="railPct"></div>
+        </div>
+        <div class="rail__search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="railSearch" placeholder="Search lessons..." autocomplete="off">
         </div>
       </div>
       <div id="chapters"></div>
@@ -10423,10 +10452,21 @@ function userChip(user) {
     }
 
     /* ---- build chapter rail ---- */
+    var railSearchTerm = "";
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
     function buildRail() {
       var wrap = document.getElementById("chapters");
       wrap.innerHTML = "";
       var prog = Progress.forCourse(course.id);
+      var term = railSearchTerm.trim().toLowerCase();
+      var anyMatch = false;
+
+      function matches(ls) { return !term || ls.title.toLowerCase().indexOf(term) !== -1; }
 
       function buildLessonRow(ls) {
         var row = el("button", "lrow" + (ls.id === current ? " active" : "") + (prog.done[ls.id] ? " done" : ""));
@@ -10440,18 +10480,26 @@ function userChip(user) {
 
       // renders a node's own lessons (if any) and its child sections (if any) into container.
       // depth 0 = a chapter's direct content, depth 1+ = nested sections at any further depth.
+      // returns true if anything matching the current search term was rendered.
       function buildNodeContent(node, container, depth) {
+        var rendered = false;
         if (node.lessons) {
-          var list = el("div", depth === 0 ? "chap__list" : "chap__section-list");
-          node.lessons.forEach(function (ls) { list.appendChild(buildLessonRow(ls)); });
-          container.appendChild(list);
+          var visibleLessons = node.lessons.filter(matches);
+          if (visibleLessons.length) {
+            var list = el("div", depth === 0 ? "chap__list" : "chap__section-list");
+            visibleLessons.forEach(function (ls) { list.appendChild(buildLessonRow(ls)); });
+            container.appendChild(list);
+            rendered = true;
+          }
         }
         if (node.sections) {
           var wrap = el("div", depth === 0 ? "chap__sections" : "chap__subsections");
+          var anyChild = false;
           node.sections.forEach(function (child) {
             var childLessons = chapterLessons(child);
+            if (term && !childLessons.some(matches)) return; // no matches anywhere in this section — skip it
             var hasCur = childLessons.some(function (l) { return l.id === current; });
-            var childEl = el("div", (depth === 0 ? "chap__section" : "chap__subsection") + (hasCur ? " open" : ""));
+            var childEl = el("div", (depth === 0 ? "chap__section" : "chap__subsection") + ((hasCur || term) ? " open" : ""));
             var sum = el("button", depth === 0 ? "chap__section-title" : "chap__subsection-title");
             sum.innerHTML =
               '<span>' + child.title + ' <span class="chap__count">· ' + childLessons.length + '</span></span>' +
@@ -10460,15 +10508,18 @@ function userChip(user) {
             childEl.appendChild(sum);
             buildNodeContent(child, childEl, depth + 1);
             wrap.appendChild(childEl);
+            anyChild = true;
           });
-          container.appendChild(wrap);
+          if (anyChild) { container.appendChild(wrap); rendered = true; }
         }
+        return rendered;
       }
 
       course.chapters.forEach(function (ch, chIdx) {
         var chLessons = chapterLessons(ch);
+        if (term && !chLessons.some(matches)) return; // no matches anywhere in this chapter — skip it
         var hasCurrent = chLessons.some(function (l) { return l.id === current; });
-        var chEl = el("div", "chap" + (hasCurrent ? " open" : ""));
+        var chEl = el("div", "chap" + ((hasCurrent || term) ? " open" : ""));
         var sum = el("button", "chap__sum");
         sum.innerHTML =
           '<span>' + (chIdx + 1) + '. ' + ch.title + ' <span class="chap__count">· ' + chLessons.length + '</span></span>' +
@@ -10478,7 +10529,13 @@ function userChip(user) {
 
         buildNodeContent(ch, chEl, 0);
         wrap.appendChild(chEl);
+        anyMatch = true;
       });
+
+      if (term && !anyMatch) {
+        wrap.innerHTML = '<p style="padding:16px 20px;color:var(--muted-2);font-size:13px;">No lessons match “' + escapeHtml(railSearchTerm.trim()) + '”.</p>';
+      }
+
       // progress bar
       var pct = Progress.percent(course);
       document.getElementById("railBar").style.width = pct + "%";
@@ -10618,6 +10675,11 @@ function userChip(user) {
         b.classList.add("active");
         document.getElementById("tab-" + b.dataset.tab).classList.add("active");
       });
+    });
+
+    document.getElementById("railSearch").addEventListener("input", function (e) {
+      railSearchTerm = e.target.value;
+      buildRail();
     });
 
     // init
