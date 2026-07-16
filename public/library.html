@@ -1635,6 +1635,19 @@ p {
     </div>
   </div>
 
+  <div class="modal-overlay" id="discordModal">
+    <div class="modal">
+      <div class="modal__head">
+        <div class="modal__title">Join our Discord community</div>
+        <button class="modal__close" id="discordModalClose" type="button" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <p class="vip-modal__intro">Get support, swap wins, and hear about new courses first — the community's over on Discord.</p>
+      <a class="btn btn--discord modal__submit" href="https://discord.gg/shipex" target="_blank" rel="noopener">Join the server</a>
+    </div>
+  </div>
+
   <script>
 /* ============================================================
    COURSE DATA — single source of truth
@@ -10617,6 +10630,14 @@ function userChip(user) {
       document.getElementById("vipModalClose").addEventListener("click", closeVipModal);
       vipModal.addEventListener("click", function (e) { if (e.target === vipModal) closeVipModal(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape" && vipModal.classList.contains("open")) closeVipModal(); });
+
+      // "join our Discord" modal — opens automatically whenever the library loads
+      var discordModal = document.getElementById("discordModal");
+      function closeDiscordModal() { discordModal.classList.remove("open"); }
+      document.getElementById("discordModalClose").addEventListener("click", closeDiscordModal);
+      discordModal.addEventListener("click", function (e) { if (e.target === discordModal) closeDiscordModal(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && discordModal.classList.contains("open")) closeDiscordModal(); });
+      discordModal.classList.add("open");
 
       reqForm.addEventListener("submit", function (e) {
         e.preventDefault();
