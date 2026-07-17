@@ -367,6 +367,47 @@ async function writeCourseStats(stats) {
   }));
 }
 
+// ---- daily watch-time limit for non-VIP users ----
+const DAILY_WATCH_LIMIT_SECONDS = 60 * 60; // 1 hour/day
+const DAILY_WATCH_KEY = "_daily-watch.json";
+function todayUTC() {
+  return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+}
+async function readDailyWatch() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: DAILY_WATCH_KEY }));
+    return JSON.parse(await res.Body.transformToString());
+  } catch (e) {
+    return {};
+  }
+}
+async function writeDailyWatch(obj) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: DAILY_WATCH_KEY,
+    Body: JSON.stringify(obj, null, 2),
+    ContentType: "application/json",
+  }));
+}
+// Adds `seconds` to today's watched total for `userId` (resetting the
+// counter if the stored date isn't today) and returns the seconds left.
+async function addDailyWatchSeconds(userId, seconds) {
+  const all = await readDailyWatch();
+  const today = todayUTC();
+  const entry = all[userId] && all[userId].date === today ? all[userId] : { date: today, seconds: 0 };
+  entry.seconds += seconds;
+  all[userId] = entry;
+  await writeDailyWatch(all);
+  return Math.max(0, DAILY_WATCH_LIMIT_SECONDS - entry.seconds);
+}
+async function getDailyWatchRemaining(userId) {
+  const all = await readDailyWatch();
+  const entry = all[userId];
+  if (!entry || entry.date !== todayUTC()) return DAILY_WATCH_LIMIT_SECONDS;
+  return Math.max(0, DAILY_WATCH_LIMIT_SECONDS - entry.seconds);
+}
+
 // ---- affiliate program ----
 // Tiered commission on VIP payments made by someone's referrals:
 //   1-10 referrals  -> 20%
@@ -755,12 +796,31 @@ app.post("/api/track-progress", async (req, res) => {
     if (!s.viewerIds.includes(user.id)) s.viewerIds.push(user.id);
     stats[courseId] = s;
 
-    await Promise.all([writeMembers(members), writeCourseStats(stats)]);
-    res.json({ ok: true });
+    const writes = [writeMembers(members), writeCourseStats(stats)];
+
+    // non-VIP users are capped at DAILY_WATCH_LIMIT_SECONDS of playback per
+    // day — VIP members are exempt and never touch this store.
+    let dailyRemainingSeconds = null;
+    if (!(await isVip(user.id))) {
+      dailyRemainingSeconds = await addDailyWatchSeconds(user.id, seconds);
+    }
+
+    await Promise.all(writes);
+    res.json({ ok: true, dailyRemainingSeconds });
   } catch (e) {
     console.error("[track] failed:", e.message);
     res.status(500).json({ error: "track_failed" });
   }
+});
+
+/* ---- daily watch-time limit: how much is left today for this user ---- */
+app.get("/api/daily-watch-status", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+
+  const vip = await isVip(user.id);
+  const remainingSeconds = vip ? DAILY_WATCH_LIMIT_SECONDS : await getDailyWatchRemaining(user.id);
+  res.json({ vip, limitSeconds: DAILY_WATCH_LIMIT_SECONDS, remainingSeconds });
 });
 
 /* ---- likes: toggle a like on a course ---- */
