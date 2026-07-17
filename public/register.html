@@ -10348,6 +10348,13 @@ function discordMark() {
 
 </script>
   <script>
+    // capture an affiliate referral code, if present, so it survives through
+    // registration (including a Discord OAuth round-trip)
+    (function () {
+      var ref = new URLSearchParams(location.search).get("ref");
+      if (ref) document.cookie = "ref_code=" + encodeURIComponent(ref) + "; path=/; max-age=" + (30 * 24 * 60 * 60);
+    })();
+
     // If already signed in, skip straight to the dashboard.
     Auth.me().then(function (user) { if (user) location.href = "library"; });
     var btn = document.getElementById("discordBtn");

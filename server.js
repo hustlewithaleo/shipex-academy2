@@ -367,6 +367,123 @@ async function writeCourseStats(stats) {
   }));
 }
 
+// ---- affiliate program ----
+// Tiered commission on VIP payments made by someone's referrals:
+//   1-10 referrals  -> 20%
+//   11 referrals    -> 30%
+//   12+ referrals   -> 40% (max)
+// The rate is based on the referrer's CURRENT total referral count, so it
+// applies to every future payment (including from earlier referrals) once
+// they level up — not locked in per-referral.
+function affiliateCommissionRate(referralCount) {
+  if (referralCount >= 12) return 0.40;
+  if (referralCount === 11) return 0.30;
+  return 0.20;
+}
+
+const AFFILIATE_LINKS_KEY = "_affiliate-links.json";
+async function readAffiliateLinks() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: AFFILIATE_LINKS_KEY }));
+    return JSON.parse(await res.Body.transformToString());
+  } catch (e) {
+    return {};
+  }
+}
+async function writeAffiliateLinks(links) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME, Key: AFFILIATE_LINKS_KEY,
+    Body: JSON.stringify(links, null, 2), ContentType: "application/json",
+  }));
+}
+
+const REFERRALS_KEY = "_referrals.json";
+async function readReferrals() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: REFERRALS_KEY }));
+    return JSON.parse(await res.Body.transformToString());
+  } catch (e) {
+    return {};
+  }
+}
+async function writeReferrals(referrals) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME, Key: REFERRALS_KEY,
+    Body: JSON.stringify(referrals, null, 2), ContentType: "application/json",
+  }));
+}
+
+const AFFILIATE_ACCOUNTS_KEY = "_affiliate-accounts.json";
+async function readAffiliateAccounts() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: AFFILIATE_ACCOUNTS_KEY }));
+    return JSON.parse(await res.Body.transformToString());
+  } catch (e) {
+    return {};
+  }
+}
+async function writeAffiliateAccounts(accounts) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME, Key: AFFILIATE_ACCOUNTS_KEY,
+    Body: JSON.stringify(accounts, null, 2), ContentType: "application/json",
+  }));
+}
+function ensureAffiliateAccount(accounts, userId) {
+  if (!accounts[userId]) {
+    accounts[userId] = { balance: 0, totalEarned: 0, referralCount: 0, payoutRequests: [] };
+  }
+  return accounts[userId];
+}
+
+// Credits a referrer's account when their referral makes a VIP payment.
+// amount is the raw payment amount in dollars (e.g. 29 for a $29 charge).
+async function creditAffiliateCommission(paidUserId, amount) {
+  if (!s3Client || !amount) return;
+  try {
+    const [referrals, accounts] = await Promise.all([readReferrals(), readAffiliateAccounts()]);
+    const referral = referrals[paidUserId];
+    if (!referral) return; // this user wasn't referred by anyone
+
+    const account = ensureAffiliateAccount(accounts, referral.referrerId);
+    const rate = affiliateCommissionRate(account.referralCount);
+    const commission = Math.round(amount * rate * 100) / 100;
+
+    account.balance = Math.round((account.balance + commission) * 100) / 100;
+    account.totalEarned = Math.round((account.totalEarned + commission) * 100) / 100;
+    referral.totalEarned = Math.round(((referral.totalEarned || 0) + commission) * 100) / 100;
+    referral.lastPaymentAt = Date.now();
+
+    await Promise.all([writeReferrals(referrals), writeAffiliateAccounts(accounts)]);
+  } catch (e) {
+    console.error("[affiliate] commission credit failed:", e.message);
+  }
+}
+
+// Records a brand-new referral (called once, at registration time only).
+async function recordReferral(referredUserId, code) {
+  if (!s3Client || !code) return;
+  try {
+    const [links, referrals, accounts] = await Promise.all([readAffiliateLinks(), readReferrals(), readAffiliateAccounts()]);
+    const link = links[code];
+    if (!link) return; // unknown/invalid code
+    if (link.ownerId === referredUserId) return; // no self-referrals
+    if (referrals[referredUserId]) return; // already has a referrer, first one wins
+
+    referrals[referredUserId] = {
+      referrerId: link.ownerId, code, referredAt: Date.now(), totalEarned: 0, lastPaymentAt: null,
+    };
+    const account = ensureAffiliateAccount(accounts, link.ownerId);
+    account.referralCount += 1;
+
+    await Promise.all([writeReferrals(referrals), writeAffiliateAccounts(accounts)]);
+  } catch (e) {
+    console.error("[affiliate] record referral failed:", e.message);
+  }
+}
+
 /* ---- 1. Start OAuth: send the user to Discord ---- */
 app.get("/auth/discord", (req, res) => {
   // CSRF protection: random state stored in a short-lived cookie, checked on return.
@@ -427,7 +544,14 @@ app.get("/auth/discord/callback", async (req, res) => {
       authProvider: "discord",
     };
     setSession(res, user);
+
+    // record a referral only for a brand-new member — not on every re-login
+    const isNewMember = !(await readMembers())[d.id];
     upsertMember(user).catch((e) => console.error("[members] upsert failed:", e.message));
+    if (isNewMember && req.cookies.ref_code) {
+      recordReferral(d.id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
+    }
+    res.clearCookie("ref_code");
 
     // pull the user into your Discord server, if that's configured
     if (AUTO_JOIN_GUILD) {
@@ -813,6 +937,12 @@ app.post("/api/whop-webhook", async (req, res) => {
 
   try {
     await addVipMember(discordId, { whopUserId: data.user?.id || null, username: discordUsername });
+    // commission is based on what was actually charged (post-discount), not
+    // the plan's list price — falls back to subtotal if "total" isn't present
+    const paidAmount = Number(data.total ?? data.subtotal ?? 0);
+    if (paidAmount > 0) {
+      creditAffiliateCommission(discordId, paidAmount).catch((e) => console.error("[affiliate] credit failed:", e.message));
+    }
     if (looksLikeDiscordId) {
       await addVipRole(discordId);
       if (ANNOUNCE_JOINS) {
@@ -865,6 +995,10 @@ app.post("/auth/register", async (req, res) => {
 
     setSession(res, { id, username, displayName: username, avatar: null, authProvider: "local" });
     upsertMember({ id, username, displayName: username, authProvider: "local" }, { niche }).catch((e) => console.error("[members] upsert failed:", e.message));
+    if (req.cookies.ref_code) {
+      recordReferral(id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
+      res.clearCookie("ref_code");
+    }
 
     if (ANNOUNCE_JOINS) {
       const niches = CATEGORY_LABELS[niche] || niche;
@@ -910,6 +1044,144 @@ app.post("/auth/login", async (req, res) => {
   } catch (e) {
     console.error("[auth] login failed:", e.message);
     res.status(500).json({ error: "login_failed" });
+  }
+});
+
+/* ---- affiliate program ---- */
+function generateAffiliateCode() {
+  return crypto.randomBytes(5).toString("hex"); // 10 chars, e.g. "a1b2c3d4e5"
+}
+
+app.get("/api/affiliate/links", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  const links = await readAffiliateLinks();
+  const mine = Object.values(links).filter((l) => l.ownerId === user.id);
+  res.json({ links: mine });
+});
+
+app.post("/api/affiliate/links", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!s3Client) return res.status(503).json({ error: "not_configured" });
+  const label = String(req.body?.label || "").trim().slice(0, 60) || null;
+
+  try {
+    const links = await readAffiliateLinks();
+    let code;
+    do { code = generateAffiliateCode(); } while (links[code]);
+    links[code] = { code, ownerId: user.id, label, createdAt: Date.now() };
+    await writeAffiliateLinks(links);
+    res.json({ link: links[code] });
+  } catch (e) {
+    console.error("[affiliate] create link failed:", e.message);
+    res.status(500).json({ error: "create_failed" });
+  }
+});
+
+app.get("/api/affiliate/dashboard", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+
+  try {
+    const [accounts, referrals, members] = await Promise.all([readAffiliateAccounts(), readReferrals(), readMembers()]);
+    const account = accounts[user.id] || { balance: 0, totalEarned: 0, referralCount: 0, payoutRequests: [] };
+    const myReferrals = Object.keys(referrals)
+      .filter((refId) => referrals[refId].referrerId === user.id)
+      .map((refId) => {
+        const r = referrals[refId];
+        const m = members[refId];
+        return {
+          username: (m && (m.displayName || m.username)) || refId,
+          referredAt: r.referredAt,
+          totalEarned: r.totalEarned || 0,
+          lastPaymentAt: r.lastPaymentAt || null,
+        };
+      })
+      .sort((a, b) => b.referredAt - a.referredAt);
+
+    res.json({
+      balance: account.balance,
+      totalEarned: account.totalEarned,
+      referralCount: account.referralCount,
+      commissionRate: affiliateCommissionRate(account.referralCount),
+      referrals: myReferrals,
+      payoutRequests: (account.payoutRequests || []).slice().sort((a, b) => b.requestedAt - a.requestedAt),
+    });
+  } catch (e) {
+    console.error("[affiliate] dashboard failed:", e.message);
+    res.status(500).json({ error: "dashboard_failed" });
+  }
+});
+
+app.post("/api/affiliate/payout-request", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!s3Client) return res.status(503).json({ error: "not_configured" });
+
+  const amount = Math.round(Number(req.body?.amount) * 100) / 100;
+  if (!amount || amount <= 0) return res.status(400).json({ error: "invalid_amount" });
+
+  try {
+    const accounts = await readAffiliateAccounts();
+    const account = ensureAffiliateAccount(accounts, user.id);
+    if (amount > account.balance) return res.status(400).json({ error: "insufficient_balance" });
+
+    const request = { id: crypto.randomBytes(6).toString("hex"), amount, requestedAt: Date.now(), status: "pending" };
+    account.balance = Math.round((account.balance - amount) * 100) / 100;
+    account.payoutRequests = account.payoutRequests || [];
+    account.payoutRequests.push(request);
+    await writeAffiliateAccounts(accounts);
+
+    if (ANNOUNCE_JOINS) {
+      fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
+        method: "POST",
+        headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `💸 **Payout requested**\nUser: ${user.displayName || user.username} (${user.id})\nAmount: $${amount.toFixed(2)}`,
+        }),
+      }).catch((e) => console.error("[discord] payout announcement failed:", e.message));
+    }
+
+    res.json({ ok: true, request });
+  } catch (e) {
+    console.error("[affiliate] payout request failed:", e.message);
+    res.status(500).json({ error: "payout_failed" });
+  }
+});
+
+app.get("/api/admin/affiliates", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  const [accounts, members] = await Promise.all([readAffiliateAccounts(), readMembers()]);
+  const out = Object.keys(accounts).map((id) => {
+    const a = accounts[id];
+    const m = members[id];
+    return {
+      id,
+      username: (m && (m.displayName || m.username)) || id,
+      balance: a.balance,
+      totalEarned: a.totalEarned,
+      referralCount: a.referralCount,
+      payoutRequests: a.payoutRequests || [],
+    };
+  });
+  res.json({ affiliates: out });
+});
+
+app.post("/api/admin/affiliate-payouts/:userId/:requestId/mark-paid", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  try {
+    const accounts = await readAffiliateAccounts();
+    const account = accounts[req.params.userId];
+    const request = account && (account.payoutRequests || []).find((r) => r.id === req.params.requestId);
+    if (!request) return res.status(404).json({ error: "not_found" });
+    request.status = "paid";
+    request.paidAt = Date.now();
+    await writeAffiliateAccounts(accounts);
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("[affiliate] mark-paid failed:", e.message);
+    res.status(500).json({ error: "mark_paid_failed" });
   }
 });
 
