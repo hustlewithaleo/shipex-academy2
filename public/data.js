@@ -7606,6 +7606,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$249",
+    vipOnly: true,
     chapters: [
       {
         id: "ab1",
