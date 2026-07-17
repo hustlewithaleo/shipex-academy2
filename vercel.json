@@ -7,6 +7,14 @@
       "config": { "includeFiles": ["public/**"] }
     }
   ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "join.shipex.academy" }],
+      "destination": "https://shipex.academy/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/server.js" }
   ]
