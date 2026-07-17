@@ -419,6 +419,42 @@ p {
     margin: 0 0 8px;
 }
 
+/* vip offer */
+.vip-offer {
+    max-width: 620px;
+    margin: 0 auto;
+    background: linear-gradient(160deg, rgba(255, 168, 60, 0.10), var(--surface) 55%);
+    border: 1px solid rgba(255, 168, 60, 0.35);
+    border-radius: var(--radius-lg);
+    padding: 44px 40px;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(255, 66, 17, 0.10);
+}
+.vip-offer__price {
+    font-family: var(--font-head);
+    font-size: 52px;
+    letter-spacing: -0.02em;
+    color: #FFA83C;
+    margin-bottom: 4px;
+}
+.vip-offer__price span { font-size: 18px; color: var(--muted-2); font-family: var(--font-body); }
+.vip-offer__note { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+.vip-offer__note b { color: #FFA83C; }
+.vip-offer__features {
+    list-style: none; padding: 0; margin: 0 0 30px;
+    display: flex; flex-direction: column; gap: 14px;
+    text-align: left; max-width: 400px; margin-left: auto; margin-right: auto;
+}
+.vip-offer__features li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: #e8e8e8; }
+.vip-offer__features li svg { flex: 0 0 auto; margin-top: 3px; color: #FFA83C; }
+.vip-offer .btn {
+    background: linear-gradient(135deg, #FFA83C, #FF4211);
+    color: #101604;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(255, 168, 60, 0.3);
+}
+.vip-offer .btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+
 .fcard__body p {
     color: var(--muted-2);
     font-size: 15px;
@@ -1493,6 +1529,27 @@ p {
                         <p>Every single course comes with all its exact templates, and scripts attached directly to the videos, so you can copy-paste the assets while you watch.</p>
                     </div>
                 </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIP OFFER -->
+    <section class="section" id="vip">
+        <div class="container">
+            <div class="shead shead--center" data-reveal>
+                <span class="badge" style="border-color:rgba(255,168,60,0.4);color:#FFA83C;">★ vip membership</span>
+                <h2>Our offer for VIP</h2>
+            </div>
+            <div class="vip-offer" data-reveal data-reveal-delay="1">
+                <div class="vip-offer__price">$29<span>/month</span></div>
+                <p class="vip-offer__note">The price is going up to <b>$50/month</b> soon — join now and keep this rate for as long as you stay VIP.</p>
+                <ul class="vip-offer__features">
+                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Full access to every exclusive VIP-only course, no exceptions</li>
+                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Every future VIP-only course, included automatically</li>
+                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A VIP role in Discord + an orange VIP badge on the site</li>
+                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Priority support and first access to everything new we add</li>
+                </ul>
+                <a class="btn btn--lg" href="register">Get VIP</a>
             </div>
         </div>
     </section>
