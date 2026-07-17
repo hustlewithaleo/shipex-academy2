@@ -92,8 +92,8 @@ td.muted { color: var(--muted-2); font-size: 13px; }
   <div class="wrap" id="app" style="display:none;">
     <div class="head">
       <div>
-        <h1>VIP members</h1>
-        <p class="sub">View, add, or remove VIP access. Removing here also pulls the Discord role.</p>
+        <h1>Admin dashboard</h1>
+        <p class="sub">VIP access, all members, and course analytics.</p>
       </div>
       <a href="/library">&larr; Back to library</a>
     </div>
@@ -109,7 +109,7 @@ td.muted { color: var(--muted-2); font-size: 13px; }
     </div>
 
     <div class="card">
-      <h2 id="countLabel">Members</h2>
+      <h2 id="countLabel">VIP members</h2>
       <table id="table" style="display:none;">
         <thead>
           <tr><th>Discord ID</th><th>Username</th><th>Source</th><th>Added</th><th></th></tr>
@@ -117,6 +117,28 @@ td.muted { color: var(--muted-2); font-size: 13px; }
         <tbody id="tbody"></tbody>
       </table>
       <div class="empty" id="emptyState" style="display:none;">No VIP members yet.</div>
+    </div>
+
+    <div class="card">
+      <h2 id="membersCountLabel">All members</h2>
+      <table id="membersTable" style="display:none;">
+        <thead>
+          <tr><th>Member</th><th>Discord</th><th>Niche</th><th>Watch time</th><th>First seen</th><th>Last seen</th></tr>
+        </thead>
+        <tbody id="membersTbody"></tbody>
+      </table>
+      <div class="empty" id="membersEmpty" style="display:none;">No members yet.</div>
+    </div>
+
+    <div class="card">
+      <h2>Course analytics</h2>
+      <table id="statsTable" style="display:none;">
+        <thead>
+          <tr><th>Course</th><th>Watchers</th><th>Watch time</th><th>Likes</th></tr>
+        </thead>
+        <tbody id="statsTbody"></tbody>
+      </table>
+      <div class="empty" id="statsEmpty" style="display:none;">No watch activity yet.</div>
     </div>
   </div>
 
@@ -134,6 +156,101 @@ td.muted { color: var(--muted-2); font-size: 13px; }
       if (!ms) return "";
       var d = new Date(ms);
       return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+    function fmtDuration(totalSeconds) {
+      totalSeconds = totalSeconds || 0;
+      var h = Math.floor(totalSeconds / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      if (h > 0) return h + "h " + m + "m";
+      if (m > 0) return m + "m";
+      return totalSeconds > 0 ? "<1m" : "—";
+    }
+
+    var COURSE_TITLES = {
+      "evolve-ecommerce": "Evolve E-Commerce by Spencer Pawliw",
+      "highticket-ecommerce": "HighTicket E-Commerce Course by Brook Hiddink",
+      "impact-team-vip": "Impact Team - VIP (High-Ticket Sales System)",
+      "ecom-masterclass": "The E-Commerce Masterclass by Zakaria Airakaz",
+      "ab-inner-circle": "AB Inner Circle - Google Ads Dropshipping",
+      "ecommerce-mrr-mastery": "E-Commerce MRR Mastery By Brandon van Mierlo",
+      "affiliate-academy": "Affiliate Academy 2.0 by Josh Adkins",
+      "viral-ai-wizards": "Viral Ai Wizards by Lendon Bracewell",
+      "meta-ads-mastery": "Meta Ads Mastery by Michael Diaz",
+      "acq-vantage": "ACQ VANTAGE by Alex Hormozi",
+      "ecommerce-architects": "E-Commerce Architects by Matt Orlic",
+      "futrgroup": "FutrGroup by Franky Shaw",
+      "origins-ecommerce": "Origins E-Commerce by Spencer Pawliw",
+      "ad-creative-academy": "Ad Creative Academy by Seth Godin",
+      "freedom-achievers": "Google Ads Dropshipping by Jesper Hensgens (Freedom Achievers)",
+      "unicorn-closer-mastermind": "Unicorn Closer Mastermind by Josh Lyons",
+      "ultra-realistic-ai-gen-mastery": "Ultra-Realistic AI Gen Mastery by Sam Butler",
+      "adspend-academy": "Adspend Academy by Brian Moncada",
+      "pay-per-lead-nation-pro": "Pay Per Lead Nation Pro by Billy Robinson",
+      "crypto-accelerator": "The Crypto Accelerator by Craig Percoco",
+      "ultimate-editors-2": "Ultimate Editors 2.0 by Joseph Eid",
+      "viral-content-accelerator": "Viral Content Accelerator by One Peak Creative",
+      "trading-blueprint": "The Trading Blueprint by The Trading Geek",
+      "swing-trading-lab": "Swing Trading Lab by Alex G",
+    };
+    var NICHE_LABELS = {
+      "ecommerce": "E-Commerce", "ai-automation": "AI & Automation", "affiliate": "Affiliate Marketing",
+      "copywriting": "Sales & Copywriting", "growth": "Growth", "lead-generation": "Lead Generation",
+      "finance-trading": "Finance & Trading", "video-editing": "Video Editing", "viral-content": "Viral Content",
+    };
+
+    function renderMembersList(members) {
+      var tbody = document.getElementById("membersTbody");
+      var table = document.getElementById("membersTable");
+      var empty = document.getElementById("membersEmpty");
+      var ids = Object.keys(members);
+      document.getElementById("membersCountLabel").textContent = "All members (" + ids.length + ")";
+      tbody.innerHTML = "";
+      if (!ids.length) { table.style.display = "none"; empty.style.display = "block"; return; }
+      table.style.display = "table"; empty.style.display = "none";
+      ids.sort(function (a, b) { return (members[b].lastSeen || 0) - (members[a].lastSeen || 0); });
+      ids.forEach(function (id) {
+        var m = members[id];
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td>' + (m.displayName || m.username || id) + '</td>' +
+          '<td class="muted">' + (m.discordUsername ? m.discordUsername : '<span class="muted">—</span>') + '</td>' +
+          '<td class="muted">' + (m.niche ? (NICHE_LABELS[m.niche] || m.niche) : '—') + '</td>' +
+          '<td class="muted">' + fmtDuration(m.totalWatchSeconds) + '</td>' +
+          '<td class="muted">' + fmtDate(m.firstSeen) + '</td>' +
+          '<td class="muted">' + fmtDate(m.lastSeen) + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+    function loadMembersList() {
+      fetchJson("/api/admin/members").then(function (res) {
+        if (res.ok) renderMembersList(res.data.members || {});
+      });
+    }
+
+    function renderCourseStats(stats) {
+      var tbody = document.getElementById("statsTbody");
+      var table = document.getElementById("statsTable");
+      var empty = document.getElementById("statsEmpty");
+      var ids = Object.keys(stats);
+      tbody.innerHTML = "";
+      if (!ids.length) { table.style.display = "none"; empty.style.display = "block"; return; }
+      table.style.display = "table"; empty.style.display = "none";
+      ids.sort(function (a, b) { return (stats[b].watchSeconds || 0) - (stats[a].watchSeconds || 0); });
+      ids.forEach(function (id) {
+        var s = stats[id];
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td>' + (COURSE_TITLES[id] || id) + '</td>' +
+          '<td class="muted">' + (s.viewers || 0) + '</td>' +
+          '<td class="muted">' + fmtDuration(s.watchSeconds) + '</td>' +
+          '<td class="muted">' + (s.likes || 0) + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+    function loadCourseStats() {
+      fetchJson("/api/admin/course-stats").then(function (res) {
+        if (res.ok) renderCourseStats(res.data.stats || {});
+      });
     }
 
     function renderMembers(members) {
@@ -216,6 +333,8 @@ td.muted { color: var(--muted-2); font-size: 13px; }
           if (res.ok && res.data.admin) {
             document.getElementById("app").style.display = "block";
             loadMembers();
+            loadMembersList();
+            loadCourseStats();
           } else {
             document.getElementById("gate").style.display = "flex";
             document.getElementById("gateMsg").textContent = "You don't have access to this page.";

@@ -305,6 +305,68 @@ function findUserByEmailOrUsername(users, identifier) {
   );
 }
 
+// ---- members (everyone who's ever signed in — Discord or local) ----
+// Separate from the auth-only _users.json store above: this tracks every
+// member for the admin dashboard (discord handle, niche if known, total
+// watch time), regardless of how they signed in.
+const MEMBERS_STORE_KEY = "_members.json";
+async function readMembers() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: MEMBERS_STORE_KEY }));
+    const text = await res.Body.transformToString();
+    return JSON.parse(text);
+  } catch (e) {
+    return {};
+  }
+}
+async function writeMembers(members) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: MEMBERS_STORE_KEY,
+    Body: JSON.stringify(members, null, 2),
+    ContentType: "application/json",
+  }));
+}
+async function upsertMember(user, extra) {
+  const members = await readMembers();
+  const existing = members[user.id] || {};
+  members[user.id] = {
+    id: user.id,
+    username: user.username,
+    displayName: user.displayName || user.username,
+    authProvider: user.authProvider || existing.authProvider || "discord",
+    discordUsername: user.authProvider === "local" ? (existing.discordUsername || null) : user.username,
+    niche: (extra && extra.niche) || existing.niche || null,
+    firstSeen: existing.firstSeen || Date.now(),
+    lastSeen: Date.now(),
+    totalWatchSeconds: existing.totalWatchSeconds || 0,
+  };
+  await writeMembers(members);
+  return members[user.id];
+}
+
+// ---- per-course analytics: total watch time, unique viewers, likes ----
+const COURSE_STATS_KEY = "_course-stats.json";
+async function readCourseStats() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: COURSE_STATS_KEY }));
+    const text = await res.Body.transformToString();
+    return JSON.parse(text);
+  } catch (e) {
+    return {};
+  }
+}
+async function writeCourseStats(stats) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: COURSE_STATS_KEY,
+    Body: JSON.stringify(stats, null, 2),
+    ContentType: "application/json",
+  }));
+}
+
 /* ---- 1. Start OAuth: send the user to Discord ---- */
 app.get("/auth/discord", (req, res) => {
   // CSRF protection: random state stored in a short-lived cookie, checked on return.
@@ -362,8 +424,10 @@ app.get("/auth/discord/callback", async (req, res) => {
       avatar: d.avatar
         ? `https://cdn.discordapp.com/avatars/${d.id}/${d.avatar}.png`
         : null,
+      authProvider: "discord",
     };
     setSession(res, user);
+    upsertMember(user).catch((e) => console.error("[members] upsert failed:", e.message));
 
     // pull the user into your Discord server, if that's configured
     if (AUTO_JOIN_GUILD) {
@@ -537,6 +601,107 @@ app.delete("/api/admin/vip-members/:discordId", async (req, res) => {
   res.json({ ok: true });
 });
 
+/* ---- watch-time tracking: the player reports accumulated seconds periodically ---- */
+app.post("/api/track-progress", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!s3Client) return res.json({ ok: true });
+
+  const courseId = String(req.body?.courseId || "").trim();
+  // clamp to a sane per-report ceiling so one bad/malicious request can't
+  // blow up the numbers — the player reports every ~20s of real playback.
+  const seconds = Math.max(0, Math.min(300, Math.round(Number(req.body?.seconds) || 0)));
+  if (!courseId || !seconds) return res.json({ ok: true });
+
+  try {
+    const [members, stats] = await Promise.all([readMembers(), readCourseStats()]);
+
+    const m = members[user.id] || {
+      id: user.id, username: user.username, displayName: user.displayName || user.username,
+      authProvider: user.authProvider || "discord",
+      discordUsername: user.authProvider === "local" ? null : user.username,
+      niche: null, firstSeen: Date.now(), totalWatchSeconds: 0,
+    };
+    m.totalWatchSeconds = (m.totalWatchSeconds || 0) + seconds;
+    m.lastSeen = Date.now();
+    members[user.id] = m;
+
+    const s = stats[courseId] || { watchSeconds: 0, viewerIds: [], likedBy: [] };
+    s.watchSeconds = (s.watchSeconds || 0) + seconds;
+    if (!s.viewerIds.includes(user.id)) s.viewerIds.push(user.id);
+    stats[courseId] = s;
+
+    await Promise.all([writeMembers(members), writeCourseStats(stats)]);
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("[track] failed:", e.message);
+    res.status(500).json({ error: "track_failed" });
+  }
+});
+
+/* ---- likes: toggle a like on a course ---- */
+app.post("/api/courses/:id/like", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!s3Client) return res.status(503).json({ error: "not_configured" });
+
+  const courseId = req.params.id;
+  try {
+    const stats = await readCourseStats();
+    const s = stats[courseId] || { watchSeconds: 0, viewerIds: [], likedBy: [] };
+    const idx = s.likedBy.indexOf(user.id);
+    let liked;
+    if (idx === -1) { s.likedBy.push(user.id); liked = true; }
+    else { s.likedBy.splice(idx, 1); liked = false; }
+    stats[courseId] = s;
+    await writeCourseStats(stats);
+    res.json({ liked, count: s.likedBy.length });
+  } catch (e) {
+    console.error("[like] failed:", e.message);
+    res.status(500).json({ error: "like_failed" });
+  }
+});
+
+/* ---- per-course stats for the logged-in user (like button state + counts) ---- */
+app.get("/api/course-stats", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  const stats = await readCourseStats();
+  const out = {};
+  Object.keys(stats).forEach((id) => {
+    const s = stats[id];
+    out[id] = {
+      watchSeconds: s.watchSeconds || 0,
+      viewers: (s.viewerIds || []).length,
+      likes: (s.likedBy || []).length,
+      likedByMe: (s.likedBy || []).includes(user.id),
+    };
+  });
+  res.json({ stats: out });
+});
+
+/* ---- admin: full member list + course analytics ---- */
+app.get("/api/admin/members", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  const members = await readMembers();
+  res.json({ members });
+});
+
+app.get("/api/admin/course-stats", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  const stats = await readCourseStats();
+  const out = {};
+  Object.keys(stats).forEach((id) => {
+    const s = stats[id];
+    out[id] = {
+      watchSeconds: s.watchSeconds || 0,
+      viewers: (s.viewerIds || []).length,
+      likes: (s.likedBy || []).length,
+    };
+  });
+  res.json({ stats: out });
+});
+
 /* ---- mint a per-user Whop checkout link carrying the buyer's Discord ID as metadata ---- */
 app.get("/api/vip-checkout-url", async (req, res) => {
   const user = currentUser(req);
@@ -699,6 +864,7 @@ app.post("/auth/register", async (req, res) => {
     await writeUsers(users);
 
     setSession(res, { id, username, displayName: username, avatar: null, authProvider: "local" });
+    upsertMember({ id, username, displayName: username, authProvider: "local" }, { niche }).catch((e) => console.error("[members] upsert failed:", e.message));
 
     if (ANNOUNCE_JOINS) {
       const niches = CATEGORY_LABELS[niche] || niche;
@@ -739,6 +905,7 @@ app.post("/auth/login", async (req, res) => {
     if (!valid) return res.status(401).json({ error: "invalid_credentials" });
 
     setSession(res, { id: user.id, username: user.username, displayName: user.username, avatar: null, authProvider: "local" });
+    upsertMember({ id: user.id, username: user.username, displayName: user.username, authProvider: "local" }, { niche: user.niche }).catch((e) => console.error("[members] upsert failed:", e.message));
     res.json({ ok: true });
   } catch (e) {
     console.error("[auth] login failed:", e.message);

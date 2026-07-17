@@ -1411,6 +1411,10 @@ p {
 }
 .markbtn:hover { border-color: var(--accent-dim); color: #fff; }
 .markbtn.is-done { background: rgba(255,66,17,0.10); border-color: var(--accent); color: var(--accent); }
+.markbtn.is-liked { background: rgba(255,66,17,0.10); border-color: var(--accent); color: var(--accent); }
+.markbtn.is-liked svg { fill: var(--accent); }
+#likeCount { color: var(--muted); font-size: 12px; }
+.markbtn.is-liked #likeCount { color: var(--accent); }
 
 .navbtns { display: flex; gap: 10px; margin-left: auto; }
 .navbtns button {
@@ -1545,6 +1549,11 @@ p {
         <button class="markbtn" id="markBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span id="markLabel">Mark complete</span>
+        </button>
+        <button class="markbtn" id="likeBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          <span id="likeLabel">Like</span>
+          <span id="likeCount"></span>
         </button>
         <div class="navbtns">
           <button id="prevBtn">← Previous</button>
@@ -10623,6 +10632,33 @@ function userChip(user) {
       if ((e.ctrlKey || e.metaKey) && key === "s") e.preventDefault();
     });
 
+    // watch-time tracking — accumulate real playback seconds and report them
+    // to the server periodically, so the admin dashboard can show total watch
+    // time per member and per course.
+    var watchAccum = 0;
+    var lastPlaybackTime = null;
+    video.addEventListener("timeupdate", function () {
+      if (lastPlaybackTime !== null) {
+        var delta = video.currentTime - lastPlaybackTime;
+        if (delta > 0 && delta < 2) watchAccum += delta; // ignore seeks/jumps
+      }
+      lastPlaybackTime = video.currentTime;
+    });
+    video.addEventListener("seeking", function () { lastPlaybackTime = video.currentTime; });
+    function flushWatchTime() {
+      if (watchAccum < 1) return;
+      var payload = JSON.stringify({ courseId: course.id, seconds: Math.round(watchAccum) });
+      watchAccum = 0;
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon("/api/track-progress", new Blob([payload], { type: "application/json" }));
+      } else {
+        fetch("/api/track-progress", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true }).catch(function () {});
+      }
+    }
+    setInterval(flushWatchTime, 20000);
+    window.addEventListener("beforeunload", flushWatchTime);
+    document.addEventListener("visibilitychange", function () { if (document.hidden) flushWatchTime(); });
+
     // pre-video "get VIP to remove this ad" popup
     var playerAd = document.getElementById("playerAd");
     document.getElementById("playerAdClose").addEventListener("click", function () {
@@ -10792,6 +10828,32 @@ function userChip(user) {
     document.getElementById("markBtn").addEventListener("click", function () {
       setDone(!Progress.forCourse(course.id).done[current]);
     });
+
+    // likes — one like per account, toggleable, per course
+    var likeBtn = document.getElementById("likeBtn");
+    var likeCountEl = document.getElementById("likeCount");
+    function renderLikeState(liked, count) {
+      likeBtn.classList.toggle("is-liked", liked);
+      likeCountEl.textContent = count > 0 ? count : "";
+    }
+    fetch("/api/course-stats", { credentials: "same-origin" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        var s = data && data.stats && data.stats[course.id];
+        if (s) renderLikeState(s.likedByMe, s.likes);
+      })
+      .catch(function () {});
+    likeBtn.addEventListener("click", function () {
+      likeBtn.disabled = true;
+      fetch("/api/courses/" + encodeURIComponent(course.id) + "/like", { method: "POST", credentials: "same-origin" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (data) renderLikeState(data.liked, data.count);
+        })
+        .catch(function () {})
+        .then(function () { likeBtn.disabled = false; });
+    });
+
     document.getElementById("nextBtn").addEventListener("click", goNext);
     document.getElementById("prevBtn").addEventListener("click", goPrev);
     document.getElementById("railToggle").addEventListener("click", function () {
