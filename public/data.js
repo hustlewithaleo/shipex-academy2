@@ -5378,6 +5378,7 @@ const COURSES = [
     accent: "#F5B301",
     category: "copywriting",
     price: "$97",
+    vipOnly: true,
     chapters: [
       {
         id: "dch1",
@@ -8316,6 +8317,7 @@ const COURSES = [
     accent: "#22C55E",
     category: "affiliate",
     price: "$197",
+    vipOnly: true,
     chapters: [],
   },
   {
@@ -8326,6 +8328,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ai-automation",
     price: "$49",
+vipOnly: true,
     chapters: [
       {
         id: "vaw1",
@@ -8596,6 +8599,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$249",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8606,6 +8610,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "growth",
     price: "$1,000",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8616,6 +8621,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$1,000",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8626,6 +8632,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$1,500",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8636,6 +8643,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$149",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8646,6 +8654,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$833",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8656,6 +8665,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$349",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8666,6 +8676,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "copywriting",
     price: "$2997",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8676,6 +8687,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ai-automation",
     price: "$247",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8686,6 +8698,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$2997",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8696,6 +8709,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "lead-generation",
     price: "$199",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8706,6 +8720,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "finance-trading",
     price: "$697",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8716,6 +8731,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "video-editing",
     price: "$497",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8726,6 +8742,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "viral-content",
     price: "$1650",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8736,6 +8753,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "finance-trading",
     price: "$697",
+vipOnly: true,
     chapters: [],
   },
   {
@@ -8746,6 +8764,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "finance-trading",
     price: "$1500",
+vipOnly: true,
     chapters: [],
   }
 ];
