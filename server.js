@@ -305,6 +305,34 @@ function findUserByEmailOrUsername(users, identifier) {
   );
 }
 
+// ---- one account per IP: whichever account first signs up from an IP
+// claims it — any later signup attempt (Discord or local) from that same
+// IP is blocked. Existing accounts logging back in are never affected.
+const SIGNUP_IPS_KEY = "_signup-ips.json";
+async function readSignupIps() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: SIGNUP_IPS_KEY }));
+    return JSON.parse(await res.Body.transformToString());
+  } catch (e) {
+    return {};
+  }
+}
+async function writeSignupIps(obj) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: SIGNUP_IPS_KEY,
+    Body: JSON.stringify(obj, null, 2),
+    ContentType: "application/json",
+  }));
+}
+async function claimSignupIp(ip, userId) {
+  if (!ip) return;
+  const signupIps = await readSignupIps();
+  signupIps[ip] = { userId, at: Date.now() };
+  await writeSignupIps(signupIps);
+}
+
 // ---- members (everyone who's ever signed in — Discord or local) ----
 // Separate from the auth-only _users.json store above: this tracks every
 // member for the admin dashboard (discord handle, niche if known, total
@@ -584,13 +612,26 @@ app.get("/auth/discord/callback", async (req, res) => {
         : null,
       authProvider: "discord",
     };
-    setSession(res, user);
-
     // record a referral only for a brand-new member — not on every re-login
     const isNewMember = !(await readMembers())[d.id];
+
+    // one account per IP: block a brand-new signup if this IP already
+    // claimed an account — existing members logging back in are unaffected
+    if (isNewMember) {
+      const signupIps = await readSignupIps();
+      const claim = signupIps[req.ip];
+      if (claim && claim.userId !== d.id) {
+        return res.redirect("/login?error=ip_limit_reached");
+      }
+    }
+
+    setSession(res, user);
     upsertMember(user).catch((e) => console.error("[members] upsert failed:", e.message));
-    if (isNewMember && req.cookies.ref_code) {
-      recordReferral(d.id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
+    if (isNewMember) {
+      if (req.cookies.ref_code) {
+        recordReferral(d.id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
+      }
+      claimSignupIp(req.ip, d.id).catch((e) => console.error("[signup-ip] claim failed:", e.message));
     }
     res.clearCookie("ref_code");
 
@@ -1048,10 +1089,17 @@ app.post("/auth/register", async (req, res) => {
       return res.status(409).json({ error: "already_exists" });
     }
 
+    // one account per IP: block if this IP has already claimed an account
+    const signupIps = await readSignupIps();
+    if (signupIps[req.ip]) {
+      return res.status(403).json({ error: "ip_limit_reached" });
+    }
+
     const id = "local_" + crypto.randomBytes(12).toString("hex");
     const passwordHash = await bcrypt.hash(password, 10);
     users[id] = { id, email, username, passwordHash, niche, createdAt: Date.now() };
     await writeUsers(users);
+    claimSignupIp(req.ip, id).catch((e) => console.error("[signup-ip] claim failed:", e.message));
 
     setSession(res, { id, username, displayName: username, avatar: null, authProvider: "local" });
     upsertMember({ id, username, displayName: username, authProvider: "local" }, { niche }).catch((e) => console.error("[members] upsert failed:", e.message));

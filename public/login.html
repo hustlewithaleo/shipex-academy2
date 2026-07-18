@@ -10363,6 +10363,19 @@ function discordMark() {
       invalid_credentials: "That email/username or password is wrong.",
       account_storage_not_configured: "Login isn't available right now — try Discord instead.",
     };
+    // errors bounced back here from the Discord OAuth redirect (/auth/discord/callback)
+    var OAUTH_ERRORS = {
+      ip_limit_reached: "An account has already been created from this network. Only one account per IP is allowed.",
+      bad_state: "Something went wrong with Discord sign-in — try again.",
+      no_code: "Something went wrong with Discord sign-in — try again.",
+      oauth_failed: "Something went wrong with Discord sign-in — try again.",
+      access_denied: "Discord sign-in was cancelled.",
+    };
+    var oauthError = qs("error");
+    if (oauthError) {
+      loginMsg.className = "modal__msg error";
+      loginMsg.textContent = OAUTH_ERRORS[oauthError] || "Something went wrong — try again.";
+    }
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
       var payload = {
