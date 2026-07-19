@@ -1500,7 +1500,7 @@ p {
                 <p class="hero__sub" data-reveal data-reveal-delay="2" style="
     font-size: 16px;
 ">Stop getting fanned out by crazy price tags, we are completely wiping out the paywall. We are giving you full access to all those high-ticket courses for free.</p>
-<video aria-label="10x product demo video" autoplay="" controls="" loop="" muted="" playsinline="" poster="./hero2.png" preload="metadata" style="
+<video aria-label="10x product demo video" autoplay="" controls="" loop="" playsinline="" poster="./hero2.png" preload="metadata" style="
     border-radius: 26px;
     object-fit: cover;
     width: 100%;
@@ -1524,7 +1524,13 @@ p {
               .then(function (data) {
                 if (!data || !data.url) return;
                 v.src = data.url;
-                v.play().catch(function () {});
+                // try with sound first — browsers block unmuted autoplay
+                // unless the visitor has already interacted with the site,
+                // so fall back to muted (still autoplaying) if that's blocked.
+                v.play().catch(function () {
+                  v.muted = true;
+                  v.play().catch(function () {});
+                });
               })
               .catch(function () {});
           })();
