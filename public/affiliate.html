@@ -65,6 +65,11 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
   color: #fff; font-size: 14px; font-family: var(--font-body);
 }
 .form-row input:focus { outline: none; border-color: var(--accent-dim); }
+.link-prefix {
+  display: flex; align-items: center;
+  padding: 0 4px; font-size: 13px; color: var(--muted); font-family: monospace;
+  white-space: nowrap;
+}
 .btn {
   padding: 11px 18px; border-radius: 10px; border: 0; cursor: pointer;
   font-family: var(--font-body); font-size: 14px; font-weight: 600;
@@ -138,7 +143,8 @@ td.muted { color: var(--muted-2); font-size: 13px; }
     <div class="card">
       <h2>Create a link</h2>
       <div class="form-row">
-        <input type="text" id="linkLabel" placeholder="Label (optional, e.g. \"Twitter bio\")">
+        <span class="link-prefix">shipex.academy/register?ref=</span>
+        <input type="text" id="linkCode" placeholder="myref (optional — leave blank for a random code)" maxlength="30">
         <button class="btn" id="createLinkBtn">Create link</button>
       </div>
       <div class="msg" id="createLinkMsg"></div>
@@ -202,7 +208,6 @@ td.muted { color: var(--muted-2); font-size: 13px; }
         var row = document.createElement("div");
         row.className = "link-row";
         row.innerHTML =
-          (l.label ? '<span class="link-row__label">' + l.label + '</span>' : "") +
           '<span class="link-row__url">' + url + '</span>' +
           '<button class="copy-btn" type="button">Copy</button>';
         row.querySelector(".copy-btn").addEventListener("click", function (e) {
@@ -277,24 +282,30 @@ td.muted { color: var(--muted-2); font-size: 13px; }
       });
     }
 
+    var CREATE_LINK_ERRORS = {
+      invalid_code: "Use 3-30 characters: lowercase letters, numbers, and hyphens only.",
+      code_taken: "That code is already taken — try another.",
+    };
     document.getElementById("createLinkBtn").addEventListener("click", function () {
       var btn = document.getElementById("createLinkBtn");
       var msg = document.getElementById("createLinkMsg");
-      var label = document.getElementById("linkLabel").value.trim();
+      var codeInput = document.getElementById("linkCode");
+      var code = codeInput.value.trim().toLowerCase();
       btn.disabled = true;
       msg.className = "msg"; msg.textContent = "Creating…";
       fetchJson("/api/affiliate/links", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ label: label }),
+        body: JSON.stringify({ code: code }),
       }).then(function (res) {
         btn.disabled = false;
         if (res.ok) {
           msg.className = "msg success"; msg.textContent = "Link created.";
-          document.getElementById("linkLabel").value = "";
+          codeInput.value = "";
           loadLinks();
         } else {
-          msg.className = "msg error"; msg.textContent = "Failed to create link — try again.";
+          msg.className = "msg error";
+          msg.textContent = CREATE_LINK_ERRORS[res.data && res.data.error] || "Failed to create link — try again.";
         }
       });
     });

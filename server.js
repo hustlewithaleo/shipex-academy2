@@ -1168,17 +1168,29 @@ app.get("/api/affiliate/links", async (req, res) => {
   res.json({ links: mine });
 });
 
+const CUSTOM_AFFILIATE_CODE_RE = /^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])?$/; // 3-30 chars, url-safe
+
 app.post("/api/affiliate/links", async (req, res) => {
   const user = currentUser(req);
   if (!user) return res.status(401).json({ error: "not_authenticated" });
   if (!s3Client) return res.status(503).json({ error: "not_configured" });
-  const label = String(req.body?.label || "").trim().slice(0, 60) || null;
+  const customCode = String(req.body?.code || "").trim().toLowerCase();
 
   try {
     const links = await readAffiliateLinks();
     let code;
-    do { code = generateAffiliateCode(); } while (links[code]);
-    links[code] = { code, ownerId: user.id, label, createdAt: Date.now() };
+    if (customCode) {
+      if (!CUSTOM_AFFILIATE_CODE_RE.test(customCode)) {
+        return res.status(400).json({ error: "invalid_code" });
+      }
+      if (links[customCode]) {
+        return res.status(409).json({ error: "code_taken" });
+      }
+      code = customCode;
+    } else {
+      do { code = generateAffiliateCode(); } while (links[code]);
+    }
+    links[code] = { code, ownerId: user.id, createdAt: Date.now() };
     await writeAffiliateLinks(links);
     res.json({ link: links[code] });
   } catch (e) {
