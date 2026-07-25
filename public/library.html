@@ -10767,6 +10767,8 @@ function userChip(user) {
           if (searchTerm) {
             list = list.filter(function (c) { return c.title.toLowerCase().indexOf(searchTerm) !== -1; });
           }
+          // free courses first, VIP-only ones after
+          list = list.slice().sort(function (a, b) { return Boolean(a.vipOnly) - Boolean(b.vipOnly); });
           if (!list.length) {
             grid.innerHTML = '<p style="color:var(--muted-2);font-size:14px;">' +
               (searchTerm ? "No courses match “" + searchTerm + "”." : "No courses in this category yet.") +
