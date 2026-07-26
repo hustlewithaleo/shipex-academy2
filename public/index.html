@@ -436,55 +436,6 @@ p {
     margin: 0 0 8px;
 }
 
-/* vip offer */
-.vip-offer {
-    max-width: 620px;
-    margin: 0 auto;
-    background: linear-gradient(160deg, rgba(255, 168, 60, 0.10), var(--surface) 55%);
-    border: 1px solid rgba(255, 168, 60, 0.35);
-    border-radius: var(--radius-lg);
-    padding: 44px 40px;
-    text-align: center;
-    box-shadow: 0 24px 70px rgba(255, 66, 17, 0.10);
-}
-.vip-offer__lockin {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
-    color: #101604; background: linear-gradient(135deg, #FFA83C, #FF4211);
-    padding: 6px 14px; border-radius: 999px; margin-bottom: 18px;
-    animation: vipPulse 2.2s ease-in-out infinite;
-}
-@keyframes vipPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 168, 60, 0.45); }
-    50% { box-shadow: 0 0 0 8px rgba(255, 168, 60, 0); }
-}
-.vip-offer__price {
-    font-family: var(--font-head);
-    font-size: 68px;
-    letter-spacing: -0.02em;
-    color: #FFA83C;
-    margin-bottom: 4px;
-}
-.vip-offer__price s { font-size: 32px; color: var(--muted); opacity: .6; margin-right: 10px; font-family: var(--font-body); }
-.vip-offer__price span { font-size: 22px; color: var(--muted-2); font-family: var(--font-body); }
-.vip-offer__note { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
-.vip-offer__note b { color: #FFA83C; }
-.vip-offer__fine { font-size: 12px; color: var(--muted); margin-top: 16px; }
-.vip-offer__features {
-    list-style: none; padding: 0; margin: 0 0 30px;
-    display: flex; flex-direction: column; align-items: center; gap: 14px;
-    text-align: left; max-width: 446px; margin-left: auto; margin-right: auto;
-}
-.vip-offer__features li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: #e8e8e8; }
-.vip-offer__features li svg { flex: 0 0 auto; margin-top: 3px; color: #FFA83C; }
-.vip-offer .btn {
-    background: linear-gradient(135deg, #FFA83C, #FF4211);
-    color: #101604;
-    font-weight: 600;
-    box-shadow: 0 8px 30px rgba(255, 168, 60, 0.3);
-}
-.vip-offer .btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
-
 .fcard__body p {
     color: var(--muted-2);
     font-size: 15px;
@@ -1569,30 +1520,6 @@ p {
                         <p>Every single course comes with all its exact templates, and scripts attached directly to the videos, so you can copy-paste the assets while you watch.</p>
                     </div>
                 </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- VIP OFFER -->
-    <section class="section" id="vip">
-        <div class="container">
-            <div class="shead shead--center" data-reveal>
-                <span class="badge" style="border-color:rgba(255,168,60,0.4);color:#FFA83C;">vip access — limited spots</span>
-                <h2>Go VIP. Skip the line. Get everything.</h2>
-                <p>The high-ticket courses everyone else is still paying thousands for — unlocked the second you join.</p>
-            </div>
-            <div class="vip-offer" data-reveal data-reveal-delay="1">
-                <div class="vip-offer__lockin">🔒 lock in this rate now</div>
-                <div class="vip-offer__price"><s>$50</s>$29<span>/month</span></div>
-                <p class="vip-offer__note">The price jumps to <b>$50/month</b> soon. Every day you wait costs you more — join now and this rate is yours for as long as you stay VIP.</p>
-                <ul class="vip-offer__features">
-                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span><b>Every VIP-only course</b> — unlocked instantly, no exceptions</span></li>
-                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span><b>Every future drop</b> is already yours — zero extra charge, ever</span></li>
-                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span><b>The Discord role, the orange badge</b> — people notice</span></li>
-                    <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span><b>Skip the line</b> — priority support, first access, always</span></li>
-                </ul>
-                <a class="btn btn--lg" href="register">Claim VIP Access →</a>
-                <p class="vip-offer__fine">Cancel anytime. No contracts, no catch.</p>
             </div>
         </div>
     </section>
