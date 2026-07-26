@@ -1325,6 +1325,11 @@ p {
   border: 1px solid rgba(255, 168, 60, 0.6) !important;
   color: #fff !important;
 }
+.ccard__tag--free {
+  background: rgba(70, 209, 127, 0.2) !important;
+  border: 1px solid rgba(70, 209, 127, 0.6) !important;
+  color: #fff !important;
+}
 .modal--vip { max-width: 460px; border-color: rgba(255, 168, 60, 0.3); }
 .vip-title-badge {
   display: inline-block; margin-left: 8px; padding: 3px 9px; border-radius: 999px;
@@ -10785,6 +10790,7 @@ function userChip(user) {
                 ';color:#fff;border:1px solid ' + hexToRgba(cat.color, 0.6) + '">' + cat.label + '</span>'
               : '';
             var vipTag = locked ? '<span class="ccard__tag ccard__tag--vip">Reserved for VIP</span>' : '';
+            var freeTag = !c.vipOnly ? '<span class="ccard__tag ccard__tag--free">Free</span>' : '';
             var priceTag = c.price ? '<span class="ccard__price">' + c.price + '</span>' : '';
             var lockOverlay = locked
               ? '<div class="ccard__lock"><span class="ccard__lock-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="ccard__lock-label">VIP Only</span></div>'
@@ -10796,7 +10802,7 @@ function userChip(user) {
             }
             card.innerHTML =
               '<div class="ccard__cover">' +
-                '<div class="ccard__tags">' + vipTag + catTag + priceTag + '</div>' +
+                '<div class="ccard__tags">' + vipTag + freeTag + catTag + priceTag + '</div>' +
                 (c.cover ? '<img src="' + c.cover + '" alt="">' : '') +
                 '<div class="ccard__prog"><i style="width:' + pct + '%"></i></div>' +
                 lockOverlay +
