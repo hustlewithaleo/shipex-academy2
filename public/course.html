@@ -1252,36 +1252,66 @@ p {
   grid-template-columns: var(--app-rail) 1fr;
   min-height: calc(100vh - 64px);
 }
-.player__intro {
-  position: absolute; inset: 0; z-index: 7;
+.course-intro {
   display: none;
+  min-height: calc(100vh - 64px);
+  justify-content: center;
+  padding: 0 20px 60px;
 }
-.player__intro.open { display: block; }
-.player__intro-img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
+.course-intro.open { display: flex; }
+.course-intro__inner { max-width: 760px; width: 100%; }
+.course-intro__back {
+  display: inline-block;
+  color: var(--muted); font-size: 14px; text-decoration: none;
+  margin: 24px 0 20px;
+}
+.course-intro__back:hover { color: #fff; }
+.course-intro__hero {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 16 / 8;
   background: var(--surface-2);
+  margin-bottom: 28px;
 }
-.player__intro-overlay {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  text-align: center;
-  padding: 32px 28px;
-  background: linear-gradient(to top, rgba(5,5,5,0.94) 15%, rgba(5,5,5,0.6) 50%, rgba(5,5,5,0.05) 100%);
+.course-intro__hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.course-intro__price {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(5,5,5,0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 13px; font-weight: 700; color: #fff;
 }
-.player__intro-desc {
-  color: #f0f0f0;
-  font-size: 15px;
+.course-intro__price b { color: var(--accent); font-weight: 800; }
+.course-intro__title {
+  font-size: clamp(24px, 3.2vw, 34px);
+  letter-spacing: -0.03em;
+  margin: 0 0 14px;
+}
+.course-intro__desc {
+  color: var(--muted-2);
+  font-size: 16px;
   line-height: 1.6;
-  max-width: 520px;
-  margin: 0 0 22px;
+  margin: 0 0 28px;
+  max-width: 640px;
 }
-.player__intro-actions {
-  display: flex; align-items: center; justify-content: center;
-  gap: 12px; flex-wrap: wrap;
+.course-intro__features {
+  list-style: none; padding: 0; margin: 0 0 32px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;
 }
-.player__intro-actions .btn { padding: 13px 26px; }
+.course-intro__features li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; color: #e8e8e8;
+  background: var(--surface); border: 1px solid var(--border-soft);
+  border-radius: 12px; padding: 12px 14px;
+}
+.course-intro__features li svg { flex: 0 0 auto; color: var(--accent); }
+.course-intro__actions {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.course-intro__actions .btn { padding: 14px 28px; }
 .rail {
   border-right: 1px solid var(--border-soft);
   background: var(--bg-soft);
@@ -1644,7 +1674,24 @@ p {
 
   <button class="railtoggle" id="railToggle">☰ Chapters</button>
 
-  <div class="watch">
+  <div class="course-intro" id="courseIntro">
+    <div class="course-intro__inner">
+      <a href="library" class="course-intro__back">← All courses</a>
+      <div class="course-intro__hero">
+        <img id="courseIntroImg" src="" alt="">
+        <div class="course-intro__price" id="courseIntroPrice" style="display:none;"></div>
+      </div>
+      <h1 class="course-intro__title" id="courseIntroTitle"></h1>
+      <p class="course-intro__desc" id="courseIntroDesc"></p>
+      <ul class="course-intro__features" id="courseIntroFeatures"></ul>
+      <div class="course-intro__actions">
+        <button class="btn btn--accent" id="courseIntroWatchBtn" type="button">Watch now</button>
+        <a class="btn btn--ghost" id="courseIntroFindBtn" href="#" target="_blank" rel="noopener" style="display:none;">Find the course online</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="watch" id="watchArea">
     <aside class="rail" id="rail">
       <div class="rail__head">
         <a href="library" class="rail__back">← All courses</a>
@@ -1664,16 +1711,6 @@ p {
     <main class="stage">
       <div class="player">
         <video id="video" controls controlsList="nodownload noremoteplayback noplaybackrate" disablePictureInPicture disableRemotePlayback playsinline poster="" style="display:none" oncontextmenu="return false"></video>
-        <div class="player__intro" id="playerIntro">
-          <img class="player__intro-img" id="playerIntroImg" src="" alt="">
-          <div class="player__intro-overlay">
-            <p class="player__intro-desc" id="playerIntroDesc"></p>
-            <div class="player__intro-actions">
-              <button class="btn btn--accent" id="playerIntroWatchBtn" type="button">Watch now</button>
-              <a class="btn btn--ghost" id="playerIntroFindBtn" href="#" target="_blank" rel="noopener" style="display:none;">Find the course online</a>
-            </div>
-          </div>
-        </div>
         <div class="player__ad" id="playerAd">
           <button class="player__ad-close" id="playerAdClose" type="button" aria-label="Close">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -10731,11 +10768,6 @@ function userChip(user) {
     }
 
     var current = qs("l") || (Progress.forCourse(course.id).last) || flat[0].lesson.id;
-    // first time on this course (no saved progress, no deep link to a
-    // specific lesson) — show an intro over the player before the video
-    // itself, once, on the first lesson load.
-    var pendingCourseIntro = !Progress.forCourse(course.id).last && !qs("l");
-
     function indexOfLesson(id) {
       for (var i = 0; i < flat.length; i++) if (flat[i].lesson.id === id) return i;
       return 0;
@@ -10979,64 +11011,36 @@ function userChip(user) {
       document.getElementById("crumb").textContent = ch.title;
       document.getElementById("lessonTitle").textContent = ls.title;
 
-      function showLessonMedia() {
-        // player: real video if src set, else placeholder
-        if (ls.src) {
-          placeholder.style.display = "none";
-          video.style.display = "block";
-          video.removeAttribute("src");
-          if (ls.poster) video.poster = ls.poster;
-          // resume position
-          var t = Progress.forCourse(course.id).time[ls.id];
-          video.onloadedmetadata = function () { if (t) video.currentTime = t; };
-          video.ontimeupdate = function () {
-            if (video.currentTime) Progress.setTime(course.id, ls.id, Math.floor(video.currentTime));
-          };
-          video.onended = function () { setDone(true); goNext(); };
-          // videos live in a private bucket behind a short-lived signed URL (so a
-          // copied link stops working within minutes) — transparently re-fetch a
-          // fresh one shortly before it expires, without interrupting playback.
-          clearVideoRefreshTimer();
-          fetchVideoUrl(ls.src, ls.id, false);
-          // non-VIP: a "get VIP to remove this ad" popup before every video —
-          // unless they're already out of daily watch time, in which case the
-          // lockout overlay takes priority instead.
-          if (isNonVip && dailyRemainingSeconds <= 0) {
-            showWatchLimitOverlay();
-          } else if (!(user && user.vip)) {
-            document.getElementById("playerAd").classList.add("open");
-          }
-        } else {
-          video.style.display = "none";
-          video.removeAttribute("src");
-          placeholder.style.display = "grid";
-        }
-      }
-
-      // first lesson of a course the viewer has never opened before — show
-      // an intro over the player (cover image, description, find-it-online
-      // link) instead of jumping straight into the video.
-      if (pendingCourseIntro) {
-        pendingCourseIntro = false;
-        video.style.display = "none";
+      // player: real video if src set, else placeholder
+      if (ls.src) {
         placeholder.style.display = "none";
-        document.getElementById("playerIntroImg").src = course.cover || "";
-        document.getElementById("playerIntroDesc").textContent = course.tagline || "";
-        var findBtn = document.getElementById("playerIntroFindBtn");
-        if (course.externalUrl) {
-          findBtn.href = course.externalUrl;
-          findBtn.style.display = "";
-        } else {
-          findBtn.style.display = "none";
-        }
-        var introEl = document.getElementById("playerIntro");
-        introEl.classList.add("open");
-        document.getElementById("playerIntroWatchBtn").onclick = function () {
-          introEl.classList.remove("open");
-          showLessonMedia();
+        video.style.display = "block";
+        video.removeAttribute("src");
+        if (ls.poster) video.poster = ls.poster;
+        // resume position
+        var t = Progress.forCourse(course.id).time[ls.id];
+        video.onloadedmetadata = function () { if (t) video.currentTime = t; };
+        video.ontimeupdate = function () {
+          if (video.currentTime) Progress.setTime(course.id, ls.id, Math.floor(video.currentTime));
         };
+        video.onended = function () { setDone(true); goNext(); };
+        // videos live in a private bucket behind a short-lived signed URL (so a
+        // copied link stops working within minutes) — transparently re-fetch a
+        // fresh one shortly before it expires, without interrupting playback.
+        clearVideoRefreshTimer();
+        fetchVideoUrl(ls.src, ls.id, false);
+        // non-VIP: a "get VIP to remove this ad" popup before every video —
+        // unless they're already out of daily watch time, in which case the
+        // lockout overlay takes priority instead.
+        if (isNonVip && dailyRemainingSeconds <= 0) {
+          showWatchLimitOverlay();
+        } else if (!(user && user.vip)) {
+          document.getElementById("playerAd").classList.add("open");
+        }
       } else {
-        showLessonMedia();
+        video.style.display = "none";
+        video.removeAttribute("src");
+        placeholder.style.display = "grid";
       }
 
       // resources
@@ -11162,9 +11166,54 @@ function userChip(user) {
     });
 
     // init
-    Progress.setLast(course.id, current);
-    buildRail();
-    loadLesson(current);
+    function startPlayer() {
+      Progress.setLast(course.id, current);
+      buildRail();
+      loadLesson(current);
+    }
+    // first time on this course (no saved progress, no deep link to a
+    // specific lesson) — show a landing page for it before dropping them
+    // into the rail/player.
+    var hasEngagedBefore = Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l"));
+    if (hasEngagedBefore) {
+      startPlayer();
+    } else {
+      document.getElementById("watchArea").style.display = "none";
+      document.getElementById("courseIntroImg").src = course.cover || "";
+      document.getElementById("courseIntroTitle").textContent = course.title;
+      document.getElementById("courseIntroDesc").textContent = course.tagline || "";
+
+      var priceEl = document.getElementById("courseIntroPrice");
+      if (course.price) {
+        priceEl.innerHTML = "Worth <b>" + course.price + "</b>";
+        priceEl.style.display = "";
+      }
+
+      var checkIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      var hasResources = flat.some(function (item) { return item.lesson.resources && item.lesson.resources.length; });
+      var features = [
+        course.chapters.length + " chapters, " + flat.length + " lessons",
+        "Lifetime access",
+        "Watch on any device",
+      ];
+      if (hasResources) features.push("Downloadable resources");
+      document.getElementById("courseIntroFeatures").innerHTML = features.map(function (f) {
+        return "<li>" + checkIcon + "<span>" + f + "</span></li>";
+      }).join("");
+
+      if (course.externalUrl) {
+        var findBtn = document.getElementById("courseIntroFindBtn");
+        findBtn.href = course.externalUrl;
+        findBtn.style.display = "";
+      }
+
+      document.getElementById("courseIntro").classList.add("open");
+      document.getElementById("courseIntroWatchBtn").addEventListener("click", function () {
+        document.getElementById("courseIntro").classList.remove("open");
+        document.getElementById("watchArea").style.display = "";
+        startPlayer();
+      });
+    }
    });
   </script>
 </body>
