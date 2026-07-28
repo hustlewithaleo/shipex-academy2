@@ -1588,7 +1588,7 @@ p {
       SHIPEX<span style="color:#FF4211;margin:0 -6px;">.</span>ACADEMY
     </a>
     <div class="appbar__right">
-      <a class="linkbtn" href="/affiliate" style="text-decoration:none;">Affiliate</a>
+      <a class="linkbtn" id="navAffiliate" href="/affiliate" style="text-decoration:none;">Affiliate</a>
       <div class="userchip" id="userchip"></div>
       <button class="linkbtn" id="logout">Log out</button>
     </div>
@@ -1668,6 +1668,22 @@ p {
       </div>
       <p class="vip-modal__intro">Get support, swap wins, and hear about new courses first — the community's over on Discord.</p>
       <a class="btn btn--discord modal__submit" href="https://discord.gg/shipex" target="_blank" rel="noopener">Join the server</a>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <div class="modal__head">
+        <div class="modal__title">Log in to continue</div>
+        <button class="modal__close" id="authModalClose" type="button" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <p class="vip-modal__intro" id="authModalMsg">Log in or create a free account to continue.</p>
+      <div style="display:flex;gap:10px;">
+        <a href="/login" class="btn btn--primary modal__submit" style="margin-top:0;flex:1;">Log in</a>
+        <a href="/register" class="btn btn--accent modal__submit" style="margin-top:0;flex:1;">Register</a>
+      </div>
     </div>
   </div>
 
@@ -10530,7 +10546,13 @@ var Auth = {
       cb(user);
     });
   },
+  // Load a page for anyone — cb(user) with user, or cb(null) if signed out
+  // (the page decides what a guest can see).
+  optional: function (cb) {
+    this.me().then(function (user) { cb(user); });
+  },
 };
+var GUEST_USER = { id: null, username: "guest", displayName: "guest", avatar: null, vip: false };
 
 /* ---- progress: which lessons are done + last position ---- */
 var Progress = {
@@ -10598,11 +10620,39 @@ function userChip(user) {
 }
 </script>
   <script>
-    Auth.guard(function (user) {
+    Auth.optional(function (rawUser) {
+      var isGuest = !rawUser;
+      var user = rawUser || GUEST_USER;
+
       // user chip + greeting
       document.getElementById("userchip").innerHTML = userChip(user);
       document.getElementById("greeting").textContent = "Welcome, " + displayName(user);
-      document.getElementById("logout").addEventListener("click", function () { Auth.signOut(); });
+      var logoutBtn = document.getElementById("logout");
+      if (isGuest) {
+        logoutBtn.textContent = "Log in";
+        logoutBtn.addEventListener("click", function () { location.href = "/login"; });
+      } else {
+        logoutBtn.addEventListener("click", function () { Auth.signOut(); });
+      }
+
+      // gated actions for guests — browsing is free, these need an account
+      var authModal = document.getElementById("authModal");
+      var authModalMsg = document.getElementById("authModalMsg");
+      function requireAuth(message) {
+        authModalMsg.textContent = message;
+        authModal.classList.add("open");
+      }
+      function closeAuthModal() { authModal.classList.remove("open"); }
+      document.getElementById("authModalClose").addEventListener("click", closeAuthModal);
+      authModal.addEventListener("click", function (e) { if (e.target === authModal) closeAuthModal(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && authModal.classList.contains("open")) closeAuthModal(); });
+
+      document.getElementById("navAffiliate").addEventListener("click", function (e) {
+        if (isGuest) {
+          e.preventDefault();
+          requireAuth("Log in or create a free account to access your affiliate dashboard.");
+        }
+      });
 
       // resume strip — most recent course with a "last" lesson
       (function () {
@@ -10657,6 +10707,7 @@ function userChip(user) {
       vipPurchaseBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV"; // fallback until the personalized link loads
       document.getElementById("vipPrice").textContent = "$29 / month";
       function openVipModal() {
+        if (isGuest) { requireAuth("Log in or create a free account to get VIP."); return; }
         vipModal.classList.add("open");
         vipPurchaseBtn.textContent = "Loading…";
         // ask the server for a checkout link tagged with this user's Discord ID,

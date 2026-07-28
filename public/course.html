@@ -1307,6 +1307,37 @@ p {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
 .course-intro__actions .btn { padding: 14px 28px; }
+.auth-modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: none;
+  align-items: center; justify-content: center;
+  background: rgba(5,5,5,0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 20px;
+}
+.auth-modal.open { display: flex; }
+.auth-modal__card {
+  position: relative;
+  max-width: 380px; width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 28px 26px;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0,0,0,.5);
+}
+.auth-modal__close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 1px solid var(--border-soft);
+  color: #fff; display: grid; place-items: center; cursor: pointer;
+}
+.auth-modal__close:hover { background: rgba(255,255,255,0.16); }
+.auth-modal__card h3 { font-family: var(--font-head); font-size: 19px; letter-spacing: -0.02em; margin: 0 0 8px; }
+.auth-modal__card p { color: var(--muted-2); font-size: 14px; line-height: 1.5; margin: 0 0 20px; }
+.auth-modal__actions { display: flex; gap: 10px; }
+.auth-modal__actions .btn { flex: 1; padding: 12px 18px; }
 .rail {
   border-right: 1px solid var(--border-soft);
   background: var(--bg-soft);
@@ -1682,6 +1713,20 @@ p {
       <div class="course-intro__actions">
         <button class="btn btn--accent" id="courseIntroWatchBtn" type="button">Watch now</button>
         <a class="btn btn--primary" id="courseIntroFindBtn" href="#" target="_blank" rel="noopener" style="display:none;">Find the course online</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-modal" id="authModal">
+    <div class="auth-modal__card">
+      <button class="auth-modal__close" id="authModalClose" type="button" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h3>Log in to continue</h3>
+      <p id="authModalMsg">Log in or create a free account to continue.</p>
+      <div class="auth-modal__actions">
+        <a href="/login" class="btn btn--primary">Log in</a>
+        <a href="/register" class="btn btn--accent">Register</a>
       </div>
     </div>
   </div>
@@ -10610,7 +10655,13 @@ var Auth = {
       cb(user);
     });
   },
+  // Load a page for anyone — cb(user) with user, or cb(null) if signed out
+  // (the page decides what a guest can see).
+  optional: function (cb) {
+    this.me().then(function (user) { cb(user); });
+  },
 };
+var GUEST_USER = { id: null, username: "guest", displayName: "guest", avatar: null, vip: false };
 
 /* ---- progress: which lessons are done + last position ---- */
 var Progress = {
@@ -10678,15 +10729,38 @@ function userChip(user) {
 }
 </script>
   <script>
-   Auth.guard(function (user) {
+   Auth.optional(function (rawUser) {
+    var isGuest = !rawUser;
+    var user = rawUser || GUEST_USER;
+
     document.getElementById("userchip").innerHTML = userChip(user);
-    document.getElementById("logout").addEventListener("click", function () { Auth.signOut(); });
+    var logoutBtn = document.getElementById("logout");
+    if (isGuest) {
+      logoutBtn.textContent = "Log in";
+      logoutBtn.addEventListener("click", function () { location.href = "/login"; });
+    } else {
+      logoutBtn.addEventListener("click", function () { Auth.signOut(); });
+    }
+
+    // gated actions for guests — browsing is free, watching needs an account
+    var authModal = document.getElementById("authModal");
+    var authModalMsg = document.getElementById("authModalMsg");
+    function requireAuth(message) {
+      authModalMsg.textContent = message;
+      authModal.classList.add("open");
+    }
+    document.getElementById("authModalClose").addEventListener("click", function () {
+      authModal.classList.remove("open");
+    });
+    authModal.addEventListener("click", function (e) { if (e.target === authModal) authModal.classList.remove("open"); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && authModal.classList.contains("open")) authModal.classList.remove("open"); });
 
     // daily watch-time limit — non-VIP accounts get 1 hour of video/day,
     // tracked server-side in `_daily-watch.json` and mirrored here for the
-    // top bar + lockout overlay.
+    // top bar + lockout overlay. Guests can't watch at all yet (gated at
+    // "Watch now"), so this doesn't apply to them.
     var DAILY_WATCH_LIMIT_SECONDS = 60 * 60;
-    var isNonVip = !user.vip;
+    var isNonVip = !isGuest && !user.vip;
     var dailyRemainingSeconds = DAILY_WATCH_LIMIT_SECONDS;
     function fmtClock(totalSeconds) {
       totalSeconds = Math.max(0, Math.round(totalSeconds));
@@ -10947,7 +11021,7 @@ function userChip(user) {
     playerAdVipBtn.addEventListener("click", function () {
       playerAd.classList.remove("open");
     });
-    if (!(user && user.vip)) {
+    if (!isGuest && !(user && user.vip)) {
       fetch("/api/vip-checkout-url", { credentials: "same-origin" })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (data) {
@@ -11169,7 +11243,7 @@ function userChip(user) {
     // first time on this course (no saved progress, no deep link to a
     // specific lesson) — show a landing page for it before dropping them
     // into the rail/player.
-    var hasEngagedBefore = Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l"));
+    var hasEngagedBefore = !isGuest && (Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
     if (hasEngagedBefore) {
       startPlayer();
     } else {
@@ -11204,6 +11278,10 @@ function userChip(user) {
 
       document.getElementById("courseIntro").classList.add("open");
       document.getElementById("courseIntroWatchBtn").addEventListener("click", function () {
+        if (isGuest) {
+          requireAuth("Log in or create a free account to watch this course.");
+          return;
+        }
         document.getElementById("courseIntro").classList.remove("open");
         document.getElementById("watchArea").style.display = "";
         startPlayer();
