@@ -161,6 +161,16 @@ p {
     box-shadow: 0 12px 40px rgb(255 66 17 / 20%);
 }
 
+.btn--ghost {
+    background: rgba(255,255,255,0.06);
+    color: var(--muted-2);
+    border: 1px solid var(--border-soft);
+}
+.btn--ghost:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
 .btn--lg {
     padding: 15px 30px;
     font-size: 16px;
@@ -1242,6 +1252,46 @@ p {
   grid-template-columns: var(--app-rail) 1fr;
   min-height: calc(100vh - 64px);
 }
+.course-intro {
+  display: none;
+  align-items: center; justify-content: center;
+  min-height: calc(100vh - 64px);
+  padding: 40px 20px;
+}
+.course-intro.open { display: flex; }
+.course-intro__card {
+  max-width: 640px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0,0,0,.5);
+}
+.course-intro__img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background: var(--surface-2);
+}
+.course-intro__body { padding: 32px; text-align: center; }
+.course-intro__body h1 {
+  font-size: clamp(22px, 3vw, 28px);
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+}
+.course-intro__body p {
+  color: var(--muted-2);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 28px;
+}
+.course-intro__actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; flex-wrap: wrap;
+}
+.course-intro__actions .btn { padding: 13px 26px; }
 .rail {
   border-right: 1px solid var(--border-soft);
   background: var(--bg-soft);
@@ -1604,7 +1654,21 @@ p {
 
   <button class="railtoggle" id="railToggle">☰ Chapters</button>
 
-  <div class="watch">
+  <div class="course-intro" id="courseIntro">
+    <div class="course-intro__card">
+      <img class="course-intro__img" id="courseIntroImg" src="" alt="">
+      <div class="course-intro__body">
+        <h1 id="courseIntroTitle"></h1>
+        <p id="courseIntroDesc"></p>
+        <div class="course-intro__actions">
+          <button class="btn btn--accent" id="courseIntroWatchBtn" type="button">Watch now</button>
+          <a class="btn btn--ghost" id="courseIntroFindBtn" href="#" target="_blank" rel="noopener" style="display:none;">Find the course online</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="watch" id="watchArea">
     <aside class="rail" id="rail">
       <div class="rail__head">
         <a href="library" class="rail__back">← All courses</a>
@@ -11080,9 +11144,34 @@ function userChip(user) {
     });
 
     // init
-    Progress.setLast(course.id, current);
-    buildRail();
-    loadLesson(current);
+    function startPlayer() {
+      Progress.setLast(course.id, current);
+      buildRail();
+      loadLesson(current);
+    }
+    // first time on this course (no saved progress, no deep link to a
+    // specific lesson) — show a landing page before dropping them into
+    // the player, so they see what the course is about first.
+    var hasEngagedBefore = Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l"));
+    if (hasEngagedBefore) {
+      startPlayer();
+    } else {
+      document.getElementById("watchArea").style.display = "none";
+      document.getElementById("courseIntroImg").src = course.cover || "";
+      document.getElementById("courseIntroTitle").textContent = course.title;
+      document.getElementById("courseIntroDesc").textContent = course.tagline || "";
+      if (course.externalUrl) {
+        var findBtn = document.getElementById("courseIntroFindBtn");
+        findBtn.href = course.externalUrl;
+        findBtn.style.display = "";
+      }
+      document.getElementById("courseIntro").classList.add("open");
+      document.getElementById("courseIntroWatchBtn").addEventListener("click", function () {
+        document.getElementById("courseIntro").classList.remove("open");
+        document.getElementById("watchArea").style.display = "";
+        startPlayer();
+      });
+    }
    });
   </script>
 </body>
