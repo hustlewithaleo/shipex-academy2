@@ -11191,11 +11191,11 @@ function userChip(user) {
         return "<li>" + checkIcon + "<span>" + f + "</span></li>";
       }).join("");
 
-      if (course.externalUrl) {
-        var findBtn = document.getElementById("courseIntroFindBtn");
-        findBtn.href = course.externalUrl;
-        findBtn.style.display = "";
-      }
+      // uses a real link once one is set for this course; falls back to a
+      // Google search for it so the button is never just missing.
+      var findBtn = document.getElementById("courseIntroFindBtn");
+      findBtn.href = course.externalUrl || ("https://www.google.com/search?q=" + encodeURIComponent(course.title));
+      findBtn.style.display = "";
 
       document.getElementById("courseIntro").classList.add("open");
       document.getElementById("courseIntroWatchBtn").addEventListener("click", function () {
