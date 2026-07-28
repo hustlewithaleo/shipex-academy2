@@ -123,6 +123,8 @@ p {
 /* buttons */
 
 .btn {
+    -webkit-appearance: none;
+    appearance: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -130,10 +132,13 @@ p {
     font-family: var(--font-body);
     font-weight: 500;
     font-size: 15px;
+    line-height: 1.2;
     padding: 12px 22px;
     border-radius: 999px;
     cursor: pointer;
     border: 1px solid transparent;
+    margin: 0;
+    text-decoration: none;
     transition: transform .15s ease, filter .15s ease, opacity .15s ease, background .15s ease, box-shadow .15s ease;
     white-space: nowrap;
 }
