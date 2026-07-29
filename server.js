@@ -43,6 +43,9 @@ const {
   WHOP_API_KEY,                // optional — enables per-user checkout links with Discord ID metadata
   WHOP_PLAN_ID,
   ADMIN_DISCORD_IDS,           // optional — comma-separated Discord user IDs allowed on /admin
+  GOOGLE_CLIENT_ID,            // optional — enables "Continue with Google"
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_REDIRECT_URI,
   PORT = 3000,
   NODE_ENV = "development",
 } = process.env;
@@ -145,6 +148,12 @@ async function removeVipRole(discordUserId) {
 const ANNOUNCE_JOINS = Boolean(DISCORD_BOT_TOKEN && DISCORD_ANNOUNCE_CHANNEL_ID);
 if (DISCORD_BOT_TOKEN && !DISCORD_ANNOUNCE_CHANNEL_ID) {
   console.log("[discord] DISCORD_ANNOUNCE_CHANNEL_ID not set — skipping join announcements.");
+}
+
+// ---- Google sign-in (parallel to Discord OAuth, and to local accounts) ----
+const GOOGLE_CONFIGURED = Boolean(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REDIRECT_URI);
+if (!GOOGLE_CONFIGURED) {
+  console.log("[google] GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET / GOOGLE_REDIRECT_URI not set — Google sign-in is disabled.");
 }
 
 // Posts "X just joined" into your announcement channel. Fires on every completed
@@ -647,6 +656,103 @@ app.get("/auth/discord/callback", async (req, res) => {
     res.redirect("/library");
   } catch (e) {
     console.error("[oauth]", e.message);
+    res.redirect("/login?error=oauth_failed");
+  }
+});
+
+/* ---- Google sign-in: parallel flow to Discord OAuth above ---- */
+app.get("/auth/google", (req, res) => {
+  if (!GOOGLE_CONFIGURED) return res.redirect("/login?error=google_not_configured");
+  const state = crypto.randomBytes(16).toString("hex");
+  res.cookie("oauth_state", state, {
+    httpOnly: true, secure: isProd, sameSite: "lax", maxAge: 10 * 60 * 1000,
+  });
+  const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+  url.searchParams.set("client_id", GOOGLE_CLIENT_ID);
+  url.searchParams.set("redirect_uri", GOOGLE_REDIRECT_URI);
+  url.searchParams.set("response_type", "code");
+  url.searchParams.set("scope", "openid email profile");
+  url.searchParams.set("state", state);
+  url.searchParams.set("prompt", "select_account");
+  res.redirect(url.toString());
+});
+
+app.get("/auth/google/callback", async (req, res) => {
+  const { code, state, error } = req.query;
+  if (error) return res.redirect("/login?error=" + encodeURIComponent(error));
+  if (!code) return res.redirect("/login?error=no_code");
+  if (!state || state !== req.cookies.oauth_state) {
+    return res.redirect("/login?error=bad_state");
+  }
+  res.clearCookie("oauth_state");
+
+  try {
+    const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        grant_type: "authorization_code",
+        code: String(code),
+        redirect_uri: GOOGLE_REDIRECT_URI,
+      }),
+    });
+    if (!tokenRes.ok) throw new Error("token exchange failed: " + tokenRes.status);
+    const token = await tokenRes.json();
+
+    const meRes = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+      headers: { Authorization: `Bearer ${token.access_token}` },
+    });
+    if (!meRes.ok) throw new Error("profile fetch failed: " + meRes.status);
+    const g = await meRes.json();
+
+    // Google IDs aren't Discord snowflakes, so prefix them — same idea as
+    // local accounts' "local_..." IDs, and it keeps Discord-only side effects
+    // (role grants, @mentions) correctly skipped via looksLikeDiscordId checks.
+    const id = "google_" + g.id;
+    const user = {
+      id,
+      username: g.email || g.name || id,
+      displayName: g.name || g.email || "there",
+      avatar: g.picture || null,
+      authProvider: "google",
+    };
+
+    const isNewMember = !(await readMembers())[id];
+
+    // one account per IP: block a brand-new signup if this IP already
+    // claimed an account — existing members logging back in are unaffected
+    if (isNewMember) {
+      const signupIps = await readSignupIps();
+      const claim = signupIps[req.ip];
+      if (claim && claim.userId !== id) {
+        return res.redirect("/login?error=ip_limit_reached");
+      }
+    }
+
+    setSession(res, user);
+    upsertMember(user).catch((e) => console.error("[members] upsert failed:", e.message));
+    if (isNewMember) {
+      if (req.cookies.ref_code) {
+        recordReferral(id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
+      }
+      claimSignupIp(req.ip, id).catch((e) => console.error("[signup-ip] claim failed:", e.message));
+      if (ANNOUNCE_JOINS) {
+        fetch(`${DISCORD_API}/channels/${DISCORD_ANNOUNCE_CHANNEL_ID}/messages`, {
+          method: "POST",
+          headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            content: `📝 **New registration (Google)**\nName: ${user.displayName}\nEmail: ${g.email || "—"}\nIP: ${req.ip}`,
+          }),
+        }).catch((e) => console.error("[discord] google join announcement failed:", e.message));
+      }
+    }
+    res.clearCookie("ref_code");
+
+    res.redirect("/library");
+  } catch (e) {
+    console.error("[oauth google]", e.message);
     res.redirect("/login?error=oauth_failed");
   }
 });
