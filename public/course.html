@@ -1733,20 +1733,6 @@ p {
     </div>
   </div>
 
-  <div class="auth-modal" id="authModal">
-    <div class="auth-modal__card">
-      <button class="auth-modal__close" id="authModalClose" type="button" aria-label="Close">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <h3>Log in to continue</h3>
-      <p id="authModalMsg">Log in or create a free account to continue.</p>
-      <div class="auth-modal__actions">
-        <a href="/login" class="btn btn--primary">Log in</a>
-        <a href="/register" class="btn btn--accent">Register</a>
-      </div>
-    </div>
-  </div>
-
   <div class="auth-modal" id="courseVipModal">
     <div class="auth-modal__card">
       <button class="auth-modal__close" id="courseVipModalClose" type="button" aria-label="Close">
@@ -10772,17 +10758,9 @@ function userChip(user) {
     }
 
     // gated actions for guests — browsing is free, watching needs an account
-    var authModal = document.getElementById("authModal");
-    var authModalMsg = document.getElementById("authModalMsg");
-    function requireAuth(message) {
-      authModalMsg.textContent = message;
-      authModal.classList.add("open");
+    function requireAuth() {
+      location.href = "/login";
     }
-    document.getElementById("authModalClose").addEventListener("click", function () {
-      authModal.classList.remove("open");
-    });
-    authModal.addEventListener("click", function (e) { if (e.target === authModal) authModal.classList.remove("open"); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && authModal.classList.contains("open")) authModal.classList.remove("open"); });
 
     // daily watch-time limit — non-VIP accounts get 1 hour of video/day,
     // tracked server-side in `_daily-watch.json` and mirrored here for the
@@ -11304,7 +11282,7 @@ function userChip(user) {
           return;
         }
         if (isGuest) {
-          requireAuth("Log in or create a free account to watch this course.");
+          requireAuth();
           return;
         }
         document.getElementById("courseIntro").classList.remove("open");
