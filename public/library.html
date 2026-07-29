@@ -1372,6 +1372,14 @@ p {
   background: rgba(255, 168, 60, 0.14); border: 1px solid rgba(255, 168, 60, 0.4);
   vertical-align: middle;
 }
+.ccard__free-tag-inline {
+  display: inline-block;
+  font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--ok);
+  padding: 2px 8px; border-radius: 999px;
+  background: rgba(70, 209, 127, 0.14); border: 1px solid rgba(70, 209, 127, 0.4);
+  vertical-align: middle;
+}
 
 /* course card category tag — sits over the cover art */
 .ccard__tags {
@@ -10834,7 +10842,8 @@ function userChip(user) {
           var priceTag = c.price ? '<span class="ccard__price">' + c.price + '</span>' : '';
           var soonTag = isEmpty ? '<span class="ccard__soon-tag">Coming Soon</span>' : '';
           var vipInlineTag = locked ? '<span class="ccard__vip-tag-inline">Reserved for VIP</span>' : '';
-          var titleTags = [vipInlineTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
+          var freeInlineTag = !c.vipOnly ? '<span class="ccard__free-tag-inline">Free Access</span>' : '';
+          var titleTags = [vipInlineTag, freeInlineTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
           var card = el("a", "ccard" + (locked ? " ccard--locked" : ""));
           card.href = "course?c=" + c.id;
           card.innerHTML =
