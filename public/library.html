@@ -10852,9 +10852,6 @@ function userChip(user) {
               : '';
             var card = el("a", "ccard" + (locked ? " ccard--locked" : ""));
             card.href = "course?c=" + c.id;
-            if (locked) {
-              card.addEventListener("click", function (e) { e.preventDefault(); openVipModal(); });
-            }
             card.innerHTML =
               '<div class="ccard__cover">' +
                 '<div class="ccard__tags">' + vipTag + freeTag + catTag + priceTag + '</div>' +

@@ -1732,6 +1732,19 @@ p {
     </div>
   </div>
 
+  <div class="auth-modal" id="courseVipModal">
+    <div class="auth-modal__card">
+      <button class="auth-modal__close" id="courseVipModalClose" type="button" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h3>VIP required</h3>
+      <p>This course is reserved for VIP members. Upgrade to unlock it, plus every other VIP-only course on the site.</p>
+      <div class="auth-modal__actions">
+        <a id="courseVipModalBtn" href="#" target="_blank" rel="noopener" class="btn btn--accent" style="flex:1 1 100%;">Get VIP</a>
+      </div>
+    </div>
+  </div>
+
   <div class="watch" id="watchArea">
     <aside class="rail" id="rail">
       <div class="rail__head">
@@ -10809,20 +10822,6 @@ function userChip(user) {
     document.getElementById("tab-about").innerHTML =
       '<p style="color:var(--muted-2);font-size:15px;line-height:1.6;">' + (course.tagline || '') + '</p>';
 
-    if (course.vipOnly && !user.vip) {
-      document.getElementById("chapters").innerHTML =
-        '<p style="padding:20px;color:var(--muted-2);font-size:13px;">This course is reserved for VIP members.</p>';
-      document.getElementById("crumb").textContent = "";
-      document.getElementById("lessonTitle").textContent = "Reserved for VIP";
-      document.querySelector(".player__note").innerHTML =
-        '<b>VIP only</b> — <a href="/?vip=1" style="color:var(--accent);">upgrade to VIP</a> from the library to unlock this course.';
-      document.querySelector(".stage__row").style.display = "none";
-      document.querySelector(".tabs__nav").style.display = "none";
-      document.getElementById("tab-res").classList.remove("active");
-      document.getElementById("tab-about").classList.add("active");
-      return;
-    }
-
     if (!flat.length) {
       document.getElementById("chapters").innerHTML =
         '<p style="padding:20px;color:var(--muted-2);font-size:13px;">No lessons yet — check back soon.</p>';
@@ -11016,9 +11015,11 @@ function userChip(user) {
     var playerAdVipBtnLabel = playerAdVipBtn.textContent;
     var watchLimitVipBtn = document.getElementById("watchLimitVipBtn");
     var watchLimitBarCta = document.getElementById("watchLimitBarCta");
+    var courseVipModalBtn = document.getElementById("courseVipModalBtn");
     playerAdVipBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV"; // fallback until the personalized link loads
     watchLimitVipBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
     watchLimitBarCta.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
+    courseVipModalBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
     playerAdVipBtn.addEventListener("click", function () {
       playerAd.classList.remove("open");
     });
@@ -11030,11 +11031,18 @@ function userChip(user) {
             playerAdVipBtn.href = data.url;
             watchLimitVipBtn.href = data.url;
             watchLimitBarCta.href = data.url;
+            courseVipModalBtn.href = data.url;
           }
         })
         .catch(function () {})
         .then(function () { playerAdVipBtn.textContent = playerAdVipBtnLabel; });
     }
+    var courseVipModal = document.getElementById("courseVipModal");
+    document.getElementById("courseVipModalClose").addEventListener("click", function () {
+      courseVipModal.classList.remove("open");
+    });
+    courseVipModal.addEventListener("click", function (e) { if (e.target === courseVipModal) courseVipModal.classList.remove("open"); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && courseVipModal.classList.contains("open")) courseVipModal.classList.remove("open"); });
 
     var videoRefreshTimer = null;
     function clearVideoRefreshTimer() {
@@ -11244,7 +11252,8 @@ function userChip(user) {
     // first time on this course (no saved progress, no deep link to a
     // specific lesson) — show a landing page for it before dropping them
     // into the rail/player.
-    var hasEngagedBefore = !isGuest && (Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
+    var vipLocked = Boolean(course.vipOnly) && !(user && user.vip);
+    var hasEngagedBefore = !isGuest && !vipLocked && (Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
     if (hasEngagedBefore) {
       startPlayer();
     } else {
@@ -11271,6 +11280,10 @@ function userChip(user) {
 
       document.getElementById("courseIntro").classList.add("open");
       document.getElementById("courseIntroWatchBtn").addEventListener("click", function () {
+        if (vipLocked) {
+          document.getElementById("courseVipModal").classList.add("open");
+          return;
+        }
         if (isGuest) {
           requireAuth("Log in or create a free account to watch this course.");
           return;
