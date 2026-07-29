@@ -1365,26 +1365,26 @@ p {
 .ccard__lock {
   position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 10px;
-  background: radial-gradient(ellipse at center, rgba(255, 168, 60, 0.10) 0%, rgba(5, 5, 5, 0.28) 72%);
+  background: radial-gradient(ellipse at center, rgba(255, 66, 17, 0.10) 0%, rgba(5, 5, 5, 0.28) 72%);
   pointer-events: none;
 }
 .ccard__lock-badge {
   width: 42px; height: 42px; border-radius: 50%;
   display: grid; place-items: center;
-  color: #FFA83C;
-  background: rgba(255, 168, 60, 0.16);
-  border: 1px solid rgba(255, 168, 60, 0.55);
+  color: #FF4211;
+  background: rgba(255, 66, 17, 0.16);
+  border: 1px solid rgba(255, 66, 17, 0.55);
   animation: ccardLockPulse 2.4s ease-in-out infinite;
 }
 @keyframes ccardLockPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 168, 60, 0.35), 0 8px 22px rgba(0,0,0,0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(255, 168, 60, 0), 0 8px 22px rgba(0,0,0,0.4); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 66, 17, 0.35), 0 8px 22px rgba(0,0,0,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(255, 66, 17, 0), 0 8px 22px rgba(0,0,0,0.4); }
 }
 .ccard__lock-label {
   font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
-  text-transform: uppercase; color: #FFA83C;
+  text-transform: uppercase; color: #FF4211;
   padding: 4px 12px; border-radius: 999px;
-  background: rgba(5, 5, 5, 0.6); border: 1px solid rgba(255, 168, 60, 0.4);
+  background: rgba(5, 5, 5, 0.6); border: 1px solid rgba(255, 66, 17, 0.4);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
 
@@ -10890,26 +10890,21 @@ function userChip(user) {
             list = list.filter(function (c) { return c.title.toLowerCase().indexOf(searchTerm) !== -1; });
           }
           if (!list.length) {
+            grid.className = "";
             grid.innerHTML = '<p style="color:var(--muted-2);font-size:14px;">' +
               (searchTerm ? "No courses match “" + searchTerm + "”." : "No courses in this category yet.") +
               '</p>';
             return;
           }
 
-          // unfiltered view: split into Netflix-style rows by free/VIP, like categories
-          if (activeCat === "all" && !searchTerm) {
-            var freeCourses = list.filter(function (c) { return !c.vipOnly; });
-            var vipCourses = list.filter(function (c) { return c.vipOnly; });
-            grid.className = "course-rows";
-            if (freeCourses.length) grid.appendChild(buildCourseRow("Free Courses", freeCourses));
-            if (vipCourses.length) grid.appendChild(buildCourseRow("VIP Courses", vipCourses));
-            return;
-          }
-
-          grid.className = "courses";
-          // free courses first, VIP-only ones after
-          list = list.slice().sort(function (a, b) { return Boolean(a.vipOnly) - Boolean(b.vipOnly); });
-          list.forEach(function (c) { grid.appendChild(buildCourseCard(c)); });
+          // always split into Free/VIP sections — filtering by category or
+          // searching just narrows what's inside each section, sections with
+          // no matches are simply not shown
+          var freeCourses = list.filter(function (c) { return !c.vipOnly; });
+          var vipCourses = list.filter(function (c) { return c.vipOnly; });
+          grid.className = "course-rows";
+          if (freeCourses.length) grid.appendChild(buildCourseRow("Free Courses", freeCourses));
+          if (vipCourses.length) grid.appendChild(buildCourseRow("VIP Courses", vipCourses));
         }
 
         renderPills();
