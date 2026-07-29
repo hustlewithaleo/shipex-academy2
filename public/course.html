@@ -1270,8 +1270,11 @@ p {
   margin-bottom: 28px;
 }
 .course-intro__hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.course-intro__price {
+.course-intro__badges {
   position: absolute; top: 16px; right: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.course-intro__price {
   background: rgba(5,5,5,0.75);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.15);
@@ -1280,6 +1283,15 @@ p {
   font-size: 13px; font-weight: 700; color: #fff;
 }
 .course-intro__price b { color: var(--accent); font-weight: 800; }
+.course-intro__vip-tag {
+  background: rgba(255, 168, 60, 0.16);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 168, 60, 0.55);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+  color: #FFA83C;
+}
 .course-intro__title {
   font-size: clamp(24px, 3.2vw, 34px);
   letter-spacing: -0.03em;
@@ -1706,7 +1718,10 @@ p {
       <a href="library" class="course-intro__back">← All courses</a>
       <div class="course-intro__hero">
         <img id="courseIntroImg" src="" alt="">
-        <div class="course-intro__price" id="courseIntroPrice" style="display:none;"></div>
+        <div class="course-intro__badges">
+          <span class="course-intro__vip-tag" id="courseIntroVipTag" style="display:none;">Reserved for VIP</span>
+          <div class="course-intro__price" id="courseIntroPrice" style="display:none;"></div>
+        </div>
       </div>
       <h1 class="course-intro__title" id="courseIntroTitle"></h1>
       <p class="course-intro__desc" id="courseIntroDesc"></p>
@@ -11261,6 +11276,10 @@ function userChip(user) {
       document.getElementById("courseIntroImg").src = course.cover || "";
       document.getElementById("courseIntroTitle").textContent = course.title;
       document.getElementById("courseIntroDesc").textContent = course.tagline || "";
+
+      if (vipLocked) {
+        document.getElementById("courseIntroVipTag").style.display = "";
+      }
 
       var priceEl = document.getElementById("courseIntroPrice");
       if (course.price) {
