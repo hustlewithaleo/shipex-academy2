@@ -1261,6 +1261,50 @@ p {
   margin: 24px 0 20px;
 }
 .course-intro__back:hover { color: #fff; }
+.course-support {
+  display: none;
+  min-height: calc(100vh - 64px);
+  align-items: center; justify-content: center;
+  padding: 0 20px 60px;
+}
+.course-support.open { display: flex; }
+.course-support__inner { max-width: 560px; width: 100%; }
+.course-support__card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 44px 40px;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0,0,0,.5);
+}
+.course-support__badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: #101604; background: linear-gradient(135deg, #FFA83C, #FF4211);
+  padding: 6px 14px; border-radius: 999px; margin-bottom: 20px;
+}
+.course-support__card h1 {
+  font-size: clamp(22px, 3vw, 28px);
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  margin: 0 0 16px;
+}
+.course-support__card p {
+  color: var(--muted-2);
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0 0 26px;
+}
+.course-support__price {
+  font-family: var(--font-head);
+  font-size: 44px;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.course-support__price span { font-size: 16px; color: var(--muted-2); font-family: var(--font-body); }
+.course-support__fine { font-size: 13px !important; color: var(--muted) !important; margin-bottom: 28px !important; }
+.course-support__actions .btn { width: 100%; justify-content: center; padding: 14px; }
 .course-intro__hero {
   position: relative;
   border-radius: var(--radius);
@@ -1743,6 +1787,22 @@ p {
     </div>
   </div>
 
+  <div class="course-support" id="courseSupport">
+    <div class="course-support__inner">
+      <a href="library" class="course-intro__back">← All courses</a>
+      <div class="course-support__card">
+        <div class="course-support__badge">Not up yet</div>
+        <h1>Honestly? <span id="courseSupportTitle"></span> isn't live yet.</h1>
+        <p>We haven't gotten to this one — buying and hosting every course here costs real money, and VIP memberships are what fund it. Sign up and you get instant access to everything already live, and you're the reason the next batch gets added sooner.</p>
+        <div class="course-support__price">$29<span>/month</span></div>
+        <p class="course-support__fine">Cancel anytime. No contracts, no catch.</p>
+        <div class="course-support__actions">
+          <a class="btn btn--accent" id="courseSupportVipBtn" href="#" target="_blank" rel="noopener">Become a VIP</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="auth-modal" id="courseVipModal">
     <div class="auth-modal__card">
       <button class="auth-modal__close" id="courseVipModalClose" type="button" aria-label="Close">
@@ -1850,6 +1910,7 @@ p {
 const COURSES = [
   {
     id: "evolve-ecommerce",
+    availableOverride: true,
     title: "Evolve E-Commerce by Spencer Pawliw",
     externalUrl: "https://www.skool.com/evolve-8484/about",
     tagline: "The complete paid-ads system for e-commerce — ad psychology, creative research and UGC, and a full testing-to-scaling workflow for 7-figure brands.",
@@ -10850,21 +10911,7 @@ function userChip(user) {
     document.getElementById("tab-about").innerHTML =
       '<p style="color:var(--muted-2);font-size:15px;line-height:1.6;">' + (course.tagline || '') + '</p>';
 
-    if (!flat.length) {
-      document.getElementById("chapters").innerHTML =
-        '<p style="padding:20px;color:var(--muted-2);font-size:13px;">No lessons yet — check back soon.</p>';
-      document.getElementById("crumb").textContent = "";
-      document.getElementById("lessonTitle").textContent = "Coming soon";
-      document.querySelector(".player__note").innerHTML =
-        "<b>Nothing here yet</b> — this course's content is being added.";
-      document.querySelector(".stage__row").style.display = "none";
-      document.querySelector(".tabs__nav").style.display = "none";
-      document.getElementById("tab-res").classList.remove("active");
-      document.getElementById("tab-about").classList.add("active");
-      return;
-    }
-
-    var current = qs("l") || (Progress.forCourse(course.id).last) || flat[0].lesson.id;
+    var current = qs("l") || (Progress.forCourse(course.id).last) || (flat[0] && flat[0].lesson.id);
     function indexOfLesson(id) {
       for (var i = 0; i < flat.length; i++) if (flat[i].lesson.id === id) return i;
       return 0;
@@ -11044,10 +11091,12 @@ function userChip(user) {
     var watchLimitVipBtn = document.getElementById("watchLimitVipBtn");
     var watchLimitBarCta = document.getElementById("watchLimitBarCta");
     var courseVipModalBtn = document.getElementById("courseVipModalBtn");
+    var courseSupportVipBtn = document.getElementById("courseSupportVipBtn");
     playerAdVipBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV"; // fallback until the personalized link loads
     watchLimitVipBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
     watchLimitBarCta.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
     courseVipModalBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
+    courseSupportVipBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV";
     playerAdVipBtn.addEventListener("click", function () {
       playerAd.classList.remove("open");
     });
@@ -11060,6 +11109,7 @@ function userChip(user) {
             watchLimitVipBtn.href = data.url;
             watchLimitBarCta.href = data.url;
             courseVipModalBtn.href = data.url;
+            courseSupportVipBtn.href = data.url;
           }
         })
         .catch(function () {})
@@ -11277,11 +11327,17 @@ function userChip(user) {
       buildRail();
       loadLesson(current);
     }
+    function showCourseSupport() {
+      document.getElementById("courseIntro").classList.remove("open");
+      document.getElementById("courseSupportTitle").textContent = course.title;
+      document.getElementById("courseSupport").classList.add("open");
+    }
     // first time on this course (no saved progress, no deep link to a
     // specific lesson) — show a landing page for it before dropping them
     // into the rail/player.
     var vipLocked = Boolean(course.vipOnly) && !(user && user.vip);
-    var hasEngagedBefore = !isGuest && !vipLocked && (Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
+    var comingSoon = flat.length === 0;
+    var hasEngagedBefore = !isGuest && !vipLocked && !comingSoon && (Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
     if (hasEngagedBefore) {
       startPlayer();
     } else {
@@ -11303,9 +11359,15 @@ function userChip(user) {
         priceEl.style.display = "";
       }
 
-      document.getElementById("courseIntroFeatures").innerHTML = course.chapters.map(function (ch, i) {
-        return "<li><b>" + (i + 1) + ".</b><span>" + ch.title + "</span></li>";
-      }).join("");
+      var featuresEl = document.getElementById("courseIntroFeatures");
+      if (course.chapters.length) {
+        featuresEl.style.display = "";
+        featuresEl.innerHTML = course.chapters.map(function (ch, i) {
+          return "<li><b>" + (i + 1) + ".</b><span>" + ch.title + "</span></li>";
+        }).join("");
+      } else {
+        featuresEl.style.display = "none";
+      }
 
       // uses a real link once one is set for this course; falls back to a
       // Google search for it so the button is never just missing.
@@ -11315,6 +11377,10 @@ function userChip(user) {
 
       document.getElementById("courseIntro").classList.add("open");
       document.getElementById("courseIntroWatchBtn").addEventListener("click", function () {
+        if (comingSoon) {
+          showCourseSupport();
+          return;
+        }
         if (vipLocked) {
           document.getElementById("courseVipModal").classList.add("open");
           return;

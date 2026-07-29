@@ -10,6 +10,7 @@
 const COURSES = [
   {
     id: "evolve-ecommerce",
+    availableOverride: true,
     title: "Evolve E-Commerce by Spencer Pawliw",
     externalUrl: "https://www.skool.com/evolve-8484/about",
     tagline: "The complete paid-ads system for e-commerce — ad psychology, creative research and UGC, and a full testing-to-scaling workflow for 7-figure brands.",

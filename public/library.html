@@ -1704,6 +1704,7 @@ p {
 const COURSES = [
   {
     id: "evolve-ecommerce",
+    availableOverride: true,
     title: "Evolve E-Commerce by Spencer Pawliw",
     externalUrl: "https://www.skool.com/evolve-8484/about",
     tagline: "The complete paid-ads system for e-commerce — ad psychology, creative research and UGC, and a full testing-to-scaling workflow for 7-figure brands.",
@@ -10868,7 +10869,7 @@ function userChip(user) {
           var soonTag = isEmpty ? '<span class="ccard__soon-tag">Coming Soon</span>' : '';
           var vipInlineTag = locked ? '<span class="ccard__vip-tag-inline">Reserved for VIP</span>' : '';
           var freeInlineTag = !c.vipOnly ? '<span class="ccard__free-tag-inline">Free Access</span>' : '';
-          var availableTag = s.allReady ? '<span class="ccard__available-tag-inline">Available Now</span>' : '';
+          var availableTag = (s.allReady || c.availableOverride) ? '<span class="ccard__available-tag-inline">Available Now</span>' : '';
           var popularTag = c.popular ? '<span class="ccard__popular-tag-inline">Popular</span>' : '';
           var titleTags = [vipInlineTag, freeInlineTag, availableTag, popularTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
           var card = el("a", "ccard" + (locked ? " ccard--locked" : ""));
