@@ -1292,6 +1292,15 @@ p {
   font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
   color: #FFA83C;
 }
+.course-intro__free-tag {
+  background: rgba(70, 209, 127, 0.16);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(70, 209, 127, 0.55);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--ok);
+}
 .course-intro__title {
   font-size: clamp(24px, 3.2vw, 34px);
   letter-spacing: -0.03em;
@@ -1720,6 +1729,7 @@ p {
         <img id="courseIntroImg" src="" alt="">
         <div class="course-intro__badges">
           <span class="course-intro__vip-tag" id="courseIntroVipTag" style="display:none;">Reserved for VIP</span>
+          <span class="course-intro__free-tag" id="courseIntroFreeTag" style="display:none;">Free</span>
           <div class="course-intro__price" id="courseIntroPrice" style="display:none;"></div>
         </div>
       </div>
@@ -11281,6 +11291,9 @@ function userChip(user) {
 
       if (vipLocked) {
         document.getElementById("courseIntroVipTag").style.display = "";
+      }
+      if (!course.vipOnly) {
+        document.getElementById("courseIntroFreeTag").style.display = "";
       }
 
       var priceEl = document.getElementById("courseIntroPrice");
