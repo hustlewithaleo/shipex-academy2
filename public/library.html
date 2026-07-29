@@ -1200,20 +1200,11 @@ p {
   grid-template-columns: repeat(auto-fill, minmax(286px, 1fr));
   gap: 18px;
 }
-/* Netflix-style category rows, shown on the unfiltered "All courses" view */
+/* category rows, shown on the unfiltered "All courses" view */
 .course-rows { display: flex; flex-direction: column; gap: 36px; }
 .course-row__head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
 .course-row__title { font-family: var(--font-head); font-size: 20px; letter-spacing: -0.02em; }
 .course-row__count { font-size: 13px; color: var(--muted); }
-.course-row__track {
-  display: flex; gap: 18px; overflow-x: auto; padding: 2px 2px 10px;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-}
-.course-row__track::-webkit-scrollbar { height: 8px; }
-.course-row__track::-webkit-scrollbar-track { background: transparent; }
-.course-row__track::-webkit-scrollbar-thumb { background: var(--border-soft); border-radius: 999px; }
-.course-row__track .ccard { flex: 0 0 260px; scroll-snap-align: start; }
 .ccard {
   background: var(--surface);
   border: 1px solid var(--border-soft);
@@ -10886,7 +10877,7 @@ function userChip(user) {
             '<span class="course-row__title">' + title + '</span>' +
             '<span class="course-row__count">' + list.length + '</span>';
           row.appendChild(head);
-          var track = el("div", "course-row__track");
+          var track = el("div", "courses");
           list.forEach(function (c) { track.appendChild(buildCourseCard(c)); });
           row.appendChild(track);
           return row;
