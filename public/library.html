@@ -1360,7 +1360,7 @@ p {
   display: inline-block;
   font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
   text-transform: uppercase; color: #FF4211;
-  padding: 2px 8px; border-radius: 999px; margin-left: 8px;
+  padding: 2px 8px; border-radius: 999px;
   background: rgba(255, 66, 17, 0.14); border: 1px solid rgba(255, 66, 17, 0.4);
   vertical-align: middle;
 }
@@ -10834,7 +10834,7 @@ function userChip(user) {
               '<div class="ccard__prog"><i style="width:' + pct + '%"></i></div>' +
             '</div>' +
             '<div class="ccard__body">' +
-              '<div class="ccard__title">' + c.title + soonTag + '</div>' +
+              '<div class="ccard__title">' + c.title + (soonTag ? ' ' + soonTag : '') + '</div>' +
               '<div class="ccard__meta">' +
                 '<span>' + s.chapters + ' chapters</span><span class="ccard__dot"></span>' +
                 '<span>' + s.lessons + ' lessons</span><span class="ccard__dot"></span>' +
