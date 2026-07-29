@@ -1200,6 +1200,20 @@ p {
   grid-template-columns: repeat(auto-fill, minmax(286px, 1fr));
   gap: 18px;
 }
+/* Netflix-style category rows, shown on the unfiltered "All courses" view */
+.course-rows { display: flex; flex-direction: column; gap: 36px; }
+.course-row__head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.course-row__title { font-family: var(--font-head); font-size: 20px; letter-spacing: -0.02em; }
+.course-row__count { font-size: 13px; color: var(--muted); }
+.course-row__track {
+  display: flex; gap: 18px; overflow-x: auto; padding: 2px 2px 10px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+.course-row__track::-webkit-scrollbar { height: 8px; }
+.course-row__track::-webkit-scrollbar-track { background: transparent; }
+.course-row__track::-webkit-scrollbar-thumb { background: var(--border-soft); border-radius: 999px; }
+.course-row__track .ccard { flex: 0 0 260px; scroll-snap-align: start; }
 .ccard {
   background: var(--surface);
   border: 1px solid var(--border-soft);
@@ -10829,55 +10843,82 @@ function userChip(user) {
           filterWrap.appendChild(discordPill);
         }
 
+        function buildCourseCard(c) {
+          var s = courseStats(c);
+          var pct = Progress.percent(c);
+          var cat = getCategory(c.category);
+          var locked = Boolean(c.vipOnly) && !(user && user.vip);
+          var isEmpty = s.lessons === 0;
+          var catTag = cat
+            ? '<span class="ccard__tag" style="background:' + hexToRgba(cat.color, 0.25) +
+              ';color:#fff;border:1px solid ' + hexToRgba(cat.color, 0.6) + '">' + cat.label + '</span>'
+            : '';
+          var vipTag = locked ? '<span class="ccard__tag ccard__tag--vip">Reserved for VIP</span>' : '';
+          var freeTag = !c.vipOnly ? '<span class="ccard__tag ccard__tag--free">Free</span>' : '';
+          var priceTag = c.price ? '<span class="ccard__price">' + c.price + '</span>' : '';
+          var emptyOverlay = isEmpty
+            ? '<div class="ccard__lock"><span class="ccard__lock-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span class="ccard__lock-label">Coming Soon</span></div>'
+            : '';
+          var card = el("a", "ccard" + (locked ? " ccard--locked" : "") + (isEmpty ? " ccard--empty" : ""));
+          card.href = "course?c=" + c.id;
+          card.innerHTML =
+            '<div class="ccard__cover">' +
+              '<div class="ccard__tags">' + vipTag + freeTag + catTag + priceTag + '</div>' +
+              (c.cover ? '<img src="' + c.cover + '" alt="">' : '') +
+              '<div class="ccard__prog"><i style="width:' + pct + '%"></i></div>' +
+              emptyOverlay +
+            '</div>' +
+            '<div class="ccard__body">' +
+              '<div class="ccard__title">' + c.title + '</div>' +
+              '<div class="ccard__meta">' +
+                '<span>' + s.chapters + ' chapters</span><span class="ccard__dot"></span>' +
+                '<span>' + s.lessons + ' lessons</span><span class="ccard__dot"></span>' +
+                '<span>' + s.duration + '</span>' +
+              '</div>' +
+            '</div>';
+          return card;
+        }
+
+        function buildCourseRow(title, list) {
+          var row = el("div", "course-row");
+          var head = el("div", "course-row__head");
+          head.innerHTML =
+            '<span class="course-row__title">' + title + '</span>' +
+            '<span class="course-row__count">' + list.length + '</span>';
+          row.appendChild(head);
+          var track = el("div", "course-row__track");
+          list.forEach(function (c) { track.appendChild(buildCourseCard(c)); });
+          row.appendChild(track);
+          return row;
+        }
+
         function renderGrid() {
           grid.innerHTML = "";
           var list = activeCat === "all" ? COURSES : COURSES.filter(function (c) { return c.category === activeCat; });
           if (searchTerm) {
             list = list.filter(function (c) { return c.title.toLowerCase().indexOf(searchTerm) !== -1; });
           }
-          // free courses first, VIP-only ones after
-          list = list.slice().sort(function (a, b) { return Boolean(a.vipOnly) - Boolean(b.vipOnly); });
           if (!list.length) {
             grid.innerHTML = '<p style="color:var(--muted-2);font-size:14px;">' +
               (searchTerm ? "No courses match “" + searchTerm + "”." : "No courses in this category yet.") +
               '</p>';
             return;
           }
-          list.forEach(function (c) {
-            var s = courseStats(c);
-            var pct = Progress.percent(c);
-            var cat = getCategory(c.category);
-            var locked = Boolean(c.vipOnly) && !(user && user.vip);
-            var isEmpty = s.lessons === 0;
-            var catTag = cat
-              ? '<span class="ccard__tag" style="background:' + hexToRgba(cat.color, 0.25) +
-                ';color:#fff;border:1px solid ' + hexToRgba(cat.color, 0.6) + '">' + cat.label + '</span>'
-              : '';
-            var vipTag = locked ? '<span class="ccard__tag ccard__tag--vip">Reserved for VIP</span>' : '';
-            var freeTag = !c.vipOnly ? '<span class="ccard__tag ccard__tag--free">Free</span>' : '';
-            var priceTag = c.price ? '<span class="ccard__price">' + c.price + '</span>' : '';
-            var emptyOverlay = isEmpty
-              ? '<div class="ccard__lock"><span class="ccard__lock-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span class="ccard__lock-label">Coming Soon</span></div>'
-              : '';
-            var card = el("a", "ccard" + (locked ? " ccard--locked" : "") + (isEmpty ? " ccard--empty" : ""));
-            card.href = "course?c=" + c.id;
-            card.innerHTML =
-              '<div class="ccard__cover">' +
-                '<div class="ccard__tags">' + vipTag + freeTag + catTag + priceTag + '</div>' +
-                (c.cover ? '<img src="' + c.cover + '" alt="">' : '') +
-                '<div class="ccard__prog"><i style="width:' + pct + '%"></i></div>' +
-                emptyOverlay +
-              '</div>' +
-              '<div class="ccard__body">' +
-                '<div class="ccard__title">' + c.title + '</div>' +
-                '<div class="ccard__meta">' +
-                  '<span>' + s.chapters + ' chapters</span><span class="ccard__dot"></span>' +
-                  '<span>' + s.lessons + ' lessons</span><span class="ccard__dot"></span>' +
-                  '<span>' + s.duration + '</span>' +
-                '</div>' +
-              '</div>';
-            grid.appendChild(card);
-          });
+
+          // unfiltered view: split into Netflix-style rows by free/VIP, like categories
+          if (activeCat === "all" && !searchTerm) {
+            var freeCourses = list.filter(function (c) { return !c.vipOnly; });
+            var vipCourses = list.filter(function (c) { return c.vipOnly; });
+            grid.className = "course-rows";
+            if (freeCourses.length) grid.appendChild(buildCourseRow("Free Courses", freeCourses));
+            if (vipCourses.length) grid.appendChild(buildCourseRow("VIP Courses", vipCourses));
+            return;
+          }
+
+          grid.className = "courses";
+          // free courses first, VIP-only ones after
+          list = list.slice().sort(function (a, b) { return Boolean(a.vipOnly) - Boolean(b.vipOnly); });
+          list.forEach(function (c) { grid.appendChild(buildCourseCard(c)); });
         }
 
         renderPills();
