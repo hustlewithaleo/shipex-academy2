@@ -1380,6 +1380,22 @@ p {
   background: rgba(70, 209, 127, 0.14); border: 1px solid rgba(70, 209, 127, 0.4);
   vertical-align: middle;
 }
+.ccard__available-tag-inline {
+  display: inline-block;
+  font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #4F8EF7;
+  padding: 2px 8px; border-radius: 999px;
+  background: rgba(79, 142, 247, 0.14); border: 1px solid rgba(79, 142, 247, 0.4);
+  vertical-align: middle;
+}
+.ccard__popular-tag-inline {
+  display: inline-block;
+  font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #EC4899;
+  padding: 2px 8px; border-radius: 999px;
+  background: rgba(236, 72, 153, 0.14); border: 1px solid rgba(236, 72, 153, 0.4);
+  vertical-align: middle;
+}
 
 /* course card category tag — sits over the cover art */
 .ccard__tags {
@@ -7458,6 +7474,7 @@ const COURSES = [
   },
   {
     id: "ecom-masterclass",
+    popular: true,
     title: "The E-Commerce Masterclass by Zakaria Airakaz",
     externalUrl: "https://whop.com/ecom-masterclass-101/ecom-masterclass-101/",
     tagline: "The full system — build, launch, and scale a brand from zero.",
@@ -10501,11 +10518,19 @@ function chapterLessons(ch) {
 function courseStats(course) {
   var chapters = course.chapters.length;
   var lessons = 0;
+  var withVideo = 0;
   var totalMin = 0;
   course.chapters.forEach(function (ch) {
-    chapterLessons(ch).forEach(function (ls) { lessons++; totalMin += parseDuration(ls.duration); });
+    chapterLessons(ch).forEach(function (ls) {
+      lessons++;
+      totalMin += parseDuration(ls.duration);
+      if (ls.src) withVideo++;
+    });
   });
-  return { chapters: chapters, lessons: lessons, duration: formatDuration(totalMin) };
+  // a handful of resource-only lessons (prompts, PDFs, "read first" notes)
+  // shouldn't stop an otherwise-complete course from counting as ready
+  var allReady = lessons > 0 && (withVideo / lessons) >= 0.9;
+  return { chapters: chapters, lessons: lessons, duration: formatDuration(totalMin), allReady: allReady };
 }
 function parseDuration(str) {
   // "1h 12m" | "52m" | "44m" -> minutes
@@ -10843,7 +10868,9 @@ function userChip(user) {
           var soonTag = isEmpty ? '<span class="ccard__soon-tag">Coming Soon</span>' : '';
           var vipInlineTag = locked ? '<span class="ccard__vip-tag-inline">Reserved for VIP</span>' : '';
           var freeInlineTag = !c.vipOnly ? '<span class="ccard__free-tag-inline">Free Access</span>' : '';
-          var titleTags = [vipInlineTag, freeInlineTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
+          var availableTag = s.allReady ? '<span class="ccard__available-tag-inline">Available Now</span>' : '';
+          var popularTag = c.popular ? '<span class="ccard__popular-tag-inline">Popular</span>' : '';
+          var titleTags = [vipInlineTag, freeInlineTag, availableTag, popularTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
           var card = el("a", "ccard" + (locked ? " ccard--locked" : ""));
           card.href = "course?c=" + c.id;
           card.innerHTML =
