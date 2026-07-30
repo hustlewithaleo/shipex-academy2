@@ -11377,15 +11377,15 @@ function userChip(user) {
 
       document.getElementById("courseIntro").classList.add("open");
       document.getElementById("courseIntroWatchBtn").addEventListener("click", function () {
-        if (comingSoon) {
-          showCourseSupport();
-          return;
-        }
-        // guests need an account regardless of VIP status — and VIP
-        // checkout itself requires being logged in — so send them to log
-        // in/register first, before ever showing the VIP-required prompt.
+        // guests need an account regardless of what's blocking this course —
+        // VIP checkout itself requires being logged in — so send them to log
+        // in/register first, before ever showing the VIP or support prompts.
         if (isGuest) {
           requireAuth();
+          return;
+        }
+        if (comingSoon) {
+          showCourseSupport();
           return;
         }
         if (vipLocked) {
