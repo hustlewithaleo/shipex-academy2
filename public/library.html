@@ -10921,8 +10921,10 @@ function userChip(user) {
           // always split into Free/VIP sections — filtering by category or
           // searching just narrows what's inside each section, sections with
           // no matches are simply not shown
-          var freeCourses = list.filter(function (c) { return !c.vipOnly; });
-          var vipCourses = list.filter(function (c) { return c.vipOnly; });
+          function isAvailableNow(c) { return Boolean(courseStats(c).allReady || c.availableOverride); }
+          function availableFirst(a, b) { return Number(isAvailableNow(b)) - Number(isAvailableNow(a)); }
+          var freeCourses = list.filter(function (c) { return !c.vipOnly; }).sort(availableFirst);
+          var vipCourses = list.filter(function (c) { return c.vipOnly; }).sort(availableFirst);
           grid.className = "course-rows";
           if (freeCourses.length) grid.appendChild(buildCourseRow("Free Courses", freeCourses));
           if (vipCourses.length) grid.appendChild(buildCourseRow("VIP Courses", vipCourses));
