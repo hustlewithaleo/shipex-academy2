@@ -180,27 +180,29 @@ async function sendEmail(to, subject, html) {
   }
 }
 
-// shared dark, branded shell every email is rendered inside
+// Plain, personal-note-style shell (white background, no buttons/boxes) —
+// heavy dark HTML with big CTA buttons reads as "marketing" to Gmail's
+// classifier and gets filed under Promotions instead of the primary inbox.
 function emailShell(bodyHtml) {
+  const f = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
   return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body style="margin:0;padding:0;background-color:#0a0a0a;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0a0a;">
-<tr><td align="center" style="padding:44px 20px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-<tr><td align="center" style="padding-bottom:32px;">
-<span style="font-size:20px;font-weight:700;letter-spacing:-0.02em;color:#ffffff;">SHIPEX<span style="color:#FF4211;">.</span>ACADEMY</span>
+<body style="margin:0;padding:0;background-color:#ffffff;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;">
+<tr><td align="center" style="padding:32px 20px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;font-family:${f};">
+<tr><td style="padding-bottom:22px;">
+<span style="font-size:15px;font-weight:700;letter-spacing:-0.01em;color:#111111;">Shipex<span style="color:#FF4211;">.</span>Academy</span>
 </td></tr>
-<tr><td style="background-color:#121212;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:40px 36px;">
+<tr><td style="color:#1a1a1a;font-size:15px;line-height:1.65;font-family:${f};">
 ${bodyHtml}
 </td></tr>
-<tr><td align="center" style="padding-top:28px;">
-<p style="margin:0 0 8px;font-size:13px;color:#6b6b6b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">Shipex Academy — free access to the courses that actually work.</p>
-<p style="margin:0;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="https://discord.gg/shipex" style="color:#8a8a8a;text-decoration:underline;">Join the Discord community</a></p>
+<tr><td style="padding-top:28px;border-top:1px solid #eeeeee;">
+<p style="margin:20px 0 0;font-size:13px;color:#999999;font-family:${f};">Shipex Academy · <a href="https://discord.gg/shipex" style="color:#999999;">Join us on Discord</a></p>
 </td></tr>
 </table>
 </td></tr>
@@ -209,40 +211,23 @@ ${bodyHtml}
 </html>`;
 }
 
-function emailButton(url, label, color) {
-  return `<a href="${url}" style="display:inline-block;background:${color || "#FF4211"};color:#101604;font-weight:700;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:999px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">${label}</a>`;
-}
-
 function welcomeEmailHtml(name, checkoutUrl) {
-  const f = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
   return emailShell(`
-<h1 style="margin:0 0 16px;font-size:24px;letter-spacing:-0.02em;color:#ffffff;font-family:${f};">You're in, ${name}.</h1>
-<p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a9a9a9;font-family:${f};">No funnel, no upsell email sequence, no "limited spots" nonsense — you just got free access to some of the highest-priced e-commerce, ai, and marketing courses out there. Go pick one and start.</p>
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px;"><tr><td>${emailButton("https://www.shipex.academy/library", "Go to the library")}</td></tr></table>
-<div style="border-top:1px solid rgba(255,255,255,0.08);margin:0 0 24px;"></div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(160deg, rgba(255,168,60,0.08), transparent);border:1px solid rgba(255,168,60,0.25);border-radius:14px;">
-<tr><td style="padding:22px 24px;">
-<p style="margin:0 0 6px;font-size:11px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#FFA83C;font-family:${f};">Want the rest of it too?</p>
-<p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">Most of the catalog is VIP-only — courses that cost thousands elsewhere. $29/month gets you all of it, every future course we add, and a role in Discord. Cancel whenever you want, no questions asked.</p>
-${emailButton(checkoutUrl, "Get VIP — $29/mo", "linear-gradient(135deg,#FFA83C,#FF4211)")}
-</td></tr>
-</table>
-<p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:#8a8a8a;font-family:${f};">Either way — come say hi in Discord. That's where new drops get announced first and where you'll actually get help if you're stuck.</p>
+<p style="margin:0 0 16px;">Hey ${name},</p>
+<p style="margin:0 0 16px;">You're in. No funnel, no upsell sequence, no "limited spots" — you just got free access to some of the highest-priced e-commerce, AI, and marketing courses out there.</p>
+<p style="margin:0 0 16px;">Go pick one and start: <a href="https://www.shipex.academy/library" style="color:#FF4211;">shipex.academy/library</a></p>
+<p style="margin:0 0 16px;">Most of the catalog is actually VIP-only — courses that cost thousands elsewhere. $29/month unlocks all of it, plus everything we add after, and you can cancel whenever. If that's useful to you: <a href="${checkoutUrl}" style="color:#FF4211;">get VIP</a>.</p>
+<p style="margin:0;">Either way, come say hi in <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> — that's where new courses get announced first.</p>
 `);
 }
 
 function vipEmailHtml(name) {
-  const f = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
   return emailShell(`
-<p style="margin:0 0 6px;font-size:11px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#FFA83C;font-family:${f};">Welcome to VIP</p>
-<h1 style="margin:0 0 16px;font-size:24px;letter-spacing:-0.02em;color:#ffffff;font-family:${f};">You're VIP now, ${name}.</h1>
-<p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a9a9a9;font-family:${f};">Every course on the site is unlocked — the ones that were locked five minutes ago, and every one we add from here on out, automatically, for as long as you're a member.</p>
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px;"><tr><td>${emailButton("https://www.shipex.academy/library", "See what just unlocked")}</td></tr></table>
-<div style="border-top:1px solid rgba(255,255,255,0.08);margin:0 0 24px;"></div>
-<p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">Two things worth doing right now:</p>
-<p style="margin:0 0 6px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">— Head into <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> and grab your VIP role. That's also where you'll hear about new courses before anyone else.</p>
-<p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">— If there's a course you want us to go get, request it from the library. VIP members get their requests looked at first.</p>
-<p style="margin:0;font-size:13px;line-height:1.6;color:#6b6b6b;font-family:${f};">Cancel anytime from Whop — no contracts, no retention maze, no hard feelings.</p>
+<p style="margin:0 0 16px;">Hey ${name},</p>
+<p style="margin:0 0 16px;">You're VIP now — everything that was locked is unlocked, and every course we add from here on is included automatically for as long as you're a member.</p>
+<p style="margin:0 0 16px;">See what just opened up: <a href="https://www.shipex.academy/library" style="color:#FF4211;">shipex.academy/library</a></p>
+<p style="margin:0 0 16px;">Two things worth doing now — grab your VIP role in <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> (that's also where new courses get announced first), and if there's a course you want us to go get, request it from the library — VIP requests get looked at first.</p>
+<p style="margin:0;">Cancel anytime from Whop, no contracts, no hoops.</p>
 `);
 }
 
