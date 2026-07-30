@@ -46,6 +46,8 @@ const {
   GOOGLE_CLIENT_ID,            // optional — enables "Continue with Google"
   GOOGLE_CLIENT_SECRET,
   GOOGLE_REDIRECT_URI,
+  RESEND_API_KEY,              // optional — enables welcome / VIP-purchase emails
+  RESEND_FROM_EMAIL,
   PORT = 3000,
   NODE_ENV = "development",
 } = process.env;
@@ -92,7 +94,7 @@ const AUTO_JOIN_GUILD = Boolean(DISCORD_BOT_TOKEN && DISCORD_GUILD_ID);
 // "guilds.join" lets us add the user to your server with the bot token below.
 // Drop it if you never set DISCORD_BOT_TOKEN / DISCORD_GUILD_ID — Discord will
 // reject the whole auth request if a scope's requirements aren't met.
-const SCOPES = AUTO_JOIN_GUILD ? ["identify", "guilds.join"] : ["identify"];
+const SCOPES = AUTO_JOIN_GUILD ? ["identify", "email", "guilds.join"] : ["identify", "email"];
 if (!AUTO_JOIN_GUILD) {
   console.log("[discord] DISCORD_BOT_TOKEN / DISCORD_GUILD_ID not set — skipping auto-join to your server.");
 }
@@ -154,6 +156,94 @@ if (DISCORD_BOT_TOKEN && !DISCORD_ANNOUNCE_CHANNEL_ID) {
 const GOOGLE_CONFIGURED = Boolean(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REDIRECT_URI);
 if (!GOOGLE_CONFIGURED) {
   console.log("[google] GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET / GOOGLE_REDIRECT_URI not set — Google sign-in is disabled.");
+}
+
+// ---- transactional email (Resend) ----
+const RESEND_CONFIGURED = Boolean(RESEND_API_KEY && RESEND_FROM_EMAIL);
+if (!RESEND_CONFIGURED) {
+  console.log("[email] RESEND_API_KEY / RESEND_FROM_EMAIL not set — welcome/VIP emails are disabled.");
+}
+async function sendEmail(to, subject, html) {
+  if (!RESEND_CONFIGURED || !to) return;
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to, subject, html }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error("[email] send failed:", res.status, body);
+    }
+  } catch (e) {
+    console.error("[email] send error:", e.message);
+  }
+}
+
+// shared dark, branded shell every email is rendered inside
+function emailShell(bodyHtml) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="margin:0;padding:0;background-color:#0a0a0a;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0a0a;">
+<tr><td align="center" style="padding:44px 20px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<tr><td align="center" style="padding-bottom:32px;">
+<span style="font-size:20px;font-weight:700;letter-spacing:-0.02em;color:#ffffff;">SHIPEX<span style="color:#FF4211;">.</span>ACADEMY</span>
+</td></tr>
+<tr><td style="background-color:#121212;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:40px 36px;">
+${bodyHtml}
+</td></tr>
+<tr><td align="center" style="padding-top:28px;">
+<p style="margin:0 0 8px;font-size:13px;color:#6b6b6b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">Shipex Academy — free access to the courses that actually work.</p>
+<p style="margin:0;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="https://discord.gg/shipex" style="color:#8a8a8a;text-decoration:underline;">Join the Discord community</a></p>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
+function emailButton(url, label, color) {
+  return `<a href="${url}" style="display:inline-block;background:${color || "#FF4211"};color:#101604;font-weight:700;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:999px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">${label}</a>`;
+}
+
+function welcomeEmailHtml(name, checkoutUrl) {
+  const f = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+  return emailShell(`
+<h1 style="margin:0 0 16px;font-size:24px;letter-spacing:-0.02em;color:#ffffff;font-family:${f};">You're in, ${name}.</h1>
+<p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a9a9a9;font-family:${f};">No funnel, no upsell email sequence, no "limited spots" nonsense — you just got free access to some of the highest-priced e-commerce, ai, and marketing courses out there. Go pick one and start.</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px;"><tr><td>${emailButton("https://www.shipex.academy/library", "Go to the library")}</td></tr></table>
+<div style="border-top:1px solid rgba(255,255,255,0.08);margin:0 0 24px;"></div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(160deg, rgba(255,168,60,0.08), transparent);border:1px solid rgba(255,168,60,0.25);border-radius:14px;">
+<tr><td style="padding:22px 24px;">
+<p style="margin:0 0 6px;font-size:11px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#FFA83C;font-family:${f};">Want the rest of it too?</p>
+<p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">Most of the catalog is VIP-only — courses that cost thousands elsewhere. $29/month gets you all of it, every future course we add, and a role in Discord. Cancel whenever you want, no questions asked.</p>
+${emailButton(checkoutUrl, "Get VIP — $29/mo", "linear-gradient(135deg,#FFA83C,#FF4211)")}
+</td></tr>
+</table>
+<p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:#8a8a8a;font-family:${f};">Either way — come say hi in Discord. That's where new drops get announced first and where you'll actually get help if you're stuck.</p>
+`);
+}
+
+function vipEmailHtml(name) {
+  const f = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+  return emailShell(`
+<p style="margin:0 0 6px;font-size:11px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#FFA83C;font-family:${f};">Welcome to VIP</p>
+<h1 style="margin:0 0 16px;font-size:24px;letter-spacing:-0.02em;color:#ffffff;font-family:${f};">You're VIP now, ${name}.</h1>
+<p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a9a9a9;font-family:${f};">Every course on the site is unlocked — the ones that were locked five minutes ago, and every one we add from here on out, automatically, for as long as you're a member.</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px;"><tr><td>${emailButton("https://www.shipex.academy/library", "See what just unlocked")}</td></tr></table>
+<div style="border-top:1px solid rgba(255,255,255,0.08);margin:0 0 24px;"></div>
+<p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">Two things worth doing right now:</p>
+<p style="margin:0 0 6px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">— Head into <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> and grab your VIP role. That's also where you'll hear about new courses before anyone else.</p>
+<p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#c9c9c9;font-family:${f};">— If there's a course you want us to go get, request it from the library. VIP members get their requests looked at first.</p>
+<p style="margin:0;font-size:13px;line-height:1.6;color:#6b6b6b;font-family:${f};">Cancel anytime from Whop — no contracts, no retention maze, no hard feelings.</p>
+`);
 }
 
 // Posts "X just joined" into your announcement channel. Fires on every completed
@@ -375,6 +465,7 @@ async function upsertMember(user, extra) {
     authProvider: user.authProvider || existing.authProvider || "discord",
     discordUsername: user.authProvider === "local" ? (existing.discordUsername || null) : user.username,
     niche: (extra && extra.niche) || existing.niche || null,
+    email: (extra && extra.email) || existing.email || null,
     firstSeen: existing.firstSeen || Date.now(),
     lastSeen: Date.now(),
     totalWatchSeconds: existing.totalWatchSeconds || 0,
@@ -635,12 +726,19 @@ app.get("/auth/discord/callback", async (req, res) => {
     }
 
     setSession(res, user);
-    upsertMember(user).catch((e) => console.error("[members] upsert failed:", e.message));
+    upsertMember(user, { email: d.email || null }).catch((e) => console.error("[members] upsert failed:", e.message));
     if (isNewMember) {
       if (req.cookies.ref_code) {
         recordReferral(d.id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
       }
       claimSignupIp(req.ip, d.id).catch((e) => console.error("[signup-ip] claim failed:", e.message));
+      // Discord only shares an email if the user granted the "email" scope
+      // (and has one verified) — send the welcome email when we actually got one.
+      if (d.email) {
+        getPersonalizedCheckoutUrl(d.id, d.username)
+          .then((checkoutUrl) => sendEmail(d.email, "Welcome to Shipex Academy", welcomeEmailHtml(user.displayName, checkoutUrl)))
+          .catch((e) => console.error("[email] welcome send failed:", e.message));
+      }
     }
     res.clearCookie("ref_code");
 
@@ -732,7 +830,7 @@ app.get("/auth/google/callback", async (req, res) => {
     }
 
     setSession(res, user);
-    upsertMember(user).catch((e) => console.error("[members] upsert failed:", e.message));
+    upsertMember(user, { email: g.email || null }).catch((e) => console.error("[members] upsert failed:", e.message));
     if (isNewMember) {
       if (req.cookies.ref_code) {
         recordReferral(id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
@@ -746,6 +844,11 @@ app.get("/auth/google/callback", async (req, res) => {
             content: `📝 **New registration (Google)**\nName: ${user.displayName}\nEmail: ${g.email || "—"}\nIP: ${req.ip}`,
           }),
         }).catch((e) => console.error("[discord] google join announcement failed:", e.message));
+      }
+      if (g.email) {
+        getPersonalizedCheckoutUrl(id, user.username)
+          .then((checkoutUrl) => sendEmail(g.email, "Welcome to Shipex Academy", welcomeEmailHtml(user.displayName, checkoutUrl)))
+          .catch((e) => console.error("[email] welcome send failed:", e.message));
       }
     }
     res.clearCookie("ref_code");
@@ -1034,12 +1137,8 @@ app.get("/api/admin/course-stats", async (req, res) => {
 });
 
 /* ---- mint a per-user Whop checkout link carrying the buyer's Discord ID as metadata ---- */
-app.get("/api/vip-checkout-url", async (req, res) => {
-  const user = currentUser(req);
-  if (!user) return res.status(401).json({ error: "not_authenticated" });
-  if (!WHOP_PERSONALIZED_CHECKOUT) {
-    return res.json({ url: WHOP_CHECKOUT_URL || null });
-  }
+async function getPersonalizedCheckoutUrl(userId, username) {
+  if (!WHOP_PERSONALIZED_CHECKOUT) return WHOP_CHECKOUT_URL || null;
   try {
     const whopRes = await fetch("https://api.whop.com/api/v1/checkout_configurations", {
       method: "POST",
@@ -1050,23 +1149,29 @@ app.get("/api/vip-checkout-url", async (req, res) => {
       body: JSON.stringify({
         plan_id: WHOP_PLAN_ID,
         mode: "payment",
-        metadata: { discord_id: user.id, discord_username: user.username },
+        metadata: { discord_id: userId, discord_username: username },
       }),
     });
     if (!whopRes.ok) {
       const body = await whopRes.text().catch(() => "");
       console.error("[whop] failed to create checkout configuration:", whopRes.status, body);
-      return res.json({ url: WHOP_CHECKOUT_URL || null });
+      return WHOP_CHECKOUT_URL || null;
     }
     const config = await whopRes.json();
-    const purchaseUrl = config.purchase_url && config.purchase_url.startsWith("http")
+    return config.purchase_url && config.purchase_url.startsWith("http")
       ? config.purchase_url
       : `https://whop.com${config.purchase_url}`;
-    res.json({ url: purchaseUrl });
   } catch (e) {
     console.error("[whop] checkout configuration request failed:", e.message);
-    res.json({ url: WHOP_CHECKOUT_URL || null });
+    return WHOP_CHECKOUT_URL || null;
   }
+}
+
+app.get("/api/vip-checkout-url", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  const url = await getPersonalizedCheckoutUrl(user.id, user.username);
+  res.json({ url });
 });
 
 /* ---- Whop webhook: fires when a VIP purchase completes ---- */
@@ -1160,6 +1265,15 @@ app.post("/api/whop-webhook", async (req, res) => {
         });
       }
     }
+    // Whop's payload usually has the buyer's email directly; fall back to
+    // whatever we already have on file for them (from signup) if not.
+    const buyerEmail = data.user?.email || data.email || data.customer?.email || null;
+    (async () => {
+      const member = (await readMembers())[discordId];
+      const email = buyerEmail || member?.email || null;
+      if (!email) return;
+      await sendEmail(email, "You're VIP now 🎉", vipEmailHtml(member?.displayName || discordUsername || "there"));
+    })().catch((e) => console.error("[email] VIP send failed:", e.message));
     res.json({ ok: true });
   } catch (e) {
     console.error("[whop] failed to record VIP membership:", e.message);
@@ -1208,7 +1322,7 @@ app.post("/auth/register", async (req, res) => {
     claimSignupIp(req.ip, id).catch((e) => console.error("[signup-ip] claim failed:", e.message));
 
     setSession(res, { id, username, displayName: username, avatar: null, authProvider: "local" });
-    upsertMember({ id, username, displayName: username, authProvider: "local" }, { niche }).catch((e) => console.error("[members] upsert failed:", e.message));
+    upsertMember({ id, username, displayName: username, authProvider: "local" }, { niche, email }).catch((e) => console.error("[members] upsert failed:", e.message));
     if (req.cookies.ref_code) {
       recordReferral(id, req.cookies.ref_code).catch((e) => console.error("[affiliate] failed:", e.message));
       res.clearCookie("ref_code");
@@ -1229,6 +1343,10 @@ app.post("/auth/register", async (req, res) => {
         }),
       }).catch((e) => console.error("[discord] registration announcement failed:", e.message));
     }
+
+    getPersonalizedCheckoutUrl(id, username)
+      .then((checkoutUrl) => sendEmail(email, "Welcome to Shipex Academy", welcomeEmailHtml(username, checkoutUrl)))
+      .catch((e) => console.error("[email] welcome send failed:", e.message));
 
     res.json({ ok: true });
   } catch (e) {
