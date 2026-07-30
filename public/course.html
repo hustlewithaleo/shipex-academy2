@@ -11381,12 +11381,15 @@ function userChip(user) {
           showCourseSupport();
           return;
         }
-        if (vipLocked) {
-          document.getElementById("courseVipModal").classList.add("open");
-          return;
-        }
+        // guests need an account regardless of VIP status — and VIP
+        // checkout itself requires being logged in — so send them to log
+        // in/register first, before ever showing the VIP-required prompt.
         if (isGuest) {
           requireAuth();
+          return;
+        }
+        if (vipLocked) {
+          document.getElementById("courseVipModal").classList.add("open");
           return;
         }
         document.getElementById("courseIntro").classList.remove("open");
