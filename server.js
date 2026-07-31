@@ -890,6 +890,29 @@ app.get("/api/preview-video-url", async (req, res) => {
   }
 });
 
+/* ---- course-intro preview videos: signed URL for a whitelisted set of keys, no login required ---- */
+const INTRO_VIDEO_KEYS = new Set([
+  "Zakaria Airakaz - ECOM Masterclass  [ JUN-2026 ]/1. Unlock the 100M$ Version of Yourself/4. How To Unfuck Your Life And Protect It To Go To The 100M$.mp4",
+  "Intro Videos/HTE Welcome Video.mp4",
+  "Intro Videos/Evolve.mp4",
+  "Intro Videos/Impact.mp4",
+  "Intro Videos/AB Inner Circle.mp4",
+  "Intro Videos/Viral Ai Wizards.mp4",
+]);
+app.get("/api/intro-video-url", async (req, res) => {
+  if (!VIDEO_STORAGE_CONFIGURED) return res.status(503).json({ error: "video_storage_not_configured" });
+  const key = req.query.key;
+  if (!key || !INTRO_VIDEO_KEYS.has(String(key))) return res.status(400).json({ error: "invalid_key" });
+  try {
+    const command = new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: String(key) });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: VIDEO_URL_TTL_SECONDS });
+    res.json({ url });
+  } catch (e) {
+    console.error("[r2] failed to sign URL for intro video", key, e.message);
+    res.status(500).json({ error: "sign_failed" });
+  }
+});
+
 /* ---- resource downloads (PDFs, worksheets, etc.) — same gate as video ---- */
 app.get("/api/download-url", async (req, res) => {
   if (!currentUser(req)) return res.status(401).json({ error: "not_authenticated" });
