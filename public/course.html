@@ -1876,10 +1876,10 @@ p {
         </div>
         <div class="player__placeholder" id="placeholder">
           <div>
-            <div class="player__play">
+            <div class="player__play" id="placeholderIcon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="#101604"><path d="M8 5v14l11-7z"/></svg>
             </div>
-            <div class="player__note"><b>Video placeholder</b> — drop your file URL into this lesson's <code>src</code> in data.js</div>
+            <div class="player__note" id="placeholderNote"><b>Video placeholder</b> — drop your file URL into this lesson's <code>src</code> in data.js</div>
           </div>
         </div>
       </div>
@@ -23899,6 +23899,15 @@ function userChip(user) {
         video.style.display = "none";
         video.removeAttribute("src");
         placeholder.style.display = "grid";
+        var placeholderNote = document.getElementById("placeholderNote");
+        var placeholderIcon = document.getElementById("placeholderIcon");
+        if (ls.resources && ls.resources.length) {
+          placeholderNote.innerHTML = "<b>No video for this one</b> — it's a resource download, check the Resources tab below";
+          placeholderIcon.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#101604" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+        } else {
+          placeholderNote.innerHTML = "<b>Video placeholder</b> — drop your file URL into this lesson's <code>src</code> in data.js";
+          placeholderIcon.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="#101604"><path d="M8 5v14l11-7z"/></svg>';
+        }
       }
 
       // resources
