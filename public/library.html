@@ -1396,6 +1396,14 @@ p {
   background: rgba(236, 72, 153, 0.14); border: 1px solid rgba(236, 72, 153, 0.4);
   vertical-align: middle;
 }
+.ccard__french-tag-inline {
+  display: inline-block;
+  font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #A78BFA;
+  padding: 2px 8px; border-radius: 999px;
+  background: rgba(167, 139, 250, 0.14); border: 1px solid rgba(167, 139, 250, 0.4);
+  vertical-align: middle;
+}
 
 /* course card category tag — sits over the cover art */
 .ccard__tags {
@@ -1707,6 +1715,7 @@ p {
 const COURSES = [
   {
     id: "zecom-academy",
+    french: true,
     title: "Zecom Academy by Zezinho",
     tagline: "Le système complet pour lancer et scaler une boutique e-commerce — mindset, recherche produit, création de boutique, email et SMS marketing, service client, publicités Meta, création de créatives, et automatisation avec ChatGPT.",
     cover: "./zecom.png",
@@ -24985,7 +24994,8 @@ function userChip(user) {
           var freeInlineTag = !c.vipOnly ? '<span class="ccard__free-tag-inline">Free Access</span>' : '';
           var availableTag = (s.allReady || c.availableOverride) ? '<span class="ccard__available-tag-inline">Available Now</span>' : '';
           var popularTag = c.popular ? '<span class="ccard__popular-tag-inline">Popular</span>' : '';
-          var titleTags = [vipInlineTag, freeInlineTag, availableTag, popularTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
+          var frenchTag = c.french ? '<span class="ccard__french-tag-inline">French</span>' : '';
+          var titleTags = [vipInlineTag, freeInlineTag, availableTag, popularTag, frenchTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
           var card = el("a", "ccard" + (locked ? " ccard--locked" : ""));
           card.href = "course?c=" + c.id;
           card.innerHTML =
