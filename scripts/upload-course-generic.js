@@ -26,7 +26,17 @@ const s3 = new S3Client({
 const CONTENT_TYPES = {
   ".mp4": "video/mp4", ".mkv": "video/x-matroska", ".mov": "video/quicktime", ".m4v": "video/x-m4v",
   ".txt": "text/plain", ".pdf": "application/pdf",
+  ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  ".csv": "text/csv", ".zip": "application/zip",
 };
+if (process.env.INCLUDE_IMAGES === "1") {
+  Object.assign(CONTENT_TYPES, {
+    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+    ".gif": "image/gif", ".webp": "image/webp",
+  });
+}
 
 function isJunk(name) {
   return name.startsWith("._") || name === ".DS_Store" || name === "Thumbs.db";
