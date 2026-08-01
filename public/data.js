@@ -83,7 +83,7 @@ const COURSES = [
             duration: "",
             src: "",
             resources: [
-              { title: "Bulletproof+Email+Deliverability+Checklist", url: "Acquisition X/2. Technical Copy Setup/Bulletproof+Email+Deliverability+Checklist.pdf" },
+              { name: "Bulletproof+Email+Deliverability+Checklist", size: "88 KB", key: "Acquisition X/2. Technical Copy Setup/Bulletproof+Email+Deliverability+Checklist.pdf" },
             ],
           },
         ],
@@ -643,7 +643,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Exercise+File+ (1)", url: "Acquisition X/6. Create Content that goes Viral/3. Graphic reaction with Canva/Exercise+File+ (1).pdf" },
+                  { name: "Exercise+File+ (1)", size: "50 KB", key: "Acquisition X/6. Create Content that goes Viral/3. Graphic reaction with Canva/Exercise+File+ (1).pdf" },
                 ],
               },
               {
@@ -652,7 +652,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Exercise+File+", url: "Acquisition X/6. Create Content that goes Viral/3. Graphic reaction with Canva/Exercise+File+.pdf" },
+                  { name: "Exercise+File+", size: "50 KB", key: "Acquisition X/6. Create Content that goes Viral/3. Graphic reaction with Canva/Exercise+File+.pdf" },
                 ],
               },
             ],
@@ -687,7 +687,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Canvas-Poster", url: "Acquisition X/7. Building Business Models for Business Growth/1. Understanding Business Models/Canvas-Poster.pdf" },
+                  { name: "Canvas-Poster", size: "801 KB", key: "Acquisition X/7. Building Business Models for Business Growth/1. Understanding Business Models/Canvas-Poster.pdf" },
                 ],
               },
               {
@@ -696,7 +696,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Project+Document +Business+Model+Canvas+Development", url: "Acquisition X/7. Building Business Models for Business Growth/1. Understanding Business Models/Project+Document_+Business+Model+Canvas+Development.pdf" },
+                  { name: "Project+Document +Business+Model+Canvas+Development", size: "61 KB", key: "Acquisition X/7. Building Business Models for Business Growth/1. Understanding Business Models/Project+Document_+Business+Model+Canvas+Development.pdf" },
                 ],
               },
             ],
@@ -896,7 +896,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Spaced+Repetition+Spreadsheet+(Manthan+Patel)", url: "Acquisition X/8. Learn how to learn anything/2. SAAD Framework/Spaced+Repetition+Spreadsheet+(Manthan+Patel).pdf" },
+                  { name: "Spaced+Repetition+Spreadsheet+(Manthan+Patel)", size: "62 KB", key: "Acquisition X/8. Learn how to learn anything/2. SAAD Framework/Spaced+Repetition+Spreadsheet+(Manthan+Patel).pdf" },
                 ],
               },
               {
@@ -905,7 +905,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Spaced+Repetition+Spreadsheet+(Manthan+Patel)+-+Sheet1", url: "Acquisition X/8. Learn how to learn anything/2. SAAD Framework/Spaced+Repetition+Spreadsheet+(Manthan+Patel)+-+Sheet1.csv" },
+                  { name: "Spaced+Repetition+Spreadsheet+(Manthan+Patel)+-+Sheet1", size: "1 KB", key: "Acquisition X/8. Learn how to learn anything/2. SAAD Framework/Spaced+Repetition+Spreadsheet+(Manthan+Patel)+-+Sheet1.csv" },
                 ],
               },
             ],
@@ -968,7 +968,7 @@ const COURSES = [
             duration: "11m",
             src: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/01- Basic Figma Tutorial.mp4",
             resources: [
-              { title: "Basic Figma Tutorial", url: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/01- Basic Figma Tutorial.pdf" },
+              { name: "Basic Figma Tutorial", size: "18 KB", key: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/01- Basic Figma Tutorial.pdf" },
             ],
           },
           {
@@ -977,7 +977,7 @@ const COURSES = [
             duration: "11m",
             src: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/02-How to Slice and Upload to Klaviyo.mp4",
             resources: [
-              { title: "How to Slice and Upload to Klaviyo", url: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/02-How to Slice and Upload to Klaviyo.pdf" },
+              { name: "How to Slice and Upload to Klaviyo", size: "19 KB", key: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/02-How to Slice and Upload to Klaviyo.pdf" },
             ],
           },
           {
@@ -986,7 +986,7 @@ const COURSES = [
             duration: "31m",
             src: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/03-Designing a GymShark Email Live.mp4",
             resources: [
-              { title: "Designing a GymShark Email Live", url: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/03-Designing a GymShark Email Live.pdf" },
+              { name: "Designing a GymShark Email Live", size: "14 KB", key: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/03-Designing a GymShark Email Live.pdf" },
             ],
           },
           {
@@ -995,7 +995,7 @@ const COURSES = [
             duration: "13m",
             src: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/04-Turning Bad Email Designs Into Masterpieces.mp4",
             resources: [
-              { title: "Turning Bad Email Designs Into Masterpieces", url: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/04-Turning Bad Email Designs Into Masterpieces.pdf" },
+              { name: "Turning Bad Email Designs Into Masterpieces", size: "13 KB", key: "Max Sturtevant - Ecommerce Email Mastery/01-Figma Email Design Tutorials/04-Turning Bad Email Designs Into Masterpieces.pdf" },
             ],
           },
         ],
@@ -1014,7 +1014,7 @@ const COURSES = [
                 duration: "5m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/01-Welcome In.mp4",
                 resources: [
-                  { title: "Welcome In", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/01-Welcome In.pdf" },
+                  { name: "Welcome In", size: "23 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/01-Welcome In.pdf" },
                 ],
               },
               {
@@ -1023,7 +1023,7 @@ const COURSES = [
                 duration: "18m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/02-The Profitable Ecommerce Funnel.mp4",
                 resources: [
-                  { title: "The Profitable Ecommerce Funnel", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/02-The Profitable Ecommerce Funnel.pdf" },
+                  { name: "The Profitable Ecommerce Funnel", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/02-The Profitable Ecommerce Funnel.pdf" },
                 ],
               },
               {
@@ -1032,7 +1032,7 @@ const COURSES = [
                 duration: "14m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/03-The 35 Pillars of Email Marketing.mp4",
                 resources: [
-                  { title: "The 35 Pillars of Email Marketing", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/03-The 35 Pillars of Email Marketing.pdf" },
+                  { name: "The 35 Pillars of Email Marketing", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/03-The 35 Pillars of Email Marketing.pdf" },
                 ],
               },
               {
@@ -1041,7 +1041,7 @@ const COURSES = [
                 duration: "7m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/04-How To Setup Klaviyo.mp4",
                 resources: [
-                  { title: "How To Setup Klaviyo", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/04-How To Setup Klaviyo.pdf" },
+                  { name: "How To Setup Klaviyo", size: "13 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/01-Intro/04-How To Setup Klaviyo.pdf" },
                 ],
               },
               {
@@ -1063,7 +1063,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/01-List Growth Intro.mp4",
                 resources: [
-                  { title: "List Growth Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/01-List Growth Intro.pdf" },
+                  { name: "List Growth Intro", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/01-List Growth Intro.pdf" },
                 ],
               },
               {
@@ -1072,7 +1072,7 @@ const COURSES = [
                 duration: "1m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/02-Checkout Page Sign-Ups.mp4",
                 resources: [
-                  { title: "Checkout Page Sign-Ups", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/02-Checkout Page Sign-Ups.pdf" },
+                  { name: "Checkout Page Sign-Ups", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/02-Checkout Page Sign-Ups.pdf" },
                 ],
               },
               {
@@ -1081,7 +1081,7 @@ const COURSES = [
                 duration: "2m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/03-Sign-Up Pages.mp4",
                 resources: [
-                  { title: "Sign-Up Pages", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/03-Sign-Up Pages.pdf" },
+                  { name: "Sign-Up Pages", size: "10 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/03-Sign-Up Pages.pdf" },
                 ],
               },
               {
@@ -1090,7 +1090,7 @@ const COURSES = [
                 duration: "1m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/04-Sign-Up Embeds.mp4",
                 resources: [
-                  { title: "Sign-Up Embeds", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/04-Sign-Up Embeds.pdf" },
+                  { name: "Sign-Up Embeds", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/04-Sign-Up Embeds.pdf" },
                 ],
               },
               {
@@ -1099,7 +1099,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/05-Importance of Pop-Up Forms.mp4",
                 resources: [
-                  { title: "Importance of Pop-Up Forms", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/05-Importance of Pop-Up Forms.pdf" },
+                  { name: "Importance of Pop-Up Forms", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/05-Importance of Pop-Up Forms.pdf" },
                 ],
               },
               {
@@ -1108,7 +1108,7 @@ const COURSES = [
                 duration: "10m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/06-How To Create An Effective Pop-Up Form.mp4",
                 resources: [
-                  { title: "How To Create An Effective Pop-Up Form", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/06-How To Create An Effective Pop-Up Form.pdf" },
+                  { name: "How To Create An Effective Pop-Up Form", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/06-How To Create An Effective Pop-Up Form.pdf" },
                 ],
               },
               {
@@ -1117,7 +1117,7 @@ const COURSES = [
                 duration: "8m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/07-Mistakes to Avoid in Pop-Up Forms.mp4",
                 resources: [
-                  { title: "Mistakes to Avoid in Pop-Up Forms", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/07-Mistakes to Avoid in Pop-Up Forms.pdf" },
+                  { name: "Mistakes to Avoid in Pop-Up Forms", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/07-Mistakes to Avoid in Pop-Up Forms.pdf" },
                 ],
               },
               {
@@ -1126,7 +1126,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/08-Great Pop-Up Form Examples.mp4",
                 resources: [
-                  { title: "Great Pop-Up Form Examples", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/08-Great Pop-Up Form Examples.pdf" },
+                  { name: "Great Pop-Up Form Examples", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/08-Great Pop-Up Form Examples.pdf" },
                 ],
               },
               {
@@ -1142,7 +1142,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Pop-Up Form Swipe File-20250517T135402Z-1-001", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/10-Pop-Up Form Swipe File-20250517T135402Z-1-001.zip" },
+                  { name: "Pop-Up Form Swipe File-20250517T135402Z-1-001", size: "14.5 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/02- List Growth/10-Pop-Up Form Swipe File-20250517T135402Z-1-001.zip" },
                 ],
               },
             ],
@@ -1157,7 +1157,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/01-Flows Intro.mp4",
                 resources: [
-                  { title: "Flows Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/01-Flows Intro.pdf" },
+                  { name: "Flows Intro", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/01-Flows Intro.pdf" },
                 ],
               },
               {
@@ -1166,7 +1166,7 @@ const COURSES = [
                 duration: "1m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/02-Welcome Flow video2.mp4",
                 resources: [
-                  { title: "Welcome Flow", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/02-Welcome Flow.pdf" },
+                  { name: "Welcome Flow", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/02-Welcome Flow.pdf" },
                 ],
               },
               {
@@ -1182,7 +1182,7 @@ const COURSES = [
                 duration: "2m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/03-Site Abandon Flow video2.mp4",
                 resources: [
-                  { title: "Site Abandon Flow", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/03-Site Abandon Flow.pdf" },
+                  { name: "Site Abandon Flow", size: "13 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/03-Site Abandon Flow.pdf" },
                 ],
               },
               {
@@ -1198,7 +1198,7 @@ const COURSES = [
                 duration: "2m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/04-Browse Abandon Flow video2.mp4",
                 resources: [
-                  { title: "Browse Abandon Flow", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/04-Browse Abandon Flow.pdf" },
+                  { name: "Browse Abandon Flow", size: "13 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/04-Browse Abandon Flow.pdf" },
                 ],
               },
               {
@@ -1214,7 +1214,7 @@ const COURSES = [
                 duration: "1m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/05-Cart - Checkout Abandon Flow video2.mp4",
                 resources: [
-                  { title: "Cart - Checkout Abandon Flow", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/05-Cart - Checkout Abandon Flow.pdf" },
+                  { name: "Cart - Checkout Abandon Flow", size: "16 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/05-Cart - Checkout Abandon Flow.pdf" },
                 ],
               },
               {
@@ -1237,7 +1237,7 @@ const COURSES = [
                 duration: "1m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/06-Post-Purchase Flow video2.mp4",
                 resources: [
-                  { title: "Post-Purchase Flow", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/06-Post-Purchase Flow.pdf" },
+                  { name: "Post-Purchase Flow", size: "13 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/06-Post-Purchase Flow.pdf" },
                 ],
               },
               {
@@ -1253,7 +1253,7 @@ const COURSES = [
                 duration: "1m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/07-Winback Flow video2.mp4",
                 resources: [
-                  { title: "Winback Flow", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/07-Winback Flow.pdf" },
+                  { name: "Winback Flow", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/07-Winback Flow.pdf" },
                 ],
               },
               {
@@ -1269,7 +1269,7 @@ const COURSES = [
                 duration: "3m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/08-Abandon Emails Dynamic Content.mp4",
                 resources: [
-                  { title: "Abandon Emails Dynamic Content", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/08-Abandon Emails Dynamic Content.pdf" },
+                  { name: "Abandon Emails Dynamic Content", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/08-Abandon Emails Dynamic Content.pdf" },
                 ],
               },
               {
@@ -1278,7 +1278,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/09-How To Create Klaviyo Discount Codes.mp4",
                 resources: [
-                  { title: "How To Create Klaviyo Discount Codes", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/09-How To Create Klaviyo Discount Codes.pdf" },
+                  { name: "How To Create Klaviyo Discount Codes", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/09-How To Create Klaviyo Discount Codes.pdf" },
                 ],
               },
               {
@@ -1287,7 +1287,7 @@ const COURSES = [
                 duration: "7m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/10-All Email Flow Templatests.mp4",
                 resources: [
-                  { title: "All Email Flow Templates", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/10-All Email Flow Templates.pdf" },
+                  { name: "All Email Flow Templates", size: "19 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/03- Flows/10-All Email Flow Templates.pdf" },
                 ],
               },
             ],
@@ -1302,7 +1302,7 @@ const COURSES = [
                 duration: "6m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/01-Campaigns Intro.mp4",
                 resources: [
-                  { title: "Campaigns Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/01-Campaigns Intro.pdf" },
+                  { name: "Campaigns Intro", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/01-Campaigns Intro.pdf" },
                 ],
               },
               {
@@ -1311,7 +1311,7 @@ const COURSES = [
                 duration: "9m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/02-Campaign Strategy.mp4",
                 resources: [
-                  { title: "Campaign Strategy", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/02-Campaign Strategy.pdf" },
+                  { name: "Campaign Strategy", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/02-Campaign Strategy.pdf" },
                 ],
               },
               {
@@ -1320,7 +1320,7 @@ const COURSES = [
                 duration: "26m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/03-29 Non-Discount Campaign Frameworks.mp4",
                 resources: [
-                  { title: "29 Non-Discount Campaign Frameworks", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/03-29 Non-Discount Campaign Frameworks.pdf" },
+                  { name: "29 Non-Discount Campaign Frameworks", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/03-29 Non-Discount Campaign Frameworks.pdf" },
                 ],
               },
               {
@@ -1329,7 +1329,7 @@ const COURSES = [
                 duration: "6m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/04-Unlimited Campaign Ideas ChatGPT Prompts.mp4",
                 resources: [
-                  { title: "Unlimited Campaign Ideas ChatGPT Prompts", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/04-Unlimited Campaign Ideas ChatGPT Prompts.pdf" },
+                  { name: "Unlimited Campaign Ideas ChatGPT Prompts", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/04-Unlimited Campaign Ideas ChatGPT Prompts.pdf" },
                 ],
               },
               {
@@ -1338,7 +1338,7 @@ const COURSES = [
                 duration: "10m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/06-Campaign Calendars.mp4",
                 resources: [
-                  { title: "Campaign Calendars", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/06-Campaign Calendars.pdf" },
+                  { name: "Campaign Calendars", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/06-Campaign Calendars.pdf" },
                 ],
               },
               {
@@ -1347,7 +1347,7 @@ const COURSES = [
                 duration: "33m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/07-Creating Lulu Lemons Campaign Calendar.mp4",
                 resources: [
-                  { title: "Creating Lulu Lemons Campaign Calendar", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/07-Creating Lulu Lemons Campaign Calendar.pdf" },
+                  { name: "Creating Lulu Lemons Campaign Calendar", size: "14 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/07-Creating Lulu Lemons Campaign Calendar.pdf" },
                 ],
               },
               {
@@ -1363,91 +1363,91 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "84 High-Converting Campaigns Swipe File", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-84 High-Converting Campaigns Swipe File.pdf" },
-                  { title: "A Year To Remember", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-A Year To Remember.png" },
-                  { title: "a-note-from-our-founders-munk-pack", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-a-note-from-our-founders-munk-pack.png" },
-                  { title: "absolutely-love", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-absolutely-love.png" },
-                  { title: "aff2839b22307c0ada2c8709e19ff197", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-aff2839b22307c0ada2c8709e19ff197.jpeg" },
-                  { title: "Afterpay Feature Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Afterpay Feature Outline.png" },
-                  { title: "Are whitening products harmful for your teeth LivFresh by Livionex", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Are whitening products harmful for your teeth_ _ LivFresh by Livionex.jpg" },
-                  { title: "Back In Stock", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Back In Stock.png" },
-                  { title: "Back in Stock1", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Back in Stock1.png" },
-                  { title: "Banner w Flash Sale", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Banner w_ Flash Sale.png" },
-                  { title: "Benefits Email", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Benefits Email.png" },
-                  { title: "Benefits Feature", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Benefits Feature.png" },
-                  { title: "Bestsellers Promo", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Bestsellers Promo.png" },
-                  { title: "Blog Feature Email Update", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Blog Feature Email Update.png" },
-                  { title: "Blog Feature", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Blog Feature.png" },
-                  { title: "Brand Benefits", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Brand Benefits.png" },
-                  { title: "Brand USPs", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Brand USPs.png" },
-                  { title: "Bundle Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Bundle Outline.png" },
-                  { title: "Collection Feature", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collection Feature.png" },
-                  { title: "Collection Spotlight", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collection Spotlight.png" },
-                  { title: "Collection Spotlight1", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collection Spotlight1.png" },
-                  { title: "Collections Spotlight", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collections Spotlight.png" },
-                  { title: "Comments as Testimonials", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Comments as Testimonials.png" },
-                  { title: "Content Email", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Content Email.png" },
-                  { title: "Crowd Pleasers", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Crowd Pleasers.png" },
-                  { title: "Customer Engagement", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Customer Engagement.png" },
-                  { title: "FAQ Address", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-FAQ Address.png" },
-                  { title: "FAQ Example", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-FAQ Example.png" },
-                  { title: "FAQ Supplement", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-FAQ Supplement.png" },
-                  { title: "Flash Discount", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Flash Discount.png" },
-                  { title: "Flash Sale", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Flash Sale.png" },
-                  { title: "Fun Fact", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Fun Fact.png" },
-                  { title: "Gift Guide", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Gift Guide.png" },
-                  { title: "Giveaway", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Giveaway.png" },
-                  { title: "Helpful Resurces", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Helpful Resurces.jpg" },
-                  { title: "Holiday Feature", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Holiday Feature.png" },
-                  { title: "How To FAQ", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How To FAQ.png" },
-                  { title: "How To Get The Most", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How To Get The Most.png" },
-                  { title: "How To xyz", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How To xyz.png" },
-                  { title: "How We Compare", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How We Compare.png" },
-                  { title: "image 23", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-image 23.png" },
-                  { title: "Knows How To Party", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Knows How To Party.png" },
-                  { title: "Last Chance Discount", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Last Chance Discount.jpg" },
-                  { title: "Last Chance Sale", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Last Chance Sale.jpeg" },
-                  { title: "Last Chance Urgency", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Last Chance Urgency.png" },
-                  { title: "last chance", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-last chance.jpg" },
-                  { title: "Magic Mind Email Example", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Magic Mind Email Example.png" },
-                  { title: "Magic Mind Example", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Magic Mind Example.png" },
-                  { title: "myth fact", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-myth fact.png" },
-                  { title: "mythfacts", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-mythfacts.png" },
-                  { title: "National Holiday Feature", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-National Holiday Feature.png" },
-                  { title: "National Holiday", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-National Holiday.png" },
-                  { title: "New Feature Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-New Feature Outline.png" },
-                  { title: "New Product Drop", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-New Product Drop.png" },
-                  { title: "Open Spaces", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Open Spaces.png" },
-                  { title: "pre-easter", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-pre-easter.png" },
-                  { title: "Product Benefits", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Product Benefits.png" },
-                  { title: "Product Spotlight", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Product Spotlight.png" },
-                  { title: "Recent Reviews on Livfresh LivFresh by Livionex", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Recent Reviews on Livfresh _ LivFresh by Livionex.jpg" },
-                  { title: "Recipe Eail", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Recipe Eail.png" },
-                  { title: "Recipies", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Recipies.png" },
-                  { title: "research study", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-research study.jpg" },
-                  { title: "Routine Worthy Of You", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Routine Worthy Of You.png" },
-                  { title: "Sale Closer", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Sale Closer.png" },
-                  { title: "Single Benefit Feature", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Feature.png" },
-                  { title: "Single Benefit Outline 1", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Outline 1.png" },
-                  { title: "Single Benefit Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Outline.jpg" },
-                  { title: "Single Benefit Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Outline.png" },
-                  { title: "Single Collection Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Collection Outline.png" },
-                  { title: "Single FAQ Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single FAQ Outline.png" },
-                  { title: "Single Ingredient Fearure", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Ingredient Fearure.png" },
-                  { title: "Single Product Outline", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Product Outline.png" },
-                  { title: "Still Want", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Still Want_.png" },
-                  { title: "Testimonials Social Proof", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Testimonials Social Proof.png" },
-                  { title: "Testimonials", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Testimonials.png" },
-                  { title: "Tips and Tricks", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Tips and Tricks.png" },
-                  { title: "Trending Collection", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Trending Collection.gif" },
-                  { title: "Update", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Update.png" },
-                  { title: "Us Versus Them", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us Versus Them.png" },
-                  { title: "Us vs Them Supplement", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us vs Them Supplement.png" },
-                  { title: "Us Vs Them", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us Vs Them.jpeg" },
-                  { title: "Us vs Them", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us vs Them.png" },
-                  { title: "Wake Up And Smell", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Wake Up And Smell.png" },
-                  { title: "Whats Inside Bundle", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Whats Inside Bundle.png" },
-                  { title: "Whats Inside", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Whats Inside.png" },
+                  { name: "84 High-Converting Campaigns Swipe File", size: "17 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-84 High-Converting Campaigns Swipe File.pdf" },
+                  { name: "A Year To Remember", size: "187 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-A Year To Remember.png" },
+                  { name: "a-note-from-our-founders-munk-pack", size: "415 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-a-note-from-our-founders-munk-pack.png" },
+                  { name: "absolutely-love", size: "237 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-absolutely-love.png" },
+                  { name: "aff2839b22307c0ada2c8709e19ff197", size: "104 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-aff2839b22307c0ada2c8709e19ff197.jpeg" },
+                  { name: "Afterpay Feature Outline", size: "3.4 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Afterpay Feature Outline.png" },
+                  { name: "Are whitening products harmful for your teeth LivFresh by Livionex", size: "6.6 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Are whitening products harmful for your teeth_ _ LivFresh by Livionex.jpg" },
+                  { name: "Back In Stock", size: "340 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Back In Stock.png" },
+                  { name: "Back in Stock1", size: "2.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Back in Stock1.png" },
+                  { name: "Banner w Flash Sale", size: "325 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Banner w_ Flash Sale.png" },
+                  { name: "Benefits Email", size: "915 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Benefits Email.png" },
+                  { name: "Benefits Feature", size: "3.5 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Benefits Feature.png" },
+                  { name: "Bestsellers Promo", size: "5.5 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Bestsellers Promo.png" },
+                  { name: "Blog Feature Email Update", size: "3.0 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Blog Feature Email Update.png" },
+                  { name: "Blog Feature", size: "312 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Blog Feature.png" },
+                  { name: "Brand Benefits", size: "5.8 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Brand Benefits.png" },
+                  { name: "Brand USPs", size: "1.1 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Brand USPs.png" },
+                  { name: "Bundle Outline", size: "83 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Bundle Outline.png" },
+                  { name: "Collection Feature", size: "2.7 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collection Feature.png" },
+                  { name: "Collection Spotlight", size: "1.2 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collection Spotlight.png" },
+                  { name: "Collection Spotlight1", size: "718 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collection Spotlight1.png" },
+                  { name: "Collections Spotlight", size: "355 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Collections Spotlight.png" },
+                  { name: "Comments as Testimonials", size: "212 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Comments as Testimonials.png" },
+                  { name: "Content Email", size: "2.0 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Content Email.png" },
+                  { name: "Crowd Pleasers", size: "235 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Crowd Pleasers.png" },
+                  { name: "Customer Engagement", size: "227 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Customer Engagement.png" },
+                  { name: "FAQ Address", size: "719 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-FAQ Address.png" },
+                  { name: "FAQ Example", size: "1.1 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-FAQ Example.png" },
+                  { name: "FAQ Supplement", size: "748 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-FAQ Supplement.png" },
+                  { name: "Flash Discount", size: "570 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Flash Discount.png" },
+                  { name: "Flash Sale", size: "3.0 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Flash Sale.png" },
+                  { name: "Fun Fact", size: "2.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Fun Fact.png" },
+                  { name: "Gift Guide", size: "6.8 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Gift Guide.png" },
+                  { name: "Giveaway", size: "271 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Giveaway.png" },
+                  { name: "Helpful Resurces", size: "114 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Helpful Resurces.jpg" },
+                  { name: "Holiday Feature", size: "2.4 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Holiday Feature.png" },
+                  { name: "How To FAQ", size: "377 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How To FAQ.png" },
+                  { name: "How To Get The Most", size: "155 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How To Get The Most.png" },
+                  { name: "How To xyz", size: "512 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How To xyz.png" },
+                  { name: "How We Compare", size: "2.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-How We Compare.png" },
+                  { name: "image 23", size: "287 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-image 23.png" },
+                  { name: "Knows How To Party", size: "471 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Knows How To Party.png" },
+                  { name: "Last Chance Discount", size: "1.8 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Last Chance Discount.jpg" },
+                  { name: "Last Chance Sale", size: "63 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Last Chance Sale.jpeg" },
+                  { name: "Last Chance Urgency", size: "767 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Last Chance Urgency.png" },
+                  { name: "last chance", size: "4.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-last chance.jpg" },
+                  { name: "Magic Mind Email Example", size: "498 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Magic Mind Email Example.png" },
+                  { name: "Magic Mind Example", size: "1.1 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Magic Mind Example.png" },
+                  { name: "myth fact", size: "220 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-myth fact.png" },
+                  { name: "mythfacts", size: "171 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-mythfacts.png" },
+                  { name: "National Holiday Feature", size: "492 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-National Holiday Feature.png" },
+                  { name: "National Holiday", size: "327 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-National Holiday.png" },
+                  { name: "New Feature Outline", size: "278 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-New Feature Outline.png" },
+                  { name: "New Product Drop", size: "187 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-New Product Drop.png" },
+                  { name: "Open Spaces", size: "523 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Open Spaces.png" },
+                  { name: "pre-easter", size: "2.9 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-pre-easter.png" },
+                  { name: "Product Benefits", size: "2.2 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Product Benefits.png" },
+                  { name: "Product Spotlight", size: "88 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Product Spotlight.png" },
+                  { name: "Recent Reviews on Livfresh LivFresh by Livionex", size: "9.2 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Recent Reviews on Livfresh _ LivFresh by Livionex.jpg" },
+                  { name: "Recipe Eail", size: "1.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Recipe Eail.png" },
+                  { name: "Recipies", size: "3.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Recipies.png" },
+                  { name: "research study", size: "2.8 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-research study.jpg" },
+                  { name: "Routine Worthy Of You", size: "319 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Routine Worthy Of You.png" },
+                  { name: "Sale Closer", size: "5.8 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Sale Closer.png" },
+                  { name: "Single Benefit Feature", size: "1.5 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Feature.png" },
+                  { name: "Single Benefit Outline 1", size: "457 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Outline 1.png" },
+                  { name: "Single Benefit Outline", size: "124 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Outline.jpg" },
+                  { name: "Single Benefit Outline", size: "5.1 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Benefit Outline.png" },
+                  { name: "Single Collection Outline", size: "3.9 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Collection Outline.png" },
+                  { name: "Single FAQ Outline", size: "1.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single FAQ Outline.png" },
+                  { name: "Single Ingredient Fearure", size: "977 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Ingredient Fearure.png" },
+                  { name: "Single Product Outline", size: "1.5 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Single Product Outline.png" },
+                  { name: "Still Want", size: "2.0 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Still Want_.png" },
+                  { name: "Testimonials Social Proof", size: "4.3 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Testimonials Social Proof.png" },
+                  { name: "Testimonials", size: "1.8 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Testimonials.png" },
+                  { name: "Tips and Tricks", size: "2.4 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Tips and Tricks.png" },
+                  { name: "Trending Collection", size: "1.9 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Trending Collection.gif" },
+                  { name: "Update", size: "290 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Update.png" },
+                  { name: "Us Versus Them", size: "294 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us Versus Them.png" },
+                  { name: "Us vs Them Supplement", size: "4.6 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us vs Them Supplement.png" },
+                  { name: "Us Vs Them", size: "337 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us Vs Them.jpeg" },
+                  { name: "Us vs Them", size: "2.2 MB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Us vs Them.png" },
+                  { name: "Wake Up And Smell", size: "272 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Wake Up And Smell.png" },
+                  { name: "Whats Inside Bundle", size: "206 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Whats Inside Bundle.png" },
+                  { name: "Whats Inside", size: "104 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/04- Campaigns/05-Whats Inside.png" },
                 ],
               },
             ],
@@ -1462,7 +1462,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/01-Copywriting Intro.mp4",
                 resources: [
-                  { title: "Copywriting Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/01-Copywriting Intro.pdf" },
+                  { name: "Copywriting Intro", size: "13 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/01-Copywriting Intro.pdf" },
                 ],
               },
               {
@@ -1471,7 +1471,7 @@ const COURSES = [
                 duration: "8m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/02-What To Avoid In Your Copy.mp4",
                 resources: [
-                  { title: "What To Avoid In Your Copy", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/02-What To Avoid In Your Copy.pdf" },
+                  { name: "What To Avoid In Your Copy", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/02-What To Avoid In Your Copy.pdf" },
                 ],
               },
               {
@@ -1480,7 +1480,7 @@ const COURSES = [
                 duration: "5m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/03-Core Principle 1- Skimmable.mp4",
                 resources: [
-                  { title: "Core Principle 1- Skimmable", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/03-Core Principle 1- Skimmable.pdf" },
+                  { name: "Core Principle 1- Skimmable", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/03-Core Principle 1- Skimmable.pdf" },
                 ],
               },
               {
@@ -1489,7 +1489,7 @@ const COURSES = [
                 duration: "3m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/04-Core Principle 2- Clear  Concise.mp4",
                 resources: [
-                  { title: "Core Principle 2- Clear Concise", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/04-Core Principle 2- Clear  Concise.pdf" },
+                  { name: "Core Principle 2- Clear Concise", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/04-Core Principle 2- Clear  Concise.pdf" },
                 ],
               },
               {
@@ -1498,7 +1498,7 @@ const COURSES = [
                 duration: "6m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/05-Core Principle 3- Engaging.mp4",
                 resources: [
-                  { title: "Core Principle 3- Engaging", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/05-Core Principle 3- Engaging.pdf" },
+                  { name: "Core Principle 3- Engaging", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/05-Core Principle 3- Engaging.pdf" },
                 ],
               },
               {
@@ -1507,7 +1507,7 @@ const COURSES = [
                 duration: "10m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/06-Using Infographics.mp4",
                 resources: [
-                  { title: "Using Infographics", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/06-Using Infographics.pdf" },
+                  { name: "Using Infographics", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/06-Using Infographics.pdf" },
                 ],
               },
               {
@@ -1516,7 +1516,7 @@ const COURSES = [
                 duration: "7m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/07-ChatGPT Copywriting Framework.mp4",
                 resources: [
-                  { title: "ChatGPT Copywriting Framework", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/07-ChatGPT Copywriting Framework.pdf" },
+                  { name: "ChatGPT Copywriting Framework", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/07-ChatGPT Copywriting Framework.pdf" },
                 ],
               },
               {
@@ -1532,7 +1532,7 @@ const COURSES = [
                 duration: "7m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/09-Subject Lines  Preview Texts.mp4",
                 resources: [
-                  { title: "Subject Lines Preview Texts", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/09-Subject Lines  Preview Texts.pdf" },
+                  { name: "Subject Lines Preview Texts", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/05- Copywriting/09-Subject Lines  Preview Texts.pdf" },
                 ],
               },
             ],
@@ -1547,7 +1547,7 @@ const COURSES = [
                 duration: "5m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/01-Design Intro.mp4",
                 resources: [
-                  { title: "Design Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/01-Design Intro.pdf" },
+                  { name: "Design Intro", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/01-Design Intro.pdf" },
                 ],
               },
               {
@@ -1556,7 +1556,7 @@ const COURSES = [
                 duration: "5m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/02-Core Principle 1- Ease of Click.mp4",
                 resources: [
-                  { title: "Core Principle 1- Ease of Click", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/02-Core Principle 1- Ease of Click.pdf" },
+                  { name: "Core Principle 1- Ease of Click", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/02-Core Principle 1- Ease of Click.pdf" },
                 ],
               },
               {
@@ -1565,7 +1565,7 @@ const COURSES = [
                 duration: "7m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/03-Core Principle 2 Skimmability.mp4",
                 resources: [
-                  { title: "Core Principle 2 Skimmability", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/03-Core Principle 2 Skimmability.pdf" },
+                  { name: "Core Principle 2 Skimmability", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/03-Core Principle 2 Skimmability.pdf" },
                 ],
               },
               {
@@ -1574,7 +1574,7 @@ const COURSES = [
                 duration: "1m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/04-Core Principle 3- Branding.mp4",
                 resources: [
-                  { title: "Core Principle 3- Branding", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/04-Core Principle 3- Branding.pdf" },
+                  { name: "Core Principle 3- Branding", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/04-Core Principle 3- Branding.pdf" },
                 ],
               },
               {
@@ -1583,7 +1583,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/05-Hero Section Mastery.mp4",
                 resources: [
-                  { title: "Hero Section Mastery", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/05-Hero Section Mastery.pdf" },
+                  { name: "Hero Section Mastery", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/05-Hero Section Mastery.pdf" },
                 ],
               },
               {
@@ -1592,7 +1592,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/06-Bridge Section Mastery.mp4",
                 resources: [
-                  { title: "Bridge Section Mastery", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/06-Bridge Section Mastery.pdf" },
+                  { name: "Bridge Section Mastery", size: "13 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/06-Bridge Section Mastery.pdf" },
                 ],
               },
               {
@@ -1601,7 +1601,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/07-Product Section Mastery.mp4",
                 resources: [
-                  { title: "Product Section Mastery", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/07-Product Section Mastery.pdf" },
+                  { name: "Product Section Mastery", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/07-Product Section Mastery.pdf" },
                 ],
               },
               {
@@ -1610,7 +1610,7 @@ const COURSES = [
                 duration: "3m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/08-Email Design Transitions.mp4",
                 resources: [
-                  { title: "Email Design Transitions", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/08-Email Design Transitions.pdf" },
+                  { name: "Email Design Transitions", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/08-Email Design Transitions.pdf" },
                 ],
               },
               {
@@ -1619,7 +1619,7 @@ const COURSES = [
                 duration: "3m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/09-1 Tip for Email Design.mp4",
                 resources: [
-                  { title: "1 Tip for Email Design", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/09-1 Tip for Email Design.pdf" },
+                  { name: "1 Tip for Email Design", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/09-1 Tip for Email Design.pdf" },
                 ],
               },
               {
@@ -1628,7 +1628,7 @@ const COURSES = [
                 duration: "11m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/10-Figma Design Tutorial.mp4",
                 resources: [
-                  { title: "Figma Design Tutorial", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/10-Figma Design Tutorial.pdf" },
+                  { name: "Figma Design Tutorial", size: "14 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/10-Figma Design Tutorial.pdf" },
                 ],
               },
               {
@@ -1644,7 +1644,7 @@ const COURSES = [
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Email Design Templates", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/12-Email Design Templates.pdf" },
+                  { name: "Email Design Templates", size: "17 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/06- Design/12-Email Design Templates.pdf" },
                 ],
               },
             ],
@@ -1659,7 +1659,7 @@ const COURSES = [
                 duration: "7m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/01-Deliverability Intro.mp4",
                 resources: [
-                  { title: "Deliverability Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/01-Deliverability Intro.pdf" },
+                  { name: "Deliverability Intro", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/01-Deliverability Intro.pdf" },
                 ],
               },
               {
@@ -1668,7 +1668,7 @@ const COURSES = [
                 duration: "2m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/02-Technical Deliverability Setup.mp4",
                 resources: [
-                  { title: "Technical Deliverability Setup", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/02-Technical Deliverability Setup.pdf" },
+                  { name: "Technical Deliverability Setup", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/02-Technical Deliverability Setup.pdf" },
                 ],
               },
               {
@@ -1677,7 +1677,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/03-Deliverability Metrics to Shoot For.mp4",
                 resources: [
-                  { title: "Deliverability Metrics to Shoot For", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/03-Deliverability Metrics to Shoot For.pdf" },
+                  { name: "Deliverability Metrics to Shoot For", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/03-Deliverability Metrics to Shoot For.pdf" },
                 ],
               },
               {
@@ -1686,7 +1686,7 @@ const COURSES = [
                 duration: "5m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/04-Footer Trick to Improve Deliverability.mp4",
                 resources: [
-                  { title: "Footer Trick to Improve Deliverability", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/04-Footer Trick to Improve Deliverability.pdf" },
+                  { name: "Footer Trick to Improve Deliverability", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/04-Footer Trick to Improve Deliverability.pdf" },
                 ],
               },
               {
@@ -1702,7 +1702,7 @@ const COURSES = [
                 duration: "11m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/06-6 Week Deliverability Recovery Protocol.mp4",
                 resources: [
-                  { title: "6 Week Deliverability Recovery Protocol", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/06-6 Week Deliverability Recovery Protocol.pdf" },
+                  { name: "6 Week Deliverability Recovery Protocol", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/07-Deliverability/06-6 Week Deliverability Recovery Protocol.pdf" },
                 ],
               },
             ],
@@ -1717,7 +1717,7 @@ const COURSES = [
                 duration: "2m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/01-Segmentation Intro.mp4",
                 resources: [
-                  { title: "Segmentation Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/01-Segmentation Intro.pdf" },
+                  { name: "Segmentation Intro", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/01-Segmentation Intro.pdf" },
                 ],
               },
               {
@@ -1726,7 +1726,7 @@ const COURSES = [
                 duration: "3m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/02-Segmentation Purpose and Use Cases.mp4",
                 resources: [
-                  { title: "Segmentation Purpose and Use Cases", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/02-Segmentation Purpose and Use Cases.pdf" },
+                  { name: "Segmentation Purpose and Use Cases", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/02-Segmentation Purpose and Use Cases.pdf" },
                 ],
               },
               {
@@ -1735,7 +1735,7 @@ const COURSES = [
                 duration: "5m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/03-Different Types of Segmentation.mp4",
                 resources: [
-                  { title: "Different Types of Segmentation", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/03-Different Types of Segmentation.pdf" },
+                  { name: "Different Types of Segmentation", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/03-Different Types of Segmentation.pdf" },
                 ],
               },
               {
@@ -1744,7 +1744,7 @@ const COURSES = [
                 duration: "18m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/04-Key Segments To Use.mp4",
                 resources: [
-                  { title: "Key Segments To Use", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/04-Key Segments To Use.pdf" },
+                  { name: "Key Segments To Use", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/08-Segmentation/04-Key Segments To Use.pdf" },
                 ],
               },
             ],
@@ -1759,7 +1759,7 @@ const COURSES = [
                 duration: "2m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/01-Optimization Intro.mp4",
                 resources: [
-                  { title: "Optimization Intro", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/01-Optimization Intro.pdf" },
+                  { name: "Optimization Intro", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/01-Optimization Intro.pdf" },
                 ],
               },
               {
@@ -1768,7 +1768,7 @@ const COURSES = [
                 duration: "9m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/02-A-B Tests for Campaigns.mp4",
                 resources: [
-                  { title: "A-B Tests for Campaigns", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/02-A-B Tests for Campaigns.pdf" },
+                  { name: "A-B Tests for Campaigns", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/02-A-B Tests for Campaigns.pdf" },
                 ],
               },
               {
@@ -1777,7 +1777,7 @@ const COURSES = [
                 duration: "3m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/03-A-B Tests for Flows.mp4",
                 resources: [
-                  { title: "A-B Tests for Flows", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/03-A-B Tests for Flows.pdf" },
+                  { name: "A-B Tests for Flows", size: "11 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/03-A-B Tests for Flows.pdf" },
                 ],
               },
               {
@@ -1786,7 +1786,7 @@ const COURSES = [
                 duration: "4m",
                 src: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/04-Long Term Optimization Strategy.mp4",
                 resources: [
-                  { title: "Long Term Optimization Strategy", url: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/04-Long Term Optimization Strategy.pdf" },
+                  { name: "Long Term Optimization Strategy", size: "12 KB", key: "Max Sturtevant - Ecommerce Email Mastery/02-Ecommerce Email Mastery/09- Optimization/04-Long Term Optimization Strategy.pdf" },
                 ],
               },
             ],
@@ -10789,7 +10789,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Main Video", url: "Franky Shaw - Futrgroup Lite/FutrGroup AI Course/Main Video - Section/Main Video.docx" },
+                  { name: "Main Video", size: "287 KB", key: "Franky Shaw - Futrgroup Lite/FutrGroup AI Course/Main Video - Section/Main Video.docx" },
                 ],
               },
             ],
@@ -10818,7 +10818,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "V3 Update", url: "Franky Shaw - Futrgroup Lite/FutrGroup AI Course/V3 Update 12-15-25/V3 Update.docx" },
+                  { name: "V3 Update", size: "2.1 MB", key: "Franky Shaw - Futrgroup Lite/FutrGroup AI Course/V3 Update 12-15-25/V3 Update.docx" },
                 ],
               },
             ],
@@ -10847,7 +10847,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "V4 Update", url: "Franky Shaw - Futrgroup Lite/FutrGroup AI Course/v4 Update (Latest)/V4 Update.docx" },
+                  { name: "V4 Update", size: "286 KB", key: "Franky Shaw - Futrgroup Lite/FutrGroup AI Course/v4 Update (Latest)/V4 Update.docx" },
                 ],
               },
             ],
@@ -15817,7 +15817,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "2-AI Prompts for Creative Strategists", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/03-Course 102- State of Paid Social Advertising/03-2-AI Prompts for Creative Strategists.pdf" },
+                  { name: "2-AI Prompts for Creative Strategists", size: "514 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/03-Course 102- State of Paid Social Advertising/03-2-AI Prompts for Creative Strategists.pdf" },
                 ],
               },
               {
@@ -15826,7 +15826,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Creative Strategists Consumer Psychology Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/03-Course 102- State of Paid Social Advertising/04-Creative Strategists Consumer Psychology Worksheet.pdf" },
+                  { name: "Creative Strategists Consumer Psychology Worksheet", size: "455 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/03-Course 102- State of Paid Social Advertising/04-Creative Strategists Consumer Psychology Worksheet.pdf" },
                 ],
               },
             ],
@@ -15848,7 +15848,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "04 - Ad Building Blocks Analysis", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/02-04 - Ad Building Blocks Analysis.pdf" },
+                  { name: "04 - Ad Building Blocks Analysis", size: "493 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/02-04 - Ad Building Blocks Analysis.pdf" },
                 ],
               },
               {
@@ -15857,7 +15857,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "05 - AI Prompt for Ad Building Blocks Analysis", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/03-05 - AI Prompt for Ad Building Blocks Analysis.pdf" },
+                  { name: "05 - AI Prompt for Ad Building Blocks Analysis", size: "329 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/03-05 - AI Prompt for Ad Building Blocks Analysis.pdf" },
                 ],
               },
               {
@@ -15866,7 +15866,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "03 - AI Prompts for Creative Analysis Development", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/04-03 - AI Prompts for Creative Analysis _ Development.pdf" },
+                  { name: "03 - AI Prompts for Creative Analysis Development", size: "430 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/04-03 - AI Prompts for Creative Analysis _ Development.pdf" },
                 ],
               },
               {
@@ -15875,7 +15875,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "1-The 10 Types of Angles Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/05-1-The 10 Types of Angles Worksheet.pdf" },
+                  { name: "1-The 10 Types of Angles Worksheet", size: "513 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/05-1-The 10 Types of Angles Worksheet.pdf" },
                 ],
               },
               {
@@ -15884,7 +15884,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "04 - Ad Building Blocks Analysis", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/06-04 - Ad Building Blocks Analysis.pdf" },
+                  { name: "04 - Ad Building Blocks Analysis", size: "458 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/06-04 - Ad Building Blocks Analysis.pdf" },
                 ],
               },
               {
@@ -15893,7 +15893,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Ceative Fundamentals-Building Blocks Analysis Assignments", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/06-Ceative Fundamentals-Building Blocks Analysis Assignments.docx" },
+                  { name: "Ceative Fundamentals-Building Blocks Analysis Assignments", size: "8 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/06-Ceative Fundamentals-Building Blocks Analysis Assignments.docx" },
                 ],
               },
               {
@@ -15902,7 +15902,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "101 Consumer Psyhology Creative", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/07-101 Consumer Psyhology Creative.pdf" },
+                  { name: "101 Consumer Psyhology Creative", size: "29 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/01-Level 100- Intro to Advertising State of the Industry/04-Course 103- Creative Fundamentals/07-101 Consumer Psyhology Creative.pdf" },
                 ],
               },
             ],
@@ -16059,7 +16059,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "AI Prompt Cross-Vertical Creative Inspiration Finder", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/02-Level 200- Platform-Specific Advertising/03-Course 230- Cross Channel Strategies/04-AI Prompt Cross-Vertical Creative Inspiration Finder.pdf" },
+                  { name: "AI Prompt Cross-Vertical Creative Inspiration Finder", size: "374 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/02-Level 200- Platform-Specific Advertising/03-Course 230- Cross Channel Strategies/04-AI Prompt Cross-Vertical Creative Inspiration Finder.pdf" },
                 ],
               },
             ],
@@ -16108,7 +16108,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "07 - Quick Performance Analysis Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/05-07 - Quick Performance Analysis Worksheet.pdf" },
+                  { name: "07 - Quick Performance Analysis Worksheet", size: "569 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/05-07 - Quick Performance Analysis Worksheet.pdf" },
                 ],
               },
               {
@@ -16117,7 +16117,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "08 - In-Depth Creative Audit Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/06-08 - In-Depth Creative Audit Worksheet.pdf" },
+                  { name: "08 - In-Depth Creative Audit Worksheet", size: "758 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/06-08 - In-Depth Creative Audit Worksheet.pdf" },
                 ],
               },
               {
@@ -16126,7 +16126,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "09 - AI Prompts for Creative Audit Assistance", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/07-09 - AI Prompts for Creative Audit Assistance.pdf" },
+                  { name: "09 - AI Prompts for Creative Audit Assistance", size: "379 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/07-09 - AI Prompts for Creative Audit Assistance.pdf" },
                 ],
               },
               {
@@ -16135,7 +16135,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "10 - Audience Research and Persona Development Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/08-10 - Audience Research and Persona Development Worksheet.pdf" },
+                  { name: "10 - Audience Research and Persona Development Worksheet", size: "566 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/08-10 - Audience Research and Persona Development Worksheet.pdf" },
                 ],
               },
               {
@@ -16144,7 +16144,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "11 - Audience Person Slide Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/09-11 - Audience Person Slide Template.pdf" },
+                  { name: "11 - Audience Person Slide Template", size: "180 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/09-11 - Audience Person Slide Template.pdf" },
                 ],
               },
               {
@@ -16153,7 +16153,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "12 - AI Prompts and Tools for Automating Audience Research", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/10-12 - AI Prompts and Tools for Automating Audience Research.pdf" },
+                  { name: "12 - AI Prompts and Tools for Automating Audience Research", size: "511 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/10-12 - AI Prompts and Tools for Automating Audience Research.pdf" },
                 ],
               },
               {
@@ -16162,7 +16162,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Competitor Creative Analysis Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/11-Competitor Creative Analysis Worksheet.pdf" },
+                  { name: "Competitor Creative Analysis Worksheet", size: "465 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/11-Competitor Creative Analysis Worksheet.pdf" },
                 ],
               },
               {
@@ -16171,7 +16171,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Competitor Research Presentation Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/12-Competitor Research Presentation Template.pdf" },
+                  { name: "Competitor Research Presentation Template", size: "193 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/12-Competitor Research Presentation Template.pdf" },
                 ],
               },
               {
@@ -16180,7 +16180,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "16 - Trends Research Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/13-16 - Trends Research Worksheet.pdf" },
+                  { name: "16 - Trends Research Worksheet", size: "325 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/13-16 - Trends Research Worksheet.pdf" },
                 ],
               },
               {
@@ -16189,7 +16189,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "AI Prompts Workflows For Trends Research", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/14-AI Prompts _ Workflows For Trends Research.pdf" },
+                  { name: "AI Prompts Workflows For Trends Research", size: "435 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/03-Level 300- Research Insights/01-Course 301- Research for Creative Strategy/14-AI Prompts _ Workflows For Trends Research.pdf" },
                 ],
               },
             ],
@@ -16238,7 +16238,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "ACA Creative Strategy Presentation Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/05-ACA Creative Strategy Presentation Template.pptx" },
+                  { name: "ACA Creative Strategy Presentation Template", size: "3.5 MB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/05-ACA Creative Strategy Presentation Template.pptx" },
                 ],
               },
               {
@@ -16247,7 +16247,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "The 10 Types of Angles Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/06 -The 10 Types of Angles Worksheet.pdf" },
+                  { name: "The 10 Types of Angles Worksheet", size: "514 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/06 -The 10 Types of Angles Worksheet.pdf" },
                 ],
               },
               {
@@ -16256,7 +16256,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Hook Development Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/07-Hook Development Worksheet.pdf" },
+                  { name: "Hook Development Worksheet", size: "374 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/07-Hook Development Worksheet.pdf" },
                 ],
               },
               {
@@ -16265,7 +16265,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "AI Prompts for Sound-First Creative Development", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/08-AI Prompts for Sound-First Creative Development.pdf" },
+                  { name: "AI Prompts for Sound-First Creative Development", size: "416 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/08-AI Prompts for Sound-First Creative Development.pdf" },
                 ],
               },
               {
@@ -16274,7 +16274,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "AI Tools for Sound-First Creative Development", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/09-AI Tools for Sound-First Creative Development.pdf" },
+                  { name: "AI Tools for Sound-First Creative Development", size: "441 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/09-AI Tools for Sound-First Creative Development.pdf" },
                 ],
               },
               {
@@ -16283,7 +16283,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Creative Diversification Guide", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/10-Creative Diversification Guide.pdf" },
+                  { name: "Creative Diversification Guide", size: "155 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/10-Creative Diversification Guide.pdf" },
                 ],
               },
               {
@@ -16292,7 +16292,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Creative Hook Framework Database", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/11-Creative Hook Framework Database.pdf" },
+                  { name: "Creative Hook Framework Database", size: "415 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/11-Creative Hook Framework Database.pdf" },
                 ],
               },
               {
@@ -16301,7 +16301,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Comprehensive Hook Database for Paid Social Ads", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/12-Comprehensive Hook Database for Paid Social Ads.pdf" },
+                  { name: "Comprehensive Hook Database for Paid Social Ads", size: "457 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/01-Course 401- Creative Ideation Concept Development/12-Comprehensive Hook Database for Paid Social Ads.pdf" },
                 ],
               },
             ],
@@ -16350,7 +16350,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Ad Creative Academy Storyboard Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/03-403- Scriptwriting Storyboarding/02-Ad Creative Academy Storyboard Template.xlsx" },
+                  { name: "Ad Creative Academy Storyboard Template", size: "5.1 MB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/04-Level 400- Creative Strategy Ideation/03-403- Scriptwriting Storyboarding/02-Ad Creative Academy Storyboard Template.xlsx" },
                 ],
               },
             ],
@@ -16378,7 +16378,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Creative QA Checklist", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/01-501- Content Creation Production/02-Creative QA Checklist.pdf" },
+                  { name: "Creative QA Checklist", size: "352 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/01-501- Content Creation Production/02-Creative QA Checklist.pdf" },
                 ],
               },
               {
@@ -16387,7 +16387,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Content Creator Brief Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/01-501- Content Creation Production/03-Content Creator Brief Template.docx" },
+                  { name: "Content Creator Brief Template", size: "142 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/01-501- Content Creation Production/03-Content Creator Brief Template.docx" },
                 ],
               },
             ],
@@ -16444,7 +16444,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Content Creator Brief Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/02-502- How to Cast and Direct UGC Talent Effectively/07-Content Creator Brief Template.pdf" },
+                  { name: "Content Creator Brief Template", size: "322 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/02-502- How to Cast and Direct UGC Talent Effectively/07-Content Creator Brief Template.pdf" },
                 ],
               },
               {
@@ -16453,7 +16453,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Example Content Creator Brief", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/02-502- How to Cast and Direct UGC Talent Effectively/08-Example Content Creator Brief.pdf" },
+                  { name: "Example Content Creator Brief", size: "372 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/02-502- How to Cast and Direct UGC Talent Effectively/08-Example Content Creator Brief.pdf" },
                 ],
               },
             ],
@@ -16531,7 +16531,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Midjourney Prompt Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/03-503- Crafting AI-Generated Image Video Ads/10-Midjourney Prompt Worksheet.pdf" },
+                  { name: "Midjourney Prompt Worksheet", size: "9.7 MB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/03-503- Crafting AI-Generated Image Video Ads/10-Midjourney Prompt Worksheet.pdf" },
                 ],
               },
             ],
@@ -16588,7 +16588,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "1-ACA Weavy Workflow Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/04-504- The Creative Automation Workshop- How To Build/07-1-ACA Weavy Workflow Template.pdf" },
+                  { name: "1-ACA Weavy Workflow Template", size: "973 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/05-Level 500- Content Creation Production Generative AI/04-504- The Creative Automation Workshop- How To Build/07-1-ACA Weavy Workflow Template.pdf" },
                 ],
               },
             ],
@@ -16616,7 +16616,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Ad Naming Convention Sheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/06-Level 600- Creative Testing/01-601- Launching Ad Campaigns/02-Ad Naming Convention Sheet.docx" },
+                  { name: "Ad Naming Convention Sheet", size: "8 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/06-Level 600- Creative Testing/01-601- Launching Ad Campaigns/02-Ad Naming Convention Sheet.docx" },
                 ],
               },
               {
@@ -16625,7 +16625,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "ACA Creative Testing Tracker Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/06-Level 600- Creative Testing/01-601- Launching Ad Campaigns/03-ACA Creative Testing Tracker Template.xlsx" },
+                  { name: "ACA Creative Testing Tracker Template", size: "113 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/06-Level 600- Creative Testing/01-601- Launching Ad Campaigns/03-ACA Creative Testing Tracker Template.xlsx" },
                 ],
               },
             ],
@@ -16713,7 +16713,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Sprint Planning Operation System Worksheet", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/07-Level 700- Performance Analysis Iteration/03-703- Sprint Planning Creative Volume/04-Sprint Planning Operation System Worksheet.pdf" },
+                  { name: "Sprint Planning Operation System Worksheet", size: "3.1 MB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/07-Level 700- Performance Analysis Iteration/03-703- Sprint Planning Creative Volume/04-Sprint Planning Operation System Worksheet.pdf" },
                 ],
               },
               {
@@ -16722,7 +16722,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Creative Sprint Planning Template", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/07-Level 700- Performance Analysis Iteration/03-703- Sprint Planning Creative Volume/05-Creative Sprint Planning Template.docx" },
+                  { name: "Creative Sprint Planning Template", size: "8 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/07-Level 700- Performance Analysis Iteration/03-703- Sprint Planning Creative Volume/05-Creative Sprint Planning Template.docx" },
                 ],
               },
             ],
@@ -16777,7 +16777,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Before You Begin How the Final Steps Work", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/01-Intoduction/01-Before You Begin_ How the Final Steps Work.docx" },
+                  { name: "Before You Begin How the Final Steps Work", size: "7 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/01-Intoduction/01-Before You Begin_ How the Final Steps Work.docx" },
                 ],
               },
               {
@@ -16786,7 +16786,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Before You Begin How the Final Steps Work", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/01-Intoduction/01-Before You Begin_ How the Final Steps Work.pdf" },
+                  { name: "Before You Begin How the Final Steps Work", size: "179 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/01-Intoduction/01-Before You Begin_ How the Final Steps Work.pdf" },
                 ],
               },
             ],
@@ -16801,7 +16801,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Exam Introduction", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/01-Exam Introduction.docx" },
+                  { name: "Exam Introduction", size: "7 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/01-Exam Introduction.docx" },
                 ],
               },
               {
@@ -16810,7 +16810,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Exam Introduction", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/01-Exam Introduction.pdf" },
+                  { name: "Exam Introduction", size: "122 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/01-Exam Introduction.pdf" },
                 ],
               },
               {
@@ -16819,7 +16819,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Section 1 Knowledge Foundation", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/02-Section 1_ Knowledge Foundation.docx" },
+                  { name: "Section 1 Knowledge Foundation", size: "8 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/02-Section 1_ Knowledge Foundation.docx" },
                 ],
               },
               {
@@ -16828,7 +16828,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Section 1 Knowledge Foundation", url: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/02-Section 1_ Knowledge Foundation.pdf" },
+                  { name: "Section 1 Knowledge Foundation", size: "69 KB", key: "Seth Godin – Ad Creative Academy ($2,499.00) (moneyvipprogram.com)/09-Level 900- Certification/02-Final Exam/02-Section 1_ Knowledge Foundation.pdf" },
                 ],
               },
             ],
@@ -16866,7 +16866,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/0) Welcome! [START HERE]/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/0) Welcome! [START HERE]/Resources.pdf" },
             ],
           },
           {
@@ -16875,7 +16875,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Welcome To The Google Ads Masterclass", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/0) Welcome! [START HERE]/Welcome To The Google Ads Masterclass.pdf" },
+              { name: "Welcome To The Google Ads Masterclass", size: "277 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/0) Welcome! [START HERE]/Welcome To The Google Ads Masterclass.pdf" },
             ],
           },
         ],
@@ -16890,7 +16890,7 @@ vipOnly: true,
             duration: "6m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.1 - What is Google Ads_ - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "What is Google Ads", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.1 - What is Google Ads.pdf" },
+              { name: "What is Google Ads", size: "302 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.1 - What is Google Ads.pdf" },
             ],
           },
           {
@@ -16899,7 +16899,7 @@ vipOnly: true,
             duration: "5m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.2 - Why Google Ads_ - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Why Google Ads", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.2 - Why Google Ads.pdf" },
+              { name: "Why Google Ads", size: "319 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.2 - Why Google Ads.pdf" },
             ],
           },
           {
@@ -16908,7 +16908,7 @@ vipOnly: true,
             duration: "4m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.3 - Action Plan - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Action Plan", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.3 - Action Plan.pdf" },
+              { name: "Action Plan", size: "304 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/1.3 - Action Plan.pdf" },
             ],
           },
           {
@@ -16917,7 +16917,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/1) Introduction to Google Ads/Resources.pdf" },
             ],
           },
         ],
@@ -16932,7 +16932,7 @@ vipOnly: true,
             duration: "9m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.1 - Pick Your Market - Google Ads Dropshipping Masterclass · Freedom Achievers - 1420x790 1500K.mp4",
             resources: [
-              { title: "Pick Your Market", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.1 - Pick Your Market.pdf" },
+              { name: "Pick Your Market", size: "285 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.1 - Pick Your Market.pdf" },
             ],
           },
           {
@@ -16941,7 +16941,7 @@ vipOnly: true,
             duration: "37m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.2 - Pick Your Niche (FREE TOOLS) - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Pick Your Niche (FREE TOOLS)", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.2 - Pick Your Niche (FREE TOOLS).pdf" },
+              { name: "Pick Your Niche (FREE TOOLS)", size: "290 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.2 - Pick Your Niche (FREE TOOLS).pdf" },
             ],
           },
           {
@@ -16950,7 +16950,7 @@ vipOnly: true,
             duration: "24m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.3 - Validate Your Niche (With Paid Tools) - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Validate Your Niche (With Paid Tools)", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.3 - Validate Your Niche (With Paid Tools).pdf" },
+              { name: "Validate Your Niche (With Paid Tools)", size: "312 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.3 - Validate Your Niche (With Paid Tools).pdf" },
             ],
           },
           {
@@ -16959,7 +16959,7 @@ vipOnly: true,
             duration: "2m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.4 - Getting Ready For Store Setup - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Getting Ready For Store Setup", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.4 - Getting Ready For Store Setup.pdf" },
+              { name: "Getting Ready For Store Setup", size: "239 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/2) Market & Niche Research/2.4 - Getting Ready For Store Setup.pdf" },
             ],
           },
         ],
@@ -16974,7 +16974,7 @@ vipOnly: true,
             duration: "35m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/3) Product Research/3.1 - Finding Winning Products - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Finding Winning Products", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/3) Product Research/3.1 - Finding Winning Products.pdf" },
+              { name: "Finding Winning Products", size: "282 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/3) Product Research/3.1 - Finding Winning Products.pdf" },
             ],
           },
           {
@@ -16983,7 +16983,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/3) Product Research/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/3) Product Research/Resources.pdf" },
             ],
           },
         ],
@@ -16998,7 +16998,7 @@ vipOnly: true,
             duration: "36m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/4) Setting Up Your Basic Store/4.1 - Basic Shopify Store - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Basic Shopify Store", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/4) Setting Up Your Basic Store/4.1 - Basic Shopify Store.pdf" },
+              { name: "Basic Shopify Store", size: "468 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/4) Setting Up Your Basic Store/4.1 - Basic Shopify Store.pdf" },
             ],
           },
           {
@@ -17007,7 +17007,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/4) Setting Up Your Basic Store/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/4) Setting Up Your Basic Store/Resources.pdf" },
             ],
           },
         ],
@@ -17022,7 +17022,7 @@ vipOnly: true,
             duration: "13m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.1 - Applying for Google Merchant Center (GMC) - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1500K.mp4",
             resources: [
-              { title: "Applying for Google Merchant Center (GMC)", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.1 - Applying for Google Merchant Center (GMC).pdf" },
+              { name: "Applying for Google Merchant Center (GMC)", size: "291 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.1 - Applying for Google Merchant Center (GMC).pdf" },
             ],
           },
           {
@@ -17031,7 +17031,7 @@ vipOnly: true,
             duration: "6m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.2 - Setting Up Google Merchant Center - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1500K.mp4",
             resources: [
-              { title: "Setting Up Google Merchant Center", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.2 - Setting Up Google Merchant Center.pdf" },
+              { name: "Setting Up Google Merchant Center", size: "117 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.2 - Setting Up Google Merchant Center.pdf" },
             ],
           },
           {
@@ -17040,7 +17040,7 @@ vipOnly: true,
             duration: "7m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.3 - Adding Products to Google Merchant Center - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1500K.mp4",
             resources: [
-              { title: "Adding Products to Google Merchant Center", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.3 - Adding Products to Google Merchant Center.pdf" },
+              { name: "Adding Products to Google Merchant Center", size: "96 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.3 - Adding Products to Google Merchant Center.pdf" },
             ],
           },
           {
@@ -17049,7 +17049,7 @@ vipOnly: true,
             duration: "2m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.4 - How To Delete Old GMC The Right Way - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1500K.mp4",
             resources: [
-              { title: "How To Delete Old GMC The Right Way", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.4 - How To Delete Old GMC The Right Way.pdf" },
+              { name: "How To Delete Old GMC The Right Way", size: "99 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.4 - How To Delete Old GMC The Right Way.pdf" },
             ],
           },
           {
@@ -17058,7 +17058,7 @@ vipOnly: true,
             duration: "4m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.6 - Adding and Removing Markets The Right Way - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1500K.mp4",
             resources: [
-              { title: "Adding and Removing Markets The Right Way", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.6 - Adding and Removing Markets The Right Way.pdf" },
+              { name: "Adding and Removing Markets The Right Way", size: "49 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.6 - Adding and Removing Markets The Right Way.pdf" },
             ],
           },
           {
@@ -17067,7 +17067,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "GMC Hacks From The Community", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.5 - GMC Hacks From The Community.pdf" },
+              { name: "GMC Hacks From The Community", size: "159 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/5.5 - GMC Hacks From The Community.pdf" },
             ],
           },
           {
@@ -17076,7 +17076,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/5) Setting Up Google Merchant Center (GMC)/Resources.pdf" },
             ],
           },
         ],
@@ -17091,7 +17091,7 @@ vipOnly: true,
             duration: "7m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/6) Setup Tracking Conversions/6.1 - Setup Google Ads Account + TrackBee - Google Ads Dropshipping Masterclass · Freedom Achievers - 1276x720 1500K.mp4",
             resources: [
-              { title: "Setup Google Ads Account + TrackBee", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/6) Setup Tracking Conversions/6.1 - Setup Google Ads Account + TrackBee.pdf" },
+              { name: "Setup Google Ads Account + TrackBee", size: "287 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/6) Setup Tracking Conversions/6.1 - Setup Google Ads Account + TrackBee.pdf" },
             ],
           },
           {
@@ -17100,7 +17100,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/6) Setup Tracking Conversions/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/6) Setup Tracking Conversions/Resources.pdf" },
             ],
           },
         ],
@@ -17115,7 +17115,7 @@ vipOnly: true,
             duration: "15m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/7) Campaign Setup/7.1 - Creating Your First Google Ads Campaign - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1500K.mp4",
             resources: [
-              { title: "Creating Your First Google Ads Campaign", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/7) Campaign Setup/7.1 - Creating Your First Google Ads Campaign.pdf" },
+              { name: "Creating Your First Google Ads Campaign", size: "266 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/7) Campaign Setup/7.1 - Creating Your First Google Ads Campaign.pdf" },
             ],
           },
           {
@@ -17124,7 +17124,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/7) Campaign Setup/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/7) Campaign Setup/Resources.pdf" },
             ],
           },
         ],
@@ -17139,7 +17139,7 @@ vipOnly: true,
             duration: "1h 22m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.1 - KPI's Google Ads - Google Ads Dropshipping Masterclass · Freedom Achievers - 1280x536 1462K.mp4",
             resources: [
-              { title: "KPI's Google Ads", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.1 - KPI's Google Ads.pdf" },
+              { name: "KPI's Google Ads", size: "527 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.1 - KPI's Google Ads.pdf" },
             ],
           },
           {
@@ -17148,7 +17148,7 @@ vipOnly: true,
             duration: "1h 6m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.2 - Optimizing & Scaling LIVE - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1146K.mp4",
             resources: [
-              { title: "Optimizing & Scaling LIVE", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.2 - Optimizing & Scaling LIVE.pdf" },
+              { name: "Optimizing & Scaling LIVE", size: "221 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.2 - Optimizing & Scaling LIVE.pdf" },
             ],
           },
           {
@@ -17157,7 +17157,7 @@ vipOnly: true,
             duration: "1h 4m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.3 - Asset Groups & Scaling LIVE - Google Ads Dropshipping Masterclass · Freedom Achievers - 1920x804 1292K.mp4",
             resources: [
-              { title: "Asset Groups & Scaling LIVE", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.3 - Asset Groups & Scaling LIVE.pdf" },
+              { name: "Asset Groups & Scaling LIVE", size: "221 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.3 - Asset Groups & Scaling LIVE.pdf" },
             ],
           },
           {
@@ -17166,7 +17166,7 @@ vipOnly: true,
             duration: "5m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.4 - Excluding Non-Performing Products - Google Ads Dropshipping Masterclass · Freedom Achievers - 1112x720 1500K.mp4",
             resources: [
-              { title: "Excluding Non-Performing Products", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.4 - Excluding Non-Performing Products.pdf" },
+              { name: "Excluding Non-Performing Products", size: "43 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/8.4 - Excluding Non-Performing Products.pdf" },
             ],
           },
           {
@@ -17175,7 +17175,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/8)  Testing & Optimizing Google Ads Campaigns/Resources.pdf" },
             ],
           },
         ],
@@ -17190,7 +17190,7 @@ vipOnly: true,
             duration: "53m",
             src: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/9)  Scaling/9.1 - Advanced Campaign Strategies - Google Ads Dropshipping Masterclass · Freedom Achievers - 1920x804 836K.mp4",
             resources: [
-              { title: "Advanced Campaign Strategies", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/9)  Scaling/9.1 - Advanced Campaign Strategies.pdf" },
+              { name: "Advanced Campaign Strategies", size: "247 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/9)  Scaling/9.1 - Advanced Campaign Strategies.pdf" },
             ],
           },
           {
@@ -17199,7 +17199,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/9)  Scaling/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/9)  Scaling/Resources.pdf" },
             ],
           },
         ],
@@ -17214,7 +17214,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "'#1 - Google Ads Glossary", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/'#1 - Google Ads Glossary.pdf" },
+              { name: "'#1 - Google Ads Glossary", size: "140 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/'#1 - Google Ads Glossary.pdf" },
             ],
           },
           {
@@ -17223,7 +17223,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "#2 - Keyword Types", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#2 - Keyword Types.pdf" },
+              { name: "#2 - Keyword Types", size: "90 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#2 - Keyword Types.pdf" },
             ],
           },
           {
@@ -17232,7 +17232,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "#4 - Google Stores Product Description Prompts", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#4 - Google Stores Product Description Prompts.pdf" },
+              { name: "#4 - Google Stores Product Description Prompts", size: "274 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#4 - Google Stores Product Description Prompts.pdf" },
             ],
           },
           {
@@ -17241,7 +17241,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "#5 - Profit & Loss Sheet", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#5 - Profit & Loss Sheet.pdf" },
+              { name: "#5 - Profit & Loss Sheet", size: "85 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#5 - Profit & Loss Sheet.pdf" },
             ],
           },
           {
@@ -17250,7 +17250,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "#6 - BER & Profit Margin Tracker", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#6 - BER & Profit Margin Tracker.pdf" },
+              { name: "#6 - BER & Profit Margin Tracker", size: "62 KB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/#6 - BER & Profit Margin Tracker.pdf" },
             ],
           },
           {
@@ -17259,7 +17259,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/Bonus/Resources.pdf" },
             ],
           },
         ],
@@ -17288,7 +17288,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Resources", url: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/FAQ/Resources.pdf" },
+              { name: "Resources", size: "3.6 MB", key: "Jesper Hensgens - Freedom Achievers BY @VAWZINEOFFICIEL/FAQ/Resources.pdf" },
             ],
           },
         ],
@@ -17508,7 +17508,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Notes", url: "Unicorn Closer Mastermind by Josh Lyons/1 - The Launchpad/The 4 Call Pillars/Looking for more Business Related Courses or Business Templates & Ideas.txt" },
+                  { name: "Notes", size: "310 B", key: "Unicorn Closer Mastermind by Josh Lyons/1 - The Launchpad/The 4 Call Pillars/Looking for more Business Related Courses or Business Templates & Ideas.txt" },
                 ],
               },
             ],
@@ -18012,7 +18012,7 @@ vipOnly: true,
                 duration: "",
                 src: "",
                 resources: [
-                  { title: "Notes", url: "Unicorn Closer Mastermind by Josh Lyons/2 - Script-less Closing/Underground Mentor/Business Related Courses.txt" },
+                  { name: "Notes", size: "310 B", key: "Unicorn Closer Mastermind by Josh Lyons/2 - Script-less Closing/Underground Mentor/Business Related Courses.txt" },
                 ],
               },
             ],
@@ -18054,8 +18054,8 @@ vipOnly: true,
             duration: "16m",
             src: "Brian Moncada Adspend Team/1. Intro & Onboarding/1. Intro & Onboarding (Watch This First!) - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Introduce Yourself", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/1. Introduce Yourself.docx" },
-              { title: "using this template", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/1. using this template.docx" },
+              { name: "Introduce Yourself", size: "7 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/1. Introduce Yourself.docx" },
+              { name: "using this template", size: "7 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/1. using this template.docx" },
             ],
           },
           {
@@ -18064,7 +18064,7 @@ vipOnly: true,
             duration: "22m",
             src: "Brian Moncada Adspend Team/1. Intro & Onboarding/2. The Blueprint To 7-Figures & Beyond - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "The Blueprint to 7-Figures+", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/2. The Blueprint to 7-Figures+.docx" },
+              { name: "The Blueprint to 7-Figures+", size: "70 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/2. The Blueprint to 7-Figures+.docx" },
             ],
           },
           {
@@ -18073,7 +18073,7 @@ vipOnly: true,
             duration: "53m",
             src: "Brian Moncada Adspend Team/1. Intro & Onboarding/3. Building Your Marketing System - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Building Your Marketing System", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/3. Building Your Marketing System.docx" },
+              { name: "Building Your Marketing System", size: "423 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/3. Building Your Marketing System.docx" },
             ],
           },
           {
@@ -18082,7 +18082,7 @@ vipOnly: true,
             duration: "28m",
             src: "Brian Moncada Adspend Team/1. Intro & Onboarding/4. Understanding Your LTGPCAC Ratio - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Understanding Your LTGP CAC Ratio", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/4. Understanding Your LTGP_CAC Ratio.docx" },
+              { name: "Understanding Your LTGP CAC Ratio", size: "420 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/4. Understanding Your LTGP_CAC Ratio.docx" },
             ],
           },
           {
@@ -18091,7 +18091,7 @@ vipOnly: true,
             duration: "13m",
             src: "Brian Moncada Adspend Team/1. Intro & Onboarding/5. Adspend Budget Calculator - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Budget Calculator", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/5. Budget Calculator.xlsx" },
+              { name: "Budget Calculator", size: "113 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/5. Budget Calculator.xlsx" },
             ],
           },
           {
@@ -18107,9 +18107,9 @@ vipOnly: true,
             duration: "46m",
             src: "Brian Moncada Adspend Team/1. Intro & Onboarding/7. The Ad Man Mindset - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Mindset", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/7. Mindset.docx" },
-              { title: "Morning Formula", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/7. Morning Formula.docx" },
-              { title: "War Map planner", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/7. War Map planner.xlsx" },
+              { name: "Mindset", size: "88 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/7. Mindset.docx" },
+              { name: "Morning Formula", size: "12.6 MB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/7. Morning Formula.docx" },
+              { name: "War Map planner", size: "60 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/7. War Map planner.xlsx" },
             ],
           },
           {
@@ -18118,7 +18118,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Referral Directory", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/8. Referral Directory.docx" },
+              { name: "Referral Directory", size: "68 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/8. Referral Directory.docx" },
             ],
           },
           {
@@ -18127,7 +18127,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Don't Miss", url: "Brian Moncada Adspend Team/1. Intro & Onboarding/Don_t Miss.pdf" },
+              { name: "Don't Miss", size: "597 KB", key: "Brian Moncada Adspend Team/1. Intro & Onboarding/Don_t Miss.pdf" },
             ],
           },
         ],
@@ -18260,7 +18260,7 @@ vipOnly: true,
             duration: "30m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/1. Creating Scalable Offers - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Creating Scalable Offers", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/1. Creating Scalable Offers.docx" },
+              { name: "Creating Scalable Offers", size: "90 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/1. Creating Scalable Offers.docx" },
             ],
           },
           {
@@ -18269,7 +18269,7 @@ vipOnly: true,
             duration: "9m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/2. Choosing Your Target Market - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Choosing Your Target Market", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/2. Choosing Your Target Market.docx" },
+              { name: "Choosing Your Target Market", size: "87 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/2. Choosing Your Target Market.docx" },
             ],
           },
           {
@@ -18278,7 +18278,7 @@ vipOnly: true,
             duration: "32m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/3. Picking Your Model & Pricing - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Picking Your Model & Pricing", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/3. Picking Your Model & Pricing.docx" },
+              { name: "Picking Your Model & Pricing", size: "90 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/3. Picking Your Model & Pricing.docx" },
             ],
           },
           {
@@ -18287,8 +18287,8 @@ vipOnly: true,
             duration: "18m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/4. Claims & Guarantees - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Claims & Guarantees", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/4. Claims & Guarantees.docx" },
-              { title: "EXAMPLE (Template)", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/4. EXAMPLE (Template).docx" },
+              { name: "Claims & Guarantees", size: "430 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/4. Claims & Guarantees.docx" },
+              { name: "EXAMPLE (Template)", size: "8 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/4. EXAMPLE (Template).docx" },
             ],
           },
           {
@@ -18297,7 +18297,7 @@ vipOnly: true,
             duration: "3m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/5. Offer Audit - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "OPP Worksheet", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/5. OPP Worksheet.docx" },
+              { name: "OPP Worksheet", size: "425 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/5. OPP Worksheet.docx" },
             ],
           },
           {
@@ -18306,8 +18306,8 @@ vipOnly: true,
             duration: "31m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/6. How To Write A High-Converting VSL - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "VSL Framework - Direct Lead", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/6. VSL Framework - Direct Lead.docx" },
-              { title: "VSL Framework - Indirect Lead", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/6. VSL Framework - Indirect Lead.docx" },
+              { name: "VSL Framework - Direct Lead", size: "11 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/6. VSL Framework - Direct Lead.docx" },
+              { name: "VSL Framework - Indirect Lead", size: "16 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/6. VSL Framework - Indirect Lead.docx" },
             ],
           },
           {
@@ -18316,7 +18316,7 @@ vipOnly: true,
             duration: "9m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/7. VSL Templates & Examples - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "VSL Templates & Examples", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/7. VSL Templates & Examples.docx" },
+              { name: "VSL Templates & Examples", size: "8 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/7. VSL Templates & Examples.docx" },
             ],
           },
           {
@@ -18325,7 +18325,7 @@ vipOnly: true,
             duration: "14m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/8. How To Film Your VSL - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "How To Film Your VSL", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/8. How To Film Your VSL.docx" },
+              { name: "How To Film Your VSL", size: "8 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/8. How To Film Your VSL.docx" },
             ],
           },
           {
@@ -18348,7 +18348,7 @@ vipOnly: true,
             duration: "9m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/11. GoHighLevel Funnel + CRM Set Up - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "VSL Funnel Setup & Automation", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/11. VSL Funnel Setup & Automation.docx" },
+              { name: "VSL Funnel Setup & Automation", size: "88 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/11. VSL Funnel Setup & Automation.docx" },
             ],
           },
           {
@@ -18357,7 +18357,7 @@ vipOnly: true,
             duration: "11m",
             src: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/12. Lead Qualification Applications - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Funnel + Application Training", url: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/12. Funnel + Application Training.docx" },
+              { name: "Funnel + Application Training", size: "87 KB", key: "Brian Moncada Adspend Team/3. Overview, Offers, and Funnels/12. Funnel + Application Training.docx" },
             ],
           },
         ],
@@ -18372,7 +18372,7 @@ vipOnly: true,
             duration: "30m",
             src: "Brian Moncada Adspend Team/4. Creating Your Ads/1. Creating Your Ads (Watch This First) - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Creating Your Ads", url: "Brian Moncada Adspend Team/4. Creating Your Ads/1. Creating Your Ads.docx" },
+              { name: "Creating Your Ads", size: "9 KB", key: "Brian Moncada Adspend Team/4. Creating Your Ads/1. Creating Your Ads.docx" },
             ],
           },
           {
@@ -18381,7 +18381,7 @@ vipOnly: true,
             duration: "38m",
             src: "Brian Moncada Adspend Team/4. Creating Your Ads/2. How To Write YouTube Ads Scripts - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "How To Write YouTube Ads Scripts", url: "Brian Moncada Adspend Team/4. Creating Your Ads/2. How To Write YouTube Ads Scripts.docx" },
+              { name: "How To Write YouTube Ads Scripts", size: "87 KB", key: "Brian Moncada Adspend Team/4. Creating Your Ads/2. How To Write YouTube Ads Scripts.docx" },
             ],
           },
           {
@@ -18390,7 +18390,7 @@ vipOnly: true,
             duration: "31m",
             src: "Brian Moncada Adspend Team/4. Creating Your Ads/3. How To Film Engaging Video Ads - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "How To Film Engaging Video Ads", url: "Brian Moncada Adspend Team/4. Creating Your Ads/3. How To Film Engaging Video Ads.docx" },
+              { name: "How To Film Engaging Video Ads", size: "54 KB", key: "Brian Moncada Adspend Team/4. Creating Your Ads/3. How To Film Engaging Video Ads.docx" },
             ],
           },
           {
@@ -18399,7 +18399,7 @@ vipOnly: true,
             duration: "11m",
             src: "Brian Moncada Adspend Team/4. Creating Your Ads/4. Home Studio Setup + Equipment Guide - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Equipment List", url: "Brian Moncada Adspend Team/4. Creating Your Ads/4. Equipment List.docx" },
+              { name: "Equipment List", size: "7 KB", key: "Brian Moncada Adspend Team/4. Creating Your Ads/4. Equipment List.docx" },
             ],
           },
           {
@@ -18408,7 +18408,7 @@ vipOnly: true,
             duration: "21m",
             src: "Brian Moncada Adspend Team/4. Creating Your Ads/5. How To Edit Engaging Video Ads - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "How To Edit Engaging Video Ads", url: "Brian Moncada Adspend Team/4. Creating Your Ads/5. How To Edit Engaging Video Ads.docx" },
+              { name: "How To Edit Engaging Video Ads", size: "54 KB", key: "Brian Moncada Adspend Team/4. Creating Your Ads/5. How To Edit Engaging Video Ads.docx" },
             ],
           },
           {
@@ -18424,7 +18424,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Read", url: "Brian Moncada Adspend Team/4. Creating Your Ads/Read.txt" },
+              { name: "Read", size: "80 B", key: "Brian Moncada Adspend Team/4. Creating Your Ads/Read.txt" },
             ],
           },
         ],
@@ -18495,7 +18495,7 @@ vipOnly: true,
             duration: "8m",
             src: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/9. How To Upload Customer List To Your Ads Account - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Uploading Customer List", url: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/9. Uploading Customer List.docx" },
+              { name: "Uploading Customer List", size: "422 KB", key: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/9. Uploading Customer List.docx" },
             ],
           },
           {
@@ -18518,7 +18518,7 @@ vipOnly: true,
             duration: "9m",
             src: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/12. Tracking Your Ads (The Right Way) - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Link to Master Tracking Sheet", url: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/12. Link to Master Tracking Sheet.xlsx" },
+              { name: "Link to Master Tracking Sheet", size: "214 KB", key: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/12. Link to Master Tracking Sheet.xlsx" },
             ],
           },
           {
@@ -18569,7 +18569,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "YouTube Ads Scaling System", url: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/YouTube Ads Scaling System.docx" },
+              { name: "YouTube Ads Scaling System", size: "772 KB", key: "Brian Moncada Adspend Team/5. Account Setup, Targeting, and Launching/YouTube Ads Scaling System.docx" },
             ],
           },
         ],
@@ -18689,7 +18689,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Hyros Setup Guide", url: "Brian Moncada Adspend Team/6. HYROS Setup & Tracking Guide/Hyros Setup Guide.docx" },
+              { name: "Hyros Setup Guide", size: "222 KB", key: "Brian Moncada Adspend Team/6. HYROS Setup & Tracking Guide/Hyros Setup Guide.docx" },
             ],
           },
           {
@@ -18698,7 +18698,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Organic Tracking", url: "Brian Moncada Adspend Team/6. HYROS Setup & Tracking Guide/Organic Tracking.docx" },
+              { name: "Organic Tracking", size: "624 KB", key: "Brian Moncada Adspend Team/6. HYROS Setup & Tracking Guide/Organic Tracking.docx" },
             ],
           },
         ],
@@ -18720,7 +18720,7 @@ vipOnly: true,
             duration: "40m",
             src: "Brian Moncada Adspend Team/7. Advanced Strategies/2. Hammer Them Strategy - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Pre-Framing With Content & Emails", url: "Brian Moncada Adspend Team/7. Advanced Strategies/2. Pre-Framing With Content & Emails.docx" },
+              { name: "Pre-Framing With Content & Emails", size: "421 KB", key: "Brian Moncada Adspend Team/7. Advanced Strategies/2. Pre-Framing With Content & Emails.docx" },
             ],
           },
         ],
@@ -18742,7 +18742,7 @@ vipOnly: true,
             duration: "26m",
             src: "Brian Moncada Adspend Team/8. Sales Crash Course (Cole Gordon)/2. Sales Tracking Sheet - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Sales Tracking Sheet - 2025", url: "Brian Moncada Adspend Team/8. Sales Crash Course (Cole Gordon)/2. Sales Tracking Sheet - 2025.xlsx" },
+              { name: "Sales Tracking Sheet - 2025", size: "248 KB", key: "Brian Moncada Adspend Team/8. Sales Crash Course (Cole Gordon)/2. Sales Tracking Sheet - 2025.xlsx" },
             ],
           },
           {
@@ -18821,7 +18821,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Read", url: "Brian Moncada Adspend Team/8. Sales Crash Course (Cole Gordon)/Read.txt" },
+              { name: "Read", size: "80 B", key: "Brian Moncada Adspend Team/8. Sales Crash Course (Cole Gordon)/Read.txt" },
             ],
           },
         ],
@@ -19093,7 +19093,7 @@ vipOnly: true,
             duration: "7m",
             src: "Brian Moncada Adspend Team/11. Client Success/2. The 4 Client Archetypes - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Trainings (Licensed for Portal)", url: "Brian Moncada Adspend Team/11. Client Success/2. Trainings (Licensed for Portal).zip" },
+              { name: "Trainings (Licensed for Portal)", size: "18.1 MB", key: "Brian Moncada Adspend Team/11. Client Success/2. Trainings (Licensed for Portal).zip" },
             ],
           },
           {
@@ -19123,7 +19123,7 @@ vipOnly: true,
             duration: "3m",
             src: "Brian Moncada Adspend Team/11. Client Success/6. Self-audit - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Self Audit", url: "Brian Moncada Adspend Team/11. Client Success/6. Self Audit.docx" },
+              { name: "Self Audit", size: "548 KB", key: "Brian Moncada Adspend Team/11. Client Success/6. Self Audit.docx" },
             ],
           },
           {
@@ -19132,7 +19132,7 @@ vipOnly: true,
             duration: "3m",
             src: "Brian Moncada Adspend Team/11. Client Success/7. Grading - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Scoring Sheet", url: "Brian Moncada Adspend Team/11. Client Success/7. Scoring Sheet.xlsx" },
+              { name: "Scoring Sheet", size: "93 KB", key: "Brian Moncada Adspend Team/11. Client Success/7. Scoring Sheet.xlsx" },
             ],
           },
           {
@@ -19141,7 +19141,7 @@ vipOnly: true,
             duration: "24m",
             src: "Brian Moncada Adspend Team/11. Client Success/8. Frameworks - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Frameworks", url: "Brian Moncada Adspend Team/11. Client Success/8. Frameworks.docx" },
+              { name: "Frameworks", size: "552 KB", key: "Brian Moncada Adspend Team/11. Client Success/8. Frameworks.docx" },
             ],
           },
         ],
@@ -19156,7 +19156,7 @@ vipOnly: true,
             duration: "8m",
             src: "Brian Moncada Adspend Team/12. Operations & Fulfillment/1. Why do we need to productize fulfillment - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Productizing Fulfilment", url: "Brian Moncada Adspend Team/12. Operations & Fulfillment/1. Productizing Fulfilment.docx" },
+              { name: "Productizing Fulfilment", size: "437 KB", key: "Brian Moncada Adspend Team/12. Operations & Fulfillment/1. Productizing Fulfilment.docx" },
             ],
           },
           {
@@ -19256,7 +19256,7 @@ vipOnly: true,
             duration: "7m",
             src: "Brian Moncada Adspend Team/12. Operations & Fulfillment/15. Organizational Structure - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Org Chart Training", url: "Brian Moncada Adspend Team/12. Operations & Fulfillment/15. Org Chart Training.docx" },
+              { name: "Org Chart Training", size: "419 KB", key: "Brian Moncada Adspend Team/12. Operations & Fulfillment/15. Org Chart Training.docx" },
             ],
           },
           {
@@ -19279,7 +19279,7 @@ vipOnly: true,
             duration: "7m",
             src: "Brian Moncada Adspend Team/12. Operations & Fulfillment/18. Company Scorecard - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Company Scorecard", url: "Brian Moncada Adspend Team/12. Operations & Fulfillment/18. Company Scorecard.docx" },
+              { name: "Company Scorecard", size: "420 KB", key: "Brian Moncada Adspend Team/12. Operations & Fulfillment/18. Company Scorecard.docx" },
             ],
           },
           {
@@ -19295,7 +19295,7 @@ vipOnly: true,
             duration: "17m",
             src: "Brian Moncada Adspend Team/12. Operations & Fulfillment/20. Lead-To-Purchase - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Lead To Purchase Training", url: "Brian Moncada Adspend Team/12. Operations & Fulfillment/20. Lead To Purchase Training.docx" },
+              { name: "Lead To Purchase Training", size: "419 KB", key: "Brian Moncada Adspend Team/12. Operations & Fulfillment/20. Lead To Purchase Training.docx" },
             ],
           },
           {
@@ -19304,7 +19304,7 @@ vipOnly: true,
             duration: "1m",
             src: "Brian Moncada Adspend Team/12. Operations & Fulfillment/21. ClickUp Overview - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Intro to ClickUp", url: "Brian Moncada Adspend Team/12. Operations & Fulfillment/21. Intro to ClickUp.docx" },
+              { name: "Intro to ClickUp", size: "1.7 MB", key: "Brian Moncada Adspend Team/12. Operations & Fulfillment/21. Intro to ClickUp.docx" },
             ],
           },
           {
@@ -19320,7 +19320,7 @@ vipOnly: true,
             duration: "3m",
             src: "Brian Moncada Adspend Team/12. Operations & Fulfillment/23. EOD Reporting - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "EOD Reporting", url: "Brian Moncada Adspend Team/12. Operations & Fulfillment/23. EOD Reporting.docx" },
+              { name: "EOD Reporting", size: "417 KB", key: "Brian Moncada Adspend Team/12. Operations & Fulfillment/23. EOD Reporting.docx" },
             ],
           },
           {
@@ -19349,7 +19349,7 @@ vipOnly: true,
             duration: "6m",
             src: "Brian Moncada Adspend Team/13. Facebook Ads/1. Ad Strategy - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Meta Ads Training", url: "Brian Moncada Adspend Team/13. Facebook Ads/1. Meta Ads Training.docx" },
+              { name: "Meta Ads Training", size: "440 KB", key: "Brian Moncada Adspend Team/13. Facebook Ads/1. Meta Ads Training.docx" },
             ],
           },
           {
@@ -19456,7 +19456,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Read", url: "Brian Moncada Adspend Team/13. Facebook Ads/Read.txt" },
+              { name: "Read", size: "80 B", key: "Brian Moncada Adspend Team/13. Facebook Ads/Read.txt" },
             ],
           },
         ],
@@ -19478,9 +19478,9 @@ vipOnly: true,
             duration: "28m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/2. Offer - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Ideal Avatar worksheet", url: "Brian Moncada Adspend Team/14. For Agency Owners/2. Ideal Avatar worksheet.docx" },
-              { title: "Offer doc", url: "Brian Moncada Adspend Team/14. For Agency Owners/2. Offer doc.docx" },
-              { title: "Offer Packaging & Positioning worksheet", url: "Brian Moncada Adspend Team/14. For Agency Owners/2. Offer Packaging & Positioning worksheet.docx" },
+              { name: "Ideal Avatar worksheet", size: "1.1 MB", key: "Brian Moncada Adspend Team/14. For Agency Owners/2. Ideal Avatar worksheet.docx" },
+              { name: "Offer doc", size: "88 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/2. Offer doc.docx" },
+              { name: "Offer Packaging & Positioning worksheet", size: "560 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/2. Offer Packaging & Positioning worksheet.docx" },
             ],
           },
           {
@@ -19489,7 +19489,7 @@ vipOnly: true,
             duration: "32m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/3. Getting Clients Overview - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Overview doc", url: "Brian Moncada Adspend Team/14. For Agency Owners/3. Overview doc.docx" },
+              { name: "Overview doc", size: "87 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/3. Overview doc.docx" },
             ],
           },
           {
@@ -19498,7 +19498,7 @@ vipOnly: true,
             duration: "50m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/4. Getting Clients - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Getting clients", url: "Brian Moncada Adspend Team/14. For Agency Owners/4. Getting clients.docx" },
+              { name: "Getting clients", size: "88 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/4. Getting clients.docx" },
             ],
           },
           {
@@ -19507,7 +19507,7 @@ vipOnly: true,
             duration: "1h",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/5. PLV Outreach Process - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "PLV Outreach Process", url: "Brian Moncada Adspend Team/14. For Agency Owners/5. PLV Outreach Process.docx" },
+              { name: "PLV Outreach Process", size: "87 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/5. PLV Outreach Process.docx" },
             ],
           },
           {
@@ -19516,8 +19516,8 @@ vipOnly: true,
             duration: "33m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/6. Closing Clients - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Closing clients", url: "Brian Moncada Adspend Team/14. For Agency Owners/6. Closing clients.docx" },
-              { title: "copy platform", url: "Brian Moncada Adspend Team/14. For Agency Owners/6. copy platform.docx" },
+              { name: "Closing clients", size: "87 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/6. Closing clients.docx" },
+              { name: "copy platform", size: "367 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/6. copy platform.docx" },
             ],
           },
           {
@@ -19526,7 +19526,7 @@ vipOnly: true,
             duration: "22m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/7. Onboarding Clients - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Onboarding clients", url: "Brian Moncada Adspend Team/14. For Agency Owners/7. Onboarding clients.docx" },
+              { name: "Onboarding clients", size: "87 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/7. Onboarding clients.docx" },
             ],
           },
           {
@@ -19535,7 +19535,7 @@ vipOnly: true,
             duration: "35m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/8. Client Success 101 - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Client success 101", url: "Brian Moncada Adspend Team/14. For Agency Owners/8. Client success 101.docx" },
+              { name: "Client success 101", size: "87 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/8. Client success 101.docx" },
             ],
           },
           {
@@ -19544,8 +19544,8 @@ vipOnly: true,
             duration: "36m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/9. Account management - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Account Management", url: "Brian Moncada Adspend Team/14. For Agency Owners/9. Account Management.docx" },
-              { title: "Asana CSV File - Account Management Review (1)", url: "Brian Moncada Adspend Team/14. For Agency Owners/9. Asana CSV File - Account_Management_Review (1).csv" },
+              { name: "Account Management", size: "87 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/9. Account Management.docx" },
+              { name: "Asana CSV File - Account Management Review (1)", size: "4 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/9. Asana CSV File - Account_Management_Review (1).csv" },
             ],
           },
           {
@@ -19554,7 +19554,7 @@ vipOnly: true,
             duration: "26m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/10. Getting Case Studies, Referrals, & Testimonials - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Getting referrals & testimonials", url: "Brian Moncada Adspend Team/14. For Agency Owners/10. Getting referrals & testimonials.docx" },
+              { name: "Getting referrals & testimonials", size: "87 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/10. Getting referrals & testimonials.docx" },
             ],
           },
           {
@@ -19563,7 +19563,7 @@ vipOnly: true,
             duration: "40m",
             src: "Brian Moncada Adspend Team/14. For Agency Owners/11. Building A Team - Adspend Academy (Full Course) · Adspend.com.mp4",
             resources: [
-              { title: "Building a Team", url: "Brian Moncada Adspend Team/14. For Agency Owners/11. Building a Team.docx" },
+              { name: "Building a Team", size: "88 KB", key: "Brian Moncada Adspend Team/14. For Agency Owners/11. Building a Team.docx" },
             ],
           },
         ],
@@ -20193,7 +20193,7 @@ vipOnly: true,
             duration: "10m",
             src: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/02 Complete Breakdown of Devin_s Style.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/02 Complete Breakdown of Devin_s Style.txt" },
+              { name: "Notes", size: "242 B", key: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/02 Complete Breakdown of Devin_s Style.txt" },
             ],
           },
           {
@@ -20216,7 +20216,7 @@ vipOnly: true,
             duration: "12m",
             src: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/05 Creating Devin_s Text Style Appearance.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/05 Creating Devin_s Text Style Appearance.txt" },
+              { name: "Notes", size: "366 B", key: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/05 Creating Devin_s Text Style Appearance.txt" },
             ],
           },
           {
@@ -20246,7 +20246,7 @@ vipOnly: true,
             duration: "14m",
             src: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/09 Icon Gallery Slide Animation.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/09 Icon Gallery Slide Animation.txt" },
+              { name: "Notes", size: "385 B", key: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/09 Icon Gallery Slide Animation.txt" },
             ],
           },
           {
@@ -20283,7 +20283,7 @@ vipOnly: true,
             duration: "14m",
             src: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/14- Rough Cuts, Pacing, & Planning!.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/14- Rough Cuts, Pacing, & Planning!.txt" },
+              { name: "Notes", size: "595 B", key: "Ultimate Editors 2.0 by Joseph Eid/03 Devin Jatho Editing Courses/14- Rough Cuts, Pacing, & Planning!.txt" },
             ],
           },
           {
@@ -20675,7 +20675,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/05 Bymaximize Editing Courses/21- 3 Hour Masterclass on Clean Editing!.txt" },
+              { name: "Notes", size: "81 B", key: "Ultimate Editors 2.0 by Joseph Eid/05 Bymaximize Editing Courses/21- 3 Hour Masterclass on Clean Editing!.txt" },
             ],
           },
         ],
@@ -20949,7 +20949,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/06 Houston Kold Editing Courses/38- Project File - Charles (January Competition ).txt" },
+              { name: "Notes", size: "90 B", key: "Ultimate Editors 2.0 by Joseph Eid/06 Houston Kold Editing Courses/38- Project File - Charles (January Competition ).txt" },
             ],
           },
         ],
@@ -21020,7 +21020,7 @@ vipOnly: true,
             duration: "",
             src: "",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/07 Isaac Editing Styles & Animations/🔋The Isaac Editing Style.txt" },
+              { name: "Notes", size: "2 KB", key: "Ultimate Editors 2.0 by Joseph Eid/07 Isaac Editing Styles & Animations/🔋The Isaac Editing Style.txt" },
             ],
           },
         ],
@@ -21042,7 +21042,7 @@ vipOnly: true,
             duration: "15m",
             src: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/2- Do you REALLY understand Iman_s Style.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/2- Do you REALLY understand Iman_s Style.txt" },
+              { name: "Notes", size: "94 B", key: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/2- Do you REALLY understand Iman_s Style.txt" },
             ],
           },
           {
@@ -21051,7 +21051,7 @@ vipOnly: true,
             duration: "19m",
             src: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/3- Your text isn_t doing enough.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/3- Your text isn_t doing enough.txt" },
+              { name: "Notes", size: "342 B", key: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/3- Your text isn_t doing enough.txt" },
             ],
           },
           {
@@ -21088,7 +21088,7 @@ vipOnly: true,
             duration: "4m",
             src: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/8- How Iman Composites.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/8- How Iman Composites.txt" },
+              { name: "Notes", size: "216 B", key: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/8- How Iman Composites.txt" },
             ],
           },
           {
@@ -21097,7 +21097,7 @@ vipOnly: true,
             duration: "5m",
             src: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/9- Taking the next step.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/9- Taking the next step.txt" },
+              { name: "Notes", size: "242 B", key: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/9- Taking the next step.txt" },
             ],
           },
           {
@@ -21106,7 +21106,7 @@ vipOnly: true,
             duration: "22m",
             src: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/10- Cutting your videos like Iman.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/10- Cutting your videos like Iman.txt" },
+              { name: "Notes", size: "208 B", key: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/10- Cutting your videos like Iman.txt" },
             ],
           },
           {
@@ -21164,7 +21164,7 @@ vipOnly: true,
             duration: "33m",
             src: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/18- Sound design like Iman.mp4",
             resources: [
-              { title: "Notes", url: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/18- Sound design like Iman.txt" },
+              { name: "Notes", size: "219 B", key: "Ultimate Editors 2.0 by Joseph Eid/08 Iman Ghadzi Style + 3D Animations/18- Sound design like Iman.txt" },
             ],
           },
         ],
