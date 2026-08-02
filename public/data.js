@@ -10568,6 +10568,7 @@ const COURSES = [
   },
   {
     id: "evolve-ecommerce",
+    popular: true,
     introVideo: "Intro Videos/Evolve.mp4",
     availableOverride: true,
     title: "Evolve E-Commerce by Spencer Pawliw",
@@ -18870,6 +18871,7 @@ const COURSES = [
   },
   {
     id: "ecommerce-mrr-mastery",
+    popular: true,
     title: "E-Commerce MRR Mastery By Brandon van Mierlo",
     externalUrl: "https://whop.com/e-com-mrr-mastery/products/mrbrandowner/",
     tagline: "Coming soon — course content is being added.",

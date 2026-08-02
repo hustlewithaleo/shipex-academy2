@@ -12281,6 +12281,7 @@ const COURSES = [
   },
   {
     id: "evolve-ecommerce",
+    popular: true,
     introVideo: "Intro Videos/Evolve.mp4",
     availableOverride: true,
     title: "Evolve E-Commerce by Spencer Pawliw",
@@ -20583,6 +20584,7 @@ const COURSES = [
   },
   {
     id: "ecommerce-mrr-mastery",
+    popular: true,
     title: "E-Commerce MRR Mastery By Brandon van Mierlo",
     externalUrl: "https://whop.com/e-com-mrr-mastery/products/mrbrandowner/",
     tagline: "Coming soon — course content is being added.",
@@ -33786,7 +33788,11 @@ function userChip(user) {
           // searching just narrows what's inside each section, sections with
           // no matches are simply not shown
           function isAvailableNow(c) { return Boolean(courseStats(c).allReady || c.availableOverride); }
-          function availableFirst(a, b) { return Number(isAvailableNow(b)) - Number(isAvailableNow(a)); }
+          function availableFirst(a, b) {
+            var popularDiff = Number(Boolean(b.popular)) - Number(Boolean(a.popular));
+            if (popularDiff !== 0) return popularDiff;
+            return Number(isAvailableNow(b)) - Number(isAvailableNow(a));
+          }
           var freeCourses = list.filter(function (c) { return !c.vipOnly; }).sort(availableFirst);
           var vipCourses = list.filter(function (c) { return c.vipOnly; }).sort(availableFirst);
           grid.className = "course-rows";
