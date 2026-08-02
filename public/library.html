@@ -1180,6 +1180,52 @@ p {
 .dash__head h1 { font-size: clamp(26px, 3.5vw, 34px); letter-spacing: -0.03em; }
 .dash__head p { color: var(--muted-2); margin-top: 8px; font-size: 16px; }
 
+/* online-now badge (appbar) */
+.online-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-body); font-size: 13px; color: var(--muted-2);
+  padding: 6px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft, rgba(255,255,255,0.07));
+}
+.online-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #46d17f; flex: 0 0 auto;
+  box-shadow: 0 0 0 0 rgba(70,209,127,0.6);
+  animation: online-pulse 2s infinite;
+}
+@keyframes online-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(70,209,127,0.55); }
+  70% { box-shadow: 0 0 0 6px rgba(70,209,127,0); }
+  100% { box-shadow: 0 0 0 0 rgba(70,209,127,0); }
+}
+@media (max-width: 640px) {
+  .online-badge span:last-child { display: none; }
+}
+
+/* fake VIP-purchase toast (bottom-left) */
+.vip-toast {
+  position: fixed; left: 18px; bottom: 18px; z-index: 80;
+  display: flex; align-items: center; gap: 12px;
+  background: var(--surface); border: 1px solid var(--border-soft, rgba(255,255,255,0.08));
+  border-radius: 14px; padding: 12px 16px 12px 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+  max-width: 320px;
+  transform: translateY(calc(100% + 30px)); opacity: 0;
+  transition: transform .45s cubic-bezier(.22,1,.36,1), opacity .35s ease;
+  pointer-events: none;
+}
+.vip-toast.show { transform: translateY(0); opacity: 1; }
+.vip-toast__icon {
+  width: 36px; height: 36px; border-radius: 10px; flex: 0 0 auto;
+  background: rgba(255,66,17,0.14); border: 1px solid rgba(255,66,17,0.35);
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.vip-toast__text { font-size: 13px; color: #fff; line-height: 1.4; }
+.vip-toast__text b { color: var(--accent); }
+.vip-toast__time { font-size: 11px; color: var(--muted-2); margin-top: 2px; }
+@media (max-width: 480px) {
+  .vip-toast { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+}
+
 /* resume strip */
 .resume {
   display: flex; align-items: center; gap: 20px;
@@ -1623,6 +1669,7 @@ p {
       SHIPEX<span style="color:#FF4211;margin:0 -6px;">.</span>ACADEMY
     </a>
     <div class="appbar__right">
+      <span class="online-badge" id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">—</span><span>&nbsp;online now</span></span>
       <a class="linkbtn" id="navAffiliate" href="/affiliate" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4211" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
         Affiliate
@@ -33804,6 +33851,64 @@ function userChip(user) {
         renderGrid();
       })();
     });
+  </script>
+
+  <div class="vip-toast" id="vipToast">
+    <div class="vip-toast__icon">🎉</div>
+    <div>
+      <div class="vip-toast__text" id="vipToastText"></div>
+      <div class="vip-toast__time" id="vipToastTime"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      // ---- online-now badge: small randomized number, nudged over time ----
+      var onlineCountEl = document.getElementById("onlineCount");
+      var onlineNow = 4 + Math.floor(Math.random() * 13); // start somewhere in 4-16
+      function renderOnline() { if (onlineCountEl) onlineCountEl.textContent = onlineNow; }
+      function nudgeOnline() {
+        var delta = Math.floor(Math.random() * 5) - 2; // -2..+2
+        onlineNow = Math.max(1, Math.min(20, onlineNow + delta));
+        renderOnline();
+        setTimeout(nudgeOnline, 4000 + Math.random() * 6000); // every 4-10s
+      }
+      renderOnline();
+      setTimeout(nudgeOnline, 4000 + Math.random() * 6000);
+
+      // ---- fake "just bought VIP" toast ----
+      var FIRST_NAMES = [
+        "James", "Michael", "Daniel", "David", "Ryan", "Kevin", "Brandon", "Tyler", "Ethan", "Noah",
+        "Lucas", "Mason", "Logan", "Jack", "Oliver", "Liam", "Aiden", "Carlos", "Diego", "Mateo",
+        "Adam", "Sam", "Omar", "Youssef", "Karim", "Ahmed", "Marco", "Luca", "Matteo", "Hugo",
+        "Leon", "Finn", "Felix", "Erik", "Lars", "Mia", "Emma", "Olivia", "Sophia", "Ava",
+        "Chloe", "Isabella", "Grace", "Zoe", "Layla", "Amara", "Priya", "Aisha", "Yuki", "Hana",
+      ];
+      var COUNTRIES = [
+        "the United States", "Canada", "the United Kingdom", "Australia", "Germany", "France",
+        "the Netherlands", "Sweden", "Norway", "Ireland", "Spain", "Italy", "Portugal", "Belgium",
+        "Switzerland", "the UAE", "Saudi Arabia", "Morocco", "Egypt", "South Africa", "Brazil",
+        "Mexico", "Poland", "Romania", "Singapore", "New Zealand", "Japan", "South Korea", "India",
+      ];
+      function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+      function randomTimeAgo() {
+        var n = 1 + Math.floor(Math.random() * 14);
+        return n === 1 ? "1 minute ago" : n + " minutes ago";
+      }
+      var toast = document.getElementById("vipToast");
+      var toastText = document.getElementById("vipToastText");
+      var toastTime = document.getElementById("vipToastTime");
+      function showVipToast() {
+        if (!toast) return;
+        var name = pick(FIRST_NAMES);
+        var country = pick(COUNTRIES);
+        toastText.innerHTML = "<b>" + name + "</b> from " + country + " just got VIP";
+        toastTime.textContent = randomTimeAgo();
+        toast.classList.add("show");
+        setTimeout(function () { toast.classList.remove("show"); }, 6000);
+        setTimeout(showVipToast, 22000 + Math.random() * 28000); // next one in 22-50s
+      }
+      setTimeout(showVipToast, 8000 + Math.random() * 10000); // first one after 8-18s
+    })();
   </script>
 </body>
 </html>
