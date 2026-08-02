@@ -1307,6 +1307,19 @@ p {
   padding: 9px 0; color: #fff; font-size: 14px; font-family: var(--font-body);
 }
 .search-box input::placeholder { color: var(--muted); }
+.sort-select {
+  padding: 9px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  font-size: 14px;
+  font-family: var(--font-body);
+  outline: none;
+  cursor: pointer;
+}
+.sort-select:hover { border-color: var(--accent-dim); }
+.sort-select option { background: var(--surface); color: #fff; }
 .cat-pill {
   padding: 7px 14px;
   border-radius: 999px;
@@ -1693,9 +1706,17 @@ p {
 
     <div class="cat-filter-row">
       <div class="cat-filter" id="catFilter"></div>
-      <div class="search-box">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="courseSearch" placeholder="Search courses..." autocomplete="off">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <select class="sort-select" id="courseSort">
+          <option value="relevance">Sort: Relevance</option>
+          <option value="price">Sort: Price</option>
+          <option value="date">Sort: Upload Date</option>
+          <option value="status">Sort: Status</option>
+        </select>
+        <div class="search-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="courseSearch" placeholder="Search courses..." autocomplete="off">
+        </div>
       </div>
     </div>
     <div class="courses" id="courses"></div>
@@ -33722,8 +33743,13 @@ function userChip(user) {
         var filterWrap = document.getElementById("catFilter");
         var activeCat = "all";
         var searchTerm = "";
+        var sortMode = "relevance";
         document.getElementById("courseSearch").addEventListener("input", function (e) {
           searchTerm = e.target.value.trim().toLowerCase();
+          renderGrid();
+        });
+        document.getElementById("courseSort").addEventListener("change", function (e) {
+          sortMode = e.target.value;
           renderGrid();
         });
 
@@ -33839,13 +33865,27 @@ function userChip(user) {
           // searching just narrows what's inside each section, sections with
           // no matches are simply not shown
           function isAvailableNow(c) { return Boolean(courseStats(c).allReady || c.availableOverride); }
-          function availableFirst(a, b) {
+          function parsePrice(p) {
+            var n = parseFloat(String(p || "").replace(/[^0-9.]/g, ""));
+            return isNaN(n) ? Infinity : n;
+          }
+          // newer courses get unshifted to the front of COURSES when added, so
+          // a lower array index is a reasonable stand-in for "uploaded more recently"
+          function courseIndex(c) { return COURSES.indexOf(c); }
+          function relevanceSort(a, b) {
             var popularDiff = Number(Boolean(b.popular)) - Number(Boolean(a.popular));
             if (popularDiff !== 0) return popularDiff;
             return Number(isAvailableNow(b)) - Number(isAvailableNow(a));
           }
-          var freeCourses = list.filter(function (c) { return !c.vipOnly; }).sort(availableFirst);
-          var vipCourses = list.filter(function (c) { return c.vipOnly; }).sort(availableFirst);
+          function sortComparator(mode) {
+            if (mode === "price") return function (a, b) { return parsePrice(a.price) - parsePrice(b.price); };
+            if (mode === "date") return function (a, b) { return courseIndex(a) - courseIndex(b); };
+            if (mode === "status") return function (a, b) { return Number(isAvailableNow(b)) - Number(isAvailableNow(a)); };
+            return relevanceSort;
+          }
+          var comparator = sortComparator(sortMode);
+          var freeCourses = list.filter(function (c) { return !c.vipOnly; }).sort(comparator);
+          var vipCourses = list.filter(function (c) { return c.vipOnly; }).sort(comparator);
           grid.className = "course-rows";
           if (freeCourses.length) grid.appendChild(buildCourseRow("Free Courses", freeCourses));
           if (vipCourses.length) grid.appendChild(buildCourseRow("VIP Courses", vipCourses));

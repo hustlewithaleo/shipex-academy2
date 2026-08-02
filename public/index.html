@@ -252,6 +252,55 @@ p {
     gap: 10px;
 }
 
+.online-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: inherit; font-size: 13px; color: #a9a9a9;
+  padding: 6px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  white-space: nowrap;
+}
+.online-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #46d17f; flex: 0 0 auto;
+  box-shadow: 0 0 0 0 rgba(70,209,127,0.6);
+  animation: online-pulse 2s infinite;
+}
+@keyframes online-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(70,209,127,0.55); }
+  70% { box-shadow: 0 0 0 6px rgba(70,209,127,0); }
+  100% { box-shadow: 0 0 0 0 rgba(70,209,127,0); }
+}
+@media (max-width: 640px) {
+  .online-badge span:last-child { display: none; }
+}
+
+.vip-toast-stack {
+  position: fixed; left: 18px; bottom: 18px; z-index: 80;
+  display: flex; flex-direction: column-reverse; gap: 10px;
+  pointer-events: none;
+}
+.vip-toast {
+  display: flex; align-items: center; gap: 12px;
+  background: #121212; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 12px 16px 12px 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+  max-width: 320px;
+  transform: translateY(calc(100% + 24px)) scale(.96); opacity: 0;
+  transition: transform .45s cubic-bezier(.22,1,.36,1), opacity .35s ease;
+}
+.vip-toast.show { transform: translateY(0) scale(1); opacity: 1; }
+.vip-toast__icon {
+  width: 36px; height: 36px; border-radius: 10px; flex: 0 0 auto;
+  background: rgba(255,66,17,0.14); border: 1px solid rgba(255,66,17,0.35);
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.vip-toast__text { font-size: 13px; color: #fff; line-height: 1.4; }
+.vip-toast__text b { color: #FF4211; }
+.vip-toast__time { font-size: 11px; color: #a9a9a9; margin-top: 2px; }
+@media (max-width: 480px) {
+  .vip-toast-stack { left: 12px; right: 12px; bottom: 12px; }
+  .vip-toast { max-width: none; }
+}
+
 .nav__toggle {
     display: none;
     background: none;
@@ -1412,6 +1461,7 @@ p {
                 <a href="#faq">FAQ</a>
             </nav>
             <div class="nav__cta">
+                <span class="online-badge" id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">—</span><span>&nbsp;online now</span></span>
                 <a href="library" class="btn btn--primary" style="
     height: 40PX;
     width: 190px;
@@ -1824,6 +1874,123 @@ document.documentElement.classList.add('js');
         });
     });
 })();
+</script>
+
+<div class="vip-toast-stack" id="vipToastStack"></div>
+<script>
+    (function () {
+      // ---- online-now badge: small randomized number, nudged over time ----
+      var onlineCountEl = document.getElementById("onlineCount");
+      var onlineNow = 4 + Math.floor(Math.random() * 13); // start somewhere in 4-16
+      function renderOnline() { if (onlineCountEl) onlineCountEl.textContent = onlineNow; }
+      function nudgeOnline() {
+        var delta = Math.floor(Math.random() * 5) - 2; // -2..+2
+        onlineNow = Math.max(1, Math.min(20, onlineNow + delta));
+        renderOnline();
+        setTimeout(nudgeOnline, 4000 + Math.random() * 6000); // every 4-10s
+      }
+      renderOnline();
+      setTimeout(nudgeOnline, 4000 + Math.random() * 6000);
+
+      // ---- fake "just bought VIP" toast ----
+      var FIRST_NAMES = [
+        "James", "Michael", "Daniel", "David", "Ryan", "Kevin", "Brandon", "Tyler", "Ethan", "Noah",
+        "Lucas", "Mason", "Logan", "Jack", "Oliver", "Liam", "Aiden", "Carlos", "Diego", "Mateo",
+        "Adam", "Sam", "Omar", "Youssef", "Karim", "Ahmed", "Marco", "Luca", "Matteo", "Hugo",
+        "Leon", "Finn", "Felix", "Erik", "Lars", "Mia", "Emma", "Olivia", "Sophia", "Ava",
+        "Chloe", "Isabella", "Grace", "Zoe", "Layla", "Amara", "Priya", "Aisha", "Yuki", "Hana",
+      ];
+      var EUROPE_COUNTRIES = [
+        "the United Kingdom", "Germany", "France", "the Netherlands", "Sweden", "Norway",
+        "Ireland", "Spain", "Italy", "Portugal", "Belgium", "Switzerland", "Poland", "Romania",
+      ];
+      function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+      function pickCountry() { return Math.random() < 0.9 ? "the United States" : pick(EUROPE_COUNTRIES); }
+      function randomTimeAgo() {
+        var n = 1 + Math.floor(Math.random() * 14);
+        return n === 1 ? "1 minute ago" : n + " minutes ago";
+      }
+
+      // small synthesized "ding" — no audio file needed, and browsers block
+      // autoplaying sound before the user has interacted with the page at
+      // all, so lazily create/unlock the AudioContext on the first click/key
+      var audioCtx = null;
+      function unlockAudio() {
+        if (audioCtx) return;
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        audioCtx = new Ctx();
+      }
+      document.addEventListener("click", unlockAudio, { once: true });
+      document.addEventListener("keydown", unlockAudio, { once: true });
+      function playChime() {
+        if (!audioCtx || audioCtx.state !== "running") return;
+        var now = audioCtx.currentTime;
+        [[880, 0], [1318.5, 0.09]].forEach(function (pair) {
+          var freq = pair[0], delay = pair[1];
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0, now + delay);
+          gain.gain.linearRampToValueAtTime(0.14, now + delay + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.35);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(now + delay);
+          osc.stop(now + delay + 0.4);
+        });
+      }
+
+      var stack = document.getElementById("vipToastStack");
+      var usedRecently = [];
+      function pickName() {
+        var name = pick(FIRST_NAMES);
+        var tries = 0;
+        while (usedRecently.indexOf(name) !== -1 && tries < 5) { name = pick(FIRST_NAMES); tries++; }
+        usedRecently.push(name);
+        if (usedRecently.length > 3) usedRecently.shift();
+        return name;
+      }
+      function spawnToast() {
+        if (!stack) return;
+        var el = document.createElement("div");
+        el.className = "vip-toast";
+        el.innerHTML =
+          '<div class="vip-toast__icon">🎉</div>' +
+          '<div>' +
+            '<div class="vip-toast__text"><b>' + pickName() + "</b> from " + pickCountry() + " just got VIP</div>" +
+            '<div class="vip-toast__time">' + randomTimeAgo() + "</div>" +
+          "</div>";
+        stack.appendChild(el);
+        void el.offsetHeight;
+        el.classList.add("show");
+        playChime();
+        var life = 5500 + Math.random() * 2000;
+        setTimeout(function () {
+          el.classList.remove("show");
+          setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
+        }, life);
+      }
+      function anyVideoPlaying() {
+        var vids = document.querySelectorAll("video");
+        for (var i = 0; i < vids.length; i++) {
+          if (!vids[i].paused && !vids[i].ended) return true;
+        }
+        return false;
+      }
+      function scheduleNext() {
+        if (anyVideoPlaying()) {
+          setTimeout(scheduleNext, 10000);
+          return;
+        }
+        spawnToast();
+        if (Math.random() < 0.18) {
+          setTimeout(function () { if (!anyVideoPlaying()) spawnToast(); }, 1500 + Math.random() * 2000);
+        }
+        setTimeout(scheduleNext, 45000 + Math.random() * 45000); // next one in 45-90s
+      }
+      setTimeout(scheduleNext, 12000 + Math.random() * 10000); // first one after 12-22s
+    })();
 </script>
 </body>
 
