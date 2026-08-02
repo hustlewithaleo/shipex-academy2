@@ -1716,9 +1716,11 @@ p {
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
         <select class="sort-select" id="courseSort">
           <option value="relevance">Sort: Relevance</option>
-          <option value="price">Sort: Price</option>
-          <option value="date">Sort: Upload Date</option>
-          <option value="status">Sort: Status</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="date-desc">Upload Date: Newest First</option>
+          <option value="date-asc">Upload Date: Oldest First</option>
+          <option value="status">Status: Available First</option>
         </select>
         <div class="search-box">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -33885,8 +33887,11 @@ function userChip(user) {
             return Number(isAvailableNow(b)) - Number(isAvailableNow(a));
           }
           function sortComparator(mode) {
-            if (mode === "price") return function (a, b) { return parsePrice(a.price) - parsePrice(b.price); };
-            if (mode === "date") return function (a, b) { return courseIndex(a) - courseIndex(b); };
+            if (mode === "price-asc") return function (a, b) { return parsePrice(a.price) - parsePrice(b.price); };
+            if (mode === "price-desc") return function (a, b) { return parsePrice(b.price) - parsePrice(a.price); };
+            // lower array index = added more recently (new courses get unshifted to the front)
+            if (mode === "date-desc") return function (a, b) { return courseIndex(a) - courseIndex(b); };
+            if (mode === "date-asc") return function (a, b) { return courseIndex(b) - courseIndex(a); };
             if (mode === "status") return function (a, b) { return Number(isAvailableNow(b)) - Number(isAvailableNow(a)); };
             return relevanceSort;
           }
