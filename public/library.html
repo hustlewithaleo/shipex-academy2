@@ -33953,18 +33953,26 @@ function userChip(user) {
           setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
         }, life);
       }
-      function scheduleNext() {
-        spawnToast();
-        // sometimes a second (or third) one lands shortly after, so 2-3 show at once
-        if (Math.random() < 0.4) {
-          setTimeout(spawnToast, 1200 + Math.random() * 2200);
-          if (Math.random() < 0.35) {
-            setTimeout(spawnToast, 3200 + Math.random() * 2600);
-          }
+      function anyVideoPlaying() {
+        var vids = document.querySelectorAll("video");
+        for (var i = 0; i < vids.length; i++) {
+          if (!vids[i].paused && !vids[i].ended) return true;
         }
-        setTimeout(scheduleNext, 20000 + Math.random() * 26000); // next cluster in 20-46s
+        return false;
       }
-      setTimeout(scheduleNext, 8000 + Math.random() * 10000); // first one after 8-18s
+      function scheduleNext() {
+        if (anyVideoPlaying()) {
+          setTimeout(scheduleNext, 10000); // check again shortly, don't interrupt playback
+          return;
+        }
+        spawnToast();
+        // occasionally a second one lands shortly after, so 2 show together
+        if (Math.random() < 0.18) {
+          setTimeout(function () { if (!anyVideoPlaying()) spawnToast(); }, 1500 + Math.random() * 2000);
+        }
+        setTimeout(scheduleNext, 45000 + Math.random() * 45000); // next one in 45-90s
+      }
+      setTimeout(scheduleNext, 12000 + Math.random() * 10000); // first one after 12-22s
     })();
   </script>
 </body>
