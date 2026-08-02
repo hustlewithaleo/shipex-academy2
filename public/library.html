@@ -33881,17 +33881,46 @@ function userChip(user) {
         "Leon", "Finn", "Felix", "Erik", "Lars", "Mia", "Emma", "Olivia", "Sophia", "Ava",
         "Chloe", "Isabella", "Grace", "Zoe", "Layla", "Amara", "Priya", "Aisha", "Yuki", "Hana",
       ];
-      var COUNTRIES = [
-        "the United States", "Canada", "the United Kingdom", "Australia", "Germany", "France",
-        "the Netherlands", "Sweden", "Norway", "Ireland", "Spain", "Italy", "Portugal", "Belgium",
-        "Switzerland", "the UAE", "Saudi Arabia", "Morocco", "Egypt", "South Africa", "Brazil",
-        "Mexico", "Poland", "Romania", "Singapore", "New Zealand", "Japan", "South Korea", "India",
+      var EUROPE_COUNTRIES = [
+        "the United Kingdom", "Germany", "France", "the Netherlands", "Sweden", "Norway",
+        "Ireland", "Spain", "Italy", "Portugal", "Belgium", "Switzerland", "Poland", "Romania",
       ];
       function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+      function pickCountry() { return Math.random() < 0.9 ? "the United States" : pick(EUROPE_COUNTRIES); }
       function randomTimeAgo() {
         var n = 1 + Math.floor(Math.random() * 14);
         return n === 1 ? "1 minute ago" : n + " minutes ago";
       }
+      // small synthesized "ding" — no audio file needed, and browsers block
+      // autoplaying sound before the user has interacted with the page at
+      // all, so lazily create/unlock the AudioContext on the first click/key
+      var audioCtx = null;
+      function unlockAudio() {
+        if (audioCtx) return;
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        audioCtx = new Ctx();
+      }
+      document.addEventListener("click", unlockAudio, { once: true });
+      document.addEventListener("keydown", unlockAudio, { once: true });
+      function playChime() {
+        if (!audioCtx || audioCtx.state !== "running") return;
+        var now = audioCtx.currentTime;
+        [[880, 0], [1318.5, 0.09]].forEach(function (pair) {
+          var freq = pair[0], delay = pair[1];
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0, now + delay);
+          gain.gain.linearRampToValueAtTime(0.14, now + delay + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.35);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(now + delay);
+          osc.stop(now + delay + 0.4);
+        });
+      }
+
       var stack = document.getElementById("vipToastStack");
       var usedRecently = [];
       function pickName() {
@@ -33910,13 +33939,14 @@ function userChip(user) {
         el.innerHTML =
           '<div class="vip-toast__icon">🎉</div>' +
           '<div>' +
-            '<div class="vip-toast__text"><b>' + pickName() + "</b> from " + pick(COUNTRIES) + " just got VIP</div>" +
+            '<div class="vip-toast__text"><b>' + pickName() + "</b> from " + pickCountry() + " just got VIP</div>" +
             '<div class="vip-toast__time">' + randomTimeAgo() + "</div>" +
           "</div>";
         stack.appendChild(el);
         // force layout so the transition actually runs
         void el.offsetHeight;
         el.classList.add("show");
+        playChime();
         var life = 5500 + Math.random() * 2000;
         setTimeout(function () {
           el.classList.remove("show");
