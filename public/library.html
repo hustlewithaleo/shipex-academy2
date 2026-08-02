@@ -1404,6 +1404,14 @@ p {
   background: rgba(167, 139, 250, 0.14); border: 1px solid rgba(167, 139, 250, 0.4);
   vertical-align: middle;
 }
+.ccard__textbased-tag-inline {
+  display: inline-block;
+  font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #8A8A8A;
+  padding: 2px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.18);
+  vertical-align: middle;
+}
 
 /* course card category tag — sits over the cover art */
 .ccard__tags {
@@ -1715,6 +1723,7 @@ p {
 const COURSES = [
   {
     id: "native-ads",
+    textBased: true,
     availableOverride: true,
     title: "Native Ads by Satish Prajapati",
     externalUrl: "https://whop.com/konvert-ads/products/meta-nativeads/",
@@ -31905,7 +31914,8 @@ function userChip(user) {
           var availableTag = (s.allReady || c.availableOverride) ? '<span class="ccard__available-tag-inline">Available Now</span>' : '';
           var popularTag = c.popular ? '<span class="ccard__popular-tag-inline">Popular</span>' : '';
           var frenchTag = c.french ? '<span class="ccard__french-tag-inline">French</span>' : '';
-          var titleTags = [vipInlineTag, freeInlineTag, availableTag, popularTag, frenchTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
+          var textBasedTag = c.textBased ? '<span class="ccard__textbased-tag-inline">Text-Based</span>' : '';
+          var titleTags = [vipInlineTag, freeInlineTag, availableTag, popularTag, frenchTag, textBasedTag, soonTag].filter(Boolean).map(function (t) { return ' ' + t; }).join('');
           var card = el("a", "ccard" + (locked ? " ccard--locked" : ""));
           card.href = "course?c=" + c.id;
           card.innerHTML =

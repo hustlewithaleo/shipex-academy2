@@ -10,6 +10,7 @@
 const COURSES = [
   {
     id: "native-ads",
+    textBased: true,
     availableOverride: true,
     title: "Native Ads by Satish Prajapati",
     externalUrl: "https://whop.com/konvert-ads/products/meta-nativeads/",
