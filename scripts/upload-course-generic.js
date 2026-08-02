@@ -30,6 +30,7 @@ const CONTENT_TYPES = {
   ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   ".csv": "text/csv", ".zip": "application/zip",
+  ".pagefly": "application/octet-stream",
 };
 if (process.env.INCLUDE_IMAGES === "1") {
   Object.assign(CONTENT_TYPES, {
