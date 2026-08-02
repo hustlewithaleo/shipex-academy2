@@ -164,7 +164,7 @@ if (!RESEND_CONFIGURED) {
   console.log("[email] RESEND_API_KEY / RESEND_FROM_EMAIL not set — welcome/VIP emails are disabled.");
 }
 async function sendEmail(to, subject, html) {
-  if (!RESEND_CONFIGURED || !to) return;
+  if (!RESEND_CONFIGURED || !to) return false;
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -174,9 +174,12 @@ async function sendEmail(to, subject, html) {
     if (!res.ok) {
       const body = await res.text().catch(() => "");
       console.error("[email] send failed:", res.status, body);
+      return false;
     }
+    return true;
   } catch (e) {
     console.error("[email] send error:", e.message);
+    return false;
   }
 }
 
@@ -228,6 +231,26 @@ function vipEmailHtml(name) {
 <p style="margin:0 0 16px;">See what just opened up: <a href="https://www.shipex.academy/library" style="color:#FF4211;">shipex.academy/library</a></p>
 <p style="margin:0 0 16px;">Two things worth doing now — grab your VIP role in <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> (that's also where new courses get announced first), and if there's a course you want us to go get, request it from the library — VIP requests get looked at first.</p>
 <p style="margin:0;">Cancel anytime from Whop, no contracts, no hoops.</p>
+`);
+}
+
+function newCourseEmailHtml(name, course, checkoutUrl) {
+  const vipLine = course.vipOnly
+    ? `<p style="margin:0 0 16px;">This one's VIP-only. If you're not VIP yet, $29/month gets you this course plus everything else in the library, and you can cancel anytime: <a href="${checkoutUrl}" style="color:#FF4211;">get VIP</a>.</p>`
+    : `<p style="margin:0 0 16px;">It's free — no VIP needed.</p>`;
+  const findLine = course.externalUrl
+    ? `<p style="margin:0 0 16px;">You can also find it directly here: <a href="${course.externalUrl}" style="color:#FF4211;">${course.externalUrl}</a></p>`
+    : "";
+  const imgHtml = course.cover
+    ? `<img src="${course.cover}" alt="${course.title}" style="width:100%;max-width:480px;border-radius:12px;margin:0 0 16px;display:block;">`
+    : "";
+  return emailShell(`
+<p style="margin:0 0 16px;">Hey ${name},</p>
+<p style="margin:0 0 16px;">We just added a new course to the library — <strong>${course.title}</strong>${course.price ? ` (worth ${course.price})` : ""}.</p>
+${imgHtml}
+<p style="margin:0 0 16px;">Watch it here: <a href="${course.courseUrl}" style="color:#FF4211;">${course.courseUrl}</a></p>
+${findLine}
+${vipLine}
 `);
 }
 
@@ -1142,6 +1165,43 @@ app.get("/api/admin/course-stats", async (req, res) => {
     };
   });
   res.json({ stats: out });
+});
+
+/* ---- admin: email every member (with an email on file) about a newly-added course ----
+   Fires in the background instead of awaiting the full send loop — with enough
+   members this can easily run past a serverless function's time limit, so the
+   route responds immediately and the send loop keeps going after that. */
+app.post("/api/admin/announce-course", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  if (!RESEND_CONFIGURED) return res.status(503).json({ error: "email_not_configured" });
+
+  const { id, title, cover, externalUrl, vipOnly, price } = req.body || {};
+  if (!id || !title) return res.status(400).json({ error: "missing_course" });
+
+  const courseUrl = `https://www.shipex.academy/course?c=${encodeURIComponent(id)}`;
+  const coverUrl = cover ? `https://www.shipex.academy/${String(cover).replace(/^\.\//, "")}` : null;
+
+  const members = await readMembers();
+  const recipients = Object.values(members).filter((m) => m.email);
+
+  res.json({ started: true, total: recipients.length });
+
+  (async () => {
+    let sent = 0;
+    let failed = 0;
+    for (const m of recipients) {
+      const checkoutUrl = vipOnly ? await getPersonalizedCheckoutUrl(m.id, m.discordUsername || m.username) : null;
+      const name = m.displayName || m.username || "there";
+      const ok = await sendEmail(
+        m.email,
+        `New course: ${title}`,
+        newCourseEmailHtml(name, { title, cover: coverUrl, externalUrl, vipOnly: Boolean(vipOnly), price, courseUrl }, checkoutUrl)
+      );
+      if (ok) sent++; else failed++;
+      await new Promise((r) => setTimeout(r, 600)); // stay under Resend's rate limit
+    }
+    console.log(`[email] course announcement "${title}" — sent ${sent}/${recipients.length} (${failed} failed)`);
+  })();
 });
 
 /* ---- mint a per-user Whop checkout link carrying the buyer's Discord ID as metadata ---- */

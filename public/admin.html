@@ -56,6 +56,12 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
   color: #fff; font-size: 14px; font-family: var(--font-body);
 }
 .form-row input:focus { outline: none; border-color: var(--accent-dim); }
+.form-row select {
+  flex: 1; min-width: 220px; padding: 11px 13px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  color: #fff; font-size: 14px; font-family: var(--font-body);
+}
+.form-row select:focus { outline: none; border-color: var(--accent-dim); }
 .btn {
   padding: 11px 18px; border-radius: 10px; border: 0; cursor: pointer;
   font-family: var(--font-body); font-size: 14px; font-weight: 600;
@@ -146,6 +152,16 @@ td.muted { color: var(--muted-2); font-size: 13px; }
     </div>
 
     <div class="card">
+      <h2>Announce a new course</h2>
+      <p class="sub" style="margin:0 0 16px;">Emails every member who has an email on file — name, cover image, where to find it online, and the VIP link if it's exclusive.</p>
+      <div class="form-row">
+        <select id="announceCourseSelect"></select>
+        <button class="btn" id="announceBtn">Send announcement to all members</button>
+      </div>
+      <div class="msg" id="announceMsg"></div>
+    </div>
+
+    <div class="card">
       <h2 id="affiliatesCountLabel">Affiliates</h2>
       <table id="affiliatesTable" style="display:none;">
         <thead>
@@ -161,6 +177,7 @@ td.muted { color: var(--muted-2); font-size: 13px; }
     <p id="gateMsg">Checking access…</p>
   </div>
 
+  <script src="./data.js"></script>
   <script>
     function fetchJson(url, opts) {
       return fetch(url, Object.assign({ credentials: "same-origin" }, opts || {}))
@@ -212,6 +229,7 @@ td.muted { color: var(--muted-2); font-size: 13px; }
       "ecommerce": "E-Commerce", "ai-automation": "AI & Automation", "affiliate": "Affiliate Marketing",
       "copywriting": "Sales & Copywriting", "growth": "Growth", "lead-generation": "Lead Generation",
       "finance-trading": "Finance & Trading", "video-editing": "Video Editing", "viral-content": "Viral Content",
+      "web-development": "Web Development",
     };
 
     function renderMembersList(members) {
@@ -357,6 +375,52 @@ td.muted { color: var(--muted-2); font-size: 13px; }
         if (res.ok) renderAffiliates(res.data.affiliates || []);
       });
     }
+
+    function populateAnnounceSelect() {
+      var sel = document.getElementById("announceCourseSelect");
+      if (typeof COURSES === "undefined") return;
+      COURSES.forEach(function (c) {
+        var opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = c.title;
+        sel.appendChild(opt);
+      });
+    }
+    populateAnnounceSelect();
+
+    document.getElementById("announceBtn").addEventListener("click", function () {
+      var sel = document.getElementById("announceCourseSelect");
+      var course = COURSES.filter(function (c) { return c.id === sel.value; })[0];
+      if (!course) return;
+      if (!confirm('Email ALL members announcing "' + course.title + '"? This cannot be undone.')) return;
+      var btn = document.getElementById("announceBtn");
+      var msg = document.getElementById("announceMsg");
+      btn.disabled = true;
+      msg.className = "msg"; msg.textContent = "Sending…";
+      fetchJson("/api/admin/announce-course", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: course.id,
+          title: course.title,
+          cover: course.cover,
+          externalUrl: course.externalUrl,
+          vipOnly: Boolean(course.vipOnly),
+          price: course.price,
+        }),
+      }).then(function (res) {
+        btn.disabled = false;
+        if (res.ok) {
+          msg.className = "msg success";
+          msg.textContent = "Sending to " + res.data.total + " members in the background — check server logs for the final count.";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = res.data && res.data.error === "email_not_configured"
+            ? "Email isn't configured on the server."
+            : "Failed to send — try again.";
+        }
+      });
+    });
 
     document.getElementById("addBtn").addEventListener("click", function () {
       var idInput = document.getElementById("addDiscordId");
