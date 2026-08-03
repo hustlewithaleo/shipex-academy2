@@ -921,6 +921,7 @@ const INTRO_VIDEO_KEYS = new Set([
   "Intro Videos/Impact.mp4",
   "Intro Videos/AB Inner Circle.mp4",
   "Intro Videos/Viral Ai Wizards.mp4",
+  "nkalchemy.mp4",
 ]);
 app.get("/api/intro-video-url", async (req, res) => {
   if (!VIDEO_STORAGE_CONFIGURED) return res.status(503).json({ error: "video_storage_not_configured" });
