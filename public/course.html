@@ -1418,6 +1418,36 @@ p {
 .auth-modal__card p { color: var(--muted-2); font-size: 14px; line-height: 1.5; margin: 0 0 20px; }
 .auth-modal__actions { display: flex; gap: 10px; }
 .auth-modal__actions .btn { flex: 1; padding: 12px 18px; }
+.vip-modal__card { max-width: 460px; padding: 32px 28px 28px; }
+.vip-modal__price {
+  display: flex; align-items: baseline; justify-content: center; gap: 10px;
+  margin: 18px 0 4px; flex-wrap: wrap;
+}
+.vip-modal__price-was {
+  color: var(--muted); font-size: 16px; text-decoration: line-through;
+}
+.vip-modal__price-now {
+  color: var(--accent); font-family: var(--font-head); font-weight: 700; font-size: 30px;
+}
+.vip-modal__price-now span { font-size: 15px; color: var(--muted-2); font-family: var(--font-body); font-weight: 500; }
+.vip-modal__price-badge {
+  background: rgba(70,209,127,0.14); border: 1px solid rgba(70,209,127,0.4); color: #46d17f;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+}
+.vip-modal__fine { color: var(--muted); font-size: 12px; margin: 0 0 22px; }
+.vip-modal__testimonials {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 22px; text-align: left;
+}
+.vip-modal__t {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  border-radius: 12px; padding: 10px 12px;
+}
+.vip-modal__t img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; }
+.vip-modal__t p { font-size: 12.5px; color: #e8e8e8; line-height: 1.4; margin: 0 0 4px; }
+.vip-modal__t span { font-size: 11px; color: var(--muted); }
 .rail {
   border-right: 1px solid var(--border-soft);
   background: var(--bg-soft);
@@ -1820,12 +1850,44 @@ p {
   </div>
 
   <div class="auth-modal" id="courseVipModal">
-    <div class="auth-modal__card">
+    <div class="auth-modal__card vip-modal__card">
       <button class="auth-modal__close" id="courseVipModalClose" type="button" aria-label="Close">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <h3>VIP required</h3>
       <p>This course is reserved for VIP members. Upgrade to unlock it, plus every other VIP-only course on the site.</p>
+
+      <div class="vip-modal__price">
+        <span class="vip-modal__price-was">$97/mo</span>
+        <span class="vip-modal__price-now">$29<span>/mo</span></span>
+        <span class="vip-modal__price-badge">70% off</span>
+      </div>
+      <p class="vip-modal__fine">Cancel anytime · unlocks every VIP course, including this one</p>
+
+      <div class="vip-modal__testimonials">
+        <div class="vip-modal__t">
+          <img src="./testimonial2.avif" alt="">
+          <div>
+            <p>"proof is in the dashboard. crossed $1.5m this past month, peaking at $116k in 24 hours."</p>
+            <span>@marco</span>
+          </div>
+        </div>
+        <div class="vip-modal__t">
+          <img src="./testimonial5.jpg" alt="">
+          <div>
+            <p>"almost at $10k today alone! upgrading to vip to get full access to all the courses was 100% worth it."</p>
+            <span>@leo</span>
+          </div>
+        </div>
+        <div class="vip-modal__t">
+          <img src="./testimonial6.jpg" alt="">
+          <div>
+            <p>"just crossed half a million in sales. paying $29 for the vip membership completely unlocked this level of scale."</p>
+            <span>@ramz</span>
+          </div>
+        </div>
+      </div>
+
       <div class="auth-modal__actions">
         <a id="courseVipModalBtn" href="#" target="_blank" rel="noopener" class="btn btn--accent" style="flex:1 1 100%;">Get VIP</a>
       </div>
