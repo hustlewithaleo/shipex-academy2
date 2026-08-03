@@ -1305,6 +1305,28 @@ p {
 .course-support__price span { font-size: 16px; color: var(--muted-2); font-family: var(--font-body); }
 .course-support__fine { font-size: 13px !important; color: var(--muted) !important; margin-bottom: 28px !important; }
 .course-support__actions .btn { width: 100%; justify-content: center; padding: 14px; }
+.course-support__price-row {
+  display: flex; align-items: baseline; justify-content: center; gap: 10px;
+  flex-wrap: wrap; margin-bottom: 4px;
+}
+.course-support__price-was { color: var(--muted); font-size: 18px; text-decoration: line-through; }
+.course-support__price-badge {
+  background: rgba(70,209,127,0.14); border: 1px solid rgba(70,209,127,0.4); color: #46d17f;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+}
+.course-support__testimonials {
+  display: flex; flex-direction: column; gap: 10px;
+  margin: 0 0 28px; text-align: left;
+}
+.course-support__t {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  border-radius: 12px; padding: 10px 12px;
+}
+.course-support__t img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; }
+.course-support__t p { font-size: 12.5px; color: #e8e8e8; line-height: 1.4; margin: 0 0 4px !important; }
+.course-support__t span { font-size: 11px; color: var(--muted); }
 .course-intro__hero {
   position: relative;
   border-radius: var(--radius);
@@ -1840,8 +1862,38 @@ p {
         <div class="course-support__badge">Not up yet</div>
         <h1>Honestly? <span id="courseSupportTitle"></span> isn't live yet.</h1>
         <p>We haven't gotten to this one — buying and hosting every course here costs real money, and VIP memberships are what fund it. Sign up and you get instant access to everything already live, and you're the reason the next batch gets added sooner.</p>
-        <div class="course-support__price">$29<span>/month</span></div>
+
+        <div class="course-support__price-row">
+          <span class="course-support__price-was">$97/mo</span>
+          <div class="course-support__price">$29<span>/month</span></div>
+          <span class="course-support__price-badge">70% off</span>
+        </div>
         <p class="course-support__fine">Cancel anytime. No contracts, no catch.</p>
+
+        <div class="course-support__testimonials">
+          <div class="course-support__t">
+            <img src="./testimonial1.avif" alt="">
+            <div>
+              <p>"bought the vip subscription then watched the entire mrr mastery course, launched my first supplement brand, and did $100k+ in revenue."</p>
+              <span>@jay</span>
+            </div>
+          </div>
+          <div class="course-support__t">
+            <img src="./testimonial3.avif" alt="">
+            <div>
+              <p>"just had my biggest day yet—crossed $100k before the day even ended. huge thanks to shipex academy for teaching me how to actually convert traffic."</p>
+              <span>@dee</span>
+            </div>
+          </div>
+          <div class="course-support__t">
+            <img src="./testimonial4.png" alt="">
+            <div>
+              <p>"a $29 subscription changed my life. we've managed to 3x our business in under a month just by executing the exact blueprints in the courses."</p>
+              <span>@samk</span>
+            </div>
+          </div>
+        </div>
+
         <div class="course-support__actions">
           <a class="btn btn--accent" id="courseSupportVipBtn" href="#" target="_blank" rel="noopener">Become a VIP</a>
         </div>
