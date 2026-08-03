@@ -1418,10 +1418,32 @@ p {
   font-size: 14px; color: #fff; line-height: 1.4;
 }
 .vip-modal__features li svg { flex: 0 0 auto; margin-top: 2px; color: #FFA83C; }
+.vip-modal__price-row {
+  display: flex; align-items: baseline; justify-content: center; gap: 10px;
+  flex-wrap: wrap; margin-bottom: 4px;
+}
+.vip-modal__price-was { color: var(--muted); font-size: 16px; text-decoration: line-through; }
 .vip-modal__price {
   text-align: center; font-family: var(--font-head); font-size: 26px; letter-spacing: -0.02em;
-  color: #FFA83C; margin-bottom: 16px;
+  color: #FFA83C;
 }
+.vip-modal__price-badge {
+  background: rgba(70,209,127,0.14); border: 1px solid rgba(70,209,127,0.4); color: #46d17f;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+}
+.vip-modal__testimonials {
+  display: flex; flex-direction: column; gap: 10px;
+  margin: 16px 0 20px;
+}
+.vip-modal__t {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  border-radius: 12px; padding: 10px 12px;
+}
+.vip-modal__t img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; }
+.vip-modal__t p { font-size: 12.5px; color: #e8e8e8; line-height: 1.4; margin: 0 0 4px; }
+.vip-modal__t span { font-size: 11px; color: var(--muted); }
 #vipPurchaseBtn {
   background: linear-gradient(135deg, #FFA83C, #FF4211); color: #101604;
 }
@@ -1772,7 +1794,36 @@ p {
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Every future VIP-only course, included automatically</li>
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A VIP role in Discord + an orange VIP badge on the site</li>
       </ul>
-      <div class="vip-modal__price" id="vipPrice">Loading price…</div>
+      <div class="vip-modal__price-row">
+        <span class="vip-modal__price-was">$97/mo</span>
+        <div class="vip-modal__price" id="vipPrice">Loading price…</div>
+        <span class="vip-modal__price-badge">70% off</span>
+      </div>
+
+      <div class="vip-modal__testimonials">
+        <div class="vip-modal__t">
+          <img src="./testimonial2.avif" alt="">
+          <div>
+            <p>"proof is in the dashboard. crossed $1.5m this past month, peaking at $116k in 24 hours."</p>
+            <span>@marco</span>
+          </div>
+        </div>
+        <div class="vip-modal__t">
+          <img src="./testimonial3.avif" alt="">
+          <div>
+            <p>"just had my biggest day yet—crossed $100k before the day even ended, thanks to shipex academy."</p>
+            <span>@dee</span>
+          </div>
+        </div>
+        <div class="vip-modal__t">
+          <img src="./testimonial6.jpg" alt="">
+          <div>
+            <p>"just crossed half a million in sales. paying $29 for vip completely unlocked this level of scale."</p>
+            <span>@ramz</span>
+          </div>
+        </div>
+      </div>
+
       <a class="btn btn--accent modal__submit" id="vipPurchaseBtn" href="#" target="_blank" rel="noopener">Purchase VIP</a>
     </div>
   </div>
