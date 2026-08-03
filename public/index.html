@@ -252,27 +252,6 @@ p {
     gap: 10px;
 }
 
-.online-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: inherit; font-size: 13px; color: #a9a9a9;
-  padding: 6px 10px; border-radius: 999px;
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
-  white-space: nowrap;
-}
-.online-dot {
-  width: 7px; height: 7px; border-radius: 50%; background: #46d17f; flex: 0 0 auto;
-  box-shadow: 0 0 0 0 rgba(70,209,127,0.6);
-  animation: online-pulse 2s infinite;
-}
-@keyframes online-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(70,209,127,0.55); }
-  70% { box-shadow: 0 0 0 6px rgba(70,209,127,0); }
-  100% { box-shadow: 0 0 0 0 rgba(70,209,127,0); }
-}
-@media (max-width: 640px) {
-  .online-badge span:last-child { display: none; }
-}
-
 .vip-toast-stack {
   position: fixed; left: 18px; bottom: 18px; z-index: 80;
   display: flex; flex-direction: column-reverse; gap: 10px;
@@ -694,11 +673,19 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     font-family: var(--font-head);
     font-weight: 700;
     font-size: 16px;
     color: #0a0a0a;
     background: linear-gradient(135deg, #FF4211, #5a6b2e);
+}
+
+.tcard__av img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .tcard:nth-child(2) .tcard__av {
@@ -1461,7 +1448,6 @@ p {
                 <a href="#faq">FAQ</a>
             </nav>
             <div class="nav__cta">
-                <span class="online-badge" id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">—</span><span>&nbsp;online now</span></span>
                 <a href="library" class="btn btn--primary" style="
     height: 40PX;
     width: 190px;
@@ -1505,7 +1491,7 @@ p {
     max-width: 586px;
     width: 100%;
 ">Stop getting fanned out by crazy price tags, we are completely wiping out the paywall. We are giving you full access to all those high-ticket courses for free.</p>
-<video aria-label="10x product demo video" autoplay="" controls="" loop="" playsinline="" poster="./hero2.png" preload="metadata" style="
+<video aria-label="10x product demo video" autoplay="" controls="" loop="" playsinline="" poster="./preview.png" preload="metadata" style="
     border-radius: 26px;
     object-fit: cover;
     width: 100%;
@@ -1656,7 +1642,7 @@ p {
                 <div class="tcard" data-reveal data-reveal-delay="1">
                     <p>"wasted thousands on basic courses before this. The academy actually gives access to courses for free, and they changed my scaling strategy all for free."</p>
                     <div class="tcard__who">
-                        <div class="tcard__av">J</div>
+                        <div class="tcard__av"><img src="./testimonial1.avif" alt=""></div>
                         <div>
                             <div class="tcard__nm">jay</div>
                             <div class="tcard__role">@jaytrades · ecom</div>
@@ -1666,7 +1652,7 @@ p {
                 <div class="tcard" data-reveal data-reveal-delay="2">
                     <p>"the ui is flawless, having every single script, and template attached right under the custom video player means I can copy the funnel instantly while watching 🤝"</p>
                     <div class="tcard__who">
-                        <div class="tcard__av">M</div>
+                        <div class="tcard__av"><img src="./testimonial1.avif" alt=""></div>
                         <div>
                             <div class="tcard__nm">Marco</div>
                             <div class="tcard__role">@hustlewithmarco</div>
@@ -1676,7 +1662,7 @@ p {
                 <div class="tcard" data-reveal data-reveal-delay="3">
                     <p>"not your typical basic chatgpt prompts, this shows you how to integrate ai directly into your business infrastructure to automate operations and scale modern brands."</p>
                     <div class="tcard__who">
-                        <div class="tcard__av">D</div>
+                        <div class="tcard__av"><img src="./testimonial1.avif" alt=""></div>
                         <div>
                             <div class="tcard__nm">dee</div>
                             <div class="tcard__role">@deeecom · ai automation</div>
@@ -1686,7 +1672,7 @@ p {
                 <div class="tcard" data-reveal data-reveal-delay="1">
                     <p>"the affiliate chapters are insane, using their exact funnel layout to build high-converting referral networks has completely unlocked my side hustles."</p>
                     <div class="tcard__who">
-                        <div class="tcard__av">S</div>
+                        <div class="tcard__av"><img src="./testimonial1.avif" alt=""></div>
                         <div>
                             <div class="tcard__nm">Sam K.</div>
                             <div class="tcard__role">affiliate marketing</div>
@@ -1696,7 +1682,7 @@ p {
                 <div class="tcard" data-reveal data-reveal-delay="2">
                     <p>"the landing page psychology and vsl breakdowns are elite, it taught me more about converting cold traffic and writing psychological copy than my entire marketing degree."</p>
                     <div class="tcard__who">
-                        <div class="tcard__av">L</div>
+                        <div class="tcard__av"><img src="./testimonial1.avif" alt=""></div>
                         <div>
                             <div class="tcard__nm">leo</div>
                             <div class="tcard__role">sales &amp; copy</div>
@@ -1706,7 +1692,7 @@ p {
                 <div class="tcard" data-reveal data-reveal-delay="3">
                     <p>"love the join ➔ watch ➔ practice setup. i’m currently copying the exact campaign structures from the meta ads blueprint using the attached resources. 😍"</p>
                     <div class="tcard__who">
-                        <div class="tcard__av">R</div>
+                        <div class="tcard__av"><img src="./testimonial1.avif" alt=""></div>
                         <div>
                             <div class="tcard__nm">ramz</div>
                             <div class="tcard__role">@ramzbuilds · ecom</div>
@@ -1879,19 +1865,6 @@ document.documentElement.classList.add('js');
 <div class="vip-toast-stack" id="vipToastStack"></div>
 <script>
     (function () {
-      // ---- online-now badge: small randomized number, nudged over time ----
-      var onlineCountEl = document.getElementById("onlineCount");
-      var onlineNow = 4 + Math.floor(Math.random() * 13); // start somewhere in 4-16
-      function renderOnline() { if (onlineCountEl) onlineCountEl.textContent = onlineNow; }
-      function nudgeOnline() {
-        var delta = Math.floor(Math.random() * 5) - 2; // -2..+2
-        onlineNow = Math.max(1, Math.min(20, onlineNow + delta));
-        renderOnline();
-        setTimeout(nudgeOnline, 4000 + Math.random() * 6000); // every 4-10s
-      }
-      renderOnline();
-      setTimeout(nudgeOnline, 4000 + Math.random() * 6000);
-
       // ---- fake "just bought VIP" toast ----
       var FIRST_NAMES = [
         "James", "Michael", "Daniel", "David", "Ryan", "Kevin", "Brandon", "Tyler", "Ethan", "Noah",
