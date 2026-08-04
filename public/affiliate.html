@@ -57,7 +57,6 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
 .stat-card__label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
 .stat-card__value { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; }
 .stat-card__value.accent { color: var(--accent); }
-.tier-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
 .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .form-row input {
   flex: 1; min-width: 180px; padding: 11px 13px; border-radius: 10px;
@@ -135,8 +134,7 @@ td.muted { color: var(--muted-2); font-size: 13px; }
       </div>
       <div class="stat-card">
         <div class="stat-card__label">Your rate</div>
-        <div class="stat-card__value" id="statRate">20%</div>
-        <div class="tier-note" id="statTierNote"></div>
+        <div class="stat-card__value" id="statRate">40%</div>
       </div>
     </div>
 
@@ -267,11 +265,6 @@ td.muted { color: var(--muted-2); font-size: 13px; }
         document.getElementById("statTotalEarned").textContent = fmtMoney(d.totalEarned);
         document.getElementById("statReferrals").textContent = d.referralCount;
         document.getElementById("statRate").textContent = Math.round(d.commissionRate * 100) + "%";
-        var nextTier = d.referralCount < 10 ? "10 referrals unlocks 30%"
-          : d.referralCount === 10 ? "1 more referral unlocks 30%"
-          : d.referralCount === 11 ? "1 more referral unlocks 40% (max)"
-          : "Max rate reached";
-        document.getElementById("statTierNote").textContent = nextTier;
         renderReferrals(d.referrals || []);
         renderPayouts(d.payoutRequests || []);
       });

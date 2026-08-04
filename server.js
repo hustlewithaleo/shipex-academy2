@@ -545,17 +545,10 @@ async function getDailyWatchRemaining(userId) {
 }
 
 // ---- affiliate program ----
-// Tiered commission on VIP payments made by someone's referrals:
-//   1-10 referrals  -> 20%
-//   11 referrals    -> 30%
-//   12+ referrals   -> 40% (max)
-// The rate is based on the referrer's CURRENT total referral count, so it
-// applies to every future payment (including from earlier referrals) once
-// they level up — not locked in per-referral.
+// Flat 40% commission on VIP payments made by someone's referrals, from
+// their very first referral — no tiers, no ramp-up.
 function affiliateCommissionRate(referralCount) {
-  if (referralCount >= 12) return 0.40;
-  if (referralCount === 11) return 0.30;
-  return 0.20;
+  return 0.40;
 }
 
 const AFFILIATE_LINKS_KEY = "_affiliate-links.json";
