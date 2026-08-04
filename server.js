@@ -546,9 +546,13 @@ async function getDailyWatchRemaining(userId) {
 
 // ---- affiliate program ----
 // Flat 40% commission on VIP payments made by someone's referrals, from
-// their very first referral — no tiers, no ramp-up.
-function affiliateCommissionRate(referralCount) {
-  return 0.40;
+// their very first referral — no tiers, no ramp-up. An individual account
+// can carry its own `rateOverride` (set manually, e.g. via a one-off admin
+// script) to earn a different flat rate instead.
+const DEFAULT_AFFILIATE_RATE = 0.40;
+function affiliateCommissionRate(referralCount, account) {
+  if (account && typeof account.rateOverride === "number") return account.rateOverride;
+  return DEFAULT_AFFILIATE_RATE;
 }
 
 const AFFILIATE_LINKS_KEY = "_affiliate-links.json";
@@ -618,7 +622,7 @@ async function creditAffiliateCommission(paidUserId, amount) {
     if (!referral) return; // this user wasn't referred by anyone
 
     const account = ensureAffiliateAccount(accounts, referral.referrerId);
-    const rate = affiliateCommissionRate(account.referralCount);
+    const rate = affiliateCommissionRate(account.referralCount, account);
     const commission = Math.round(amount * rate * 100) / 100;
 
     account.balance = Math.round((account.balance + commission) * 100) / 100;
@@ -1510,7 +1514,7 @@ app.get("/api/affiliate/dashboard", async (req, res) => {
       balance: account.balance,
       totalEarned: account.totalEarned,
       referralCount: account.referralCount,
-      commissionRate: affiliateCommissionRate(account.referralCount),
+      commissionRate: affiliateCommissionRate(account.referralCount, account),
       referrals: myReferrals,
       payoutRequests: (account.payoutRequests || []).slice().sort((a, b) => b.requestedAt - a.requestedAt),
     });
