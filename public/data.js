@@ -24,7 +24,7 @@ const COURSES = [
     chapters: [
       {
         id: "ner0",
-        title: "Module 1",
+        title: "Introduction",
         lessons: [
           {
             id: "ner0-1",
@@ -65,7 +65,7 @@ const COURSES = [
       },
       {
         id: "ner1",
-        title: "Module 2",
+        title: "Research & Positioning",
         lessons: [
           {
             id: "ner1-1",
@@ -106,7 +106,7 @@ const COURSES = [
       },
       {
         id: "ner2",
-        title: "Module 3",
+        title: "Store & Offer",
         lessons: [
           {
             id: "ner2-1",
@@ -147,7 +147,7 @@ const COURSES = [
       },
       {
         id: "ner3",
-        title: "Module 4",
+        title: "Funnels",
         lessons: [
           {
             id: "ner3-1",
@@ -202,7 +202,7 @@ const COURSES = [
       },
       {
         id: "ner4",
-        title: "Module 5",
+        title: "Creatives",
         lessons: [
           {
             id: "ner4-1",
@@ -278,7 +278,7 @@ const COURSES = [
       },
       {
         id: "ner5",
-        title: "Module 6",
+        title: "Launch Protocol",
         lessons: [
           {
             id: "ner5-1",
@@ -326,7 +326,7 @@ const COURSES = [
       },
       {
         id: "ner6",
-        title: "Module 7",
+        title: "Scaling on Meta",
         lessons: [
           {
             id: "ner6-1",
@@ -360,7 +360,7 @@ const COURSES = [
       },
       {
         id: "ner7",
-        title: "Module 8",
+        title: "Brand & Exit",
         lessons: [
           {
             id: "ner7-1",
