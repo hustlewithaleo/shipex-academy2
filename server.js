@@ -205,7 +205,7 @@ function emailShell(bodyHtml) {
 ${bodyHtml}
 </td></tr>
 <tr><td style="padding-top:28px;border-top:1px solid #eeeeee;">
-<p style="margin:20px 0 0;font-size:13px;color:#999999;font-family:${f};">Shipex Academy · <a href="https://discord.gg/shipex" style="color:#999999;">Join us on Discord</a></p>
+<p style="margin:20px 0 0;font-size:13px;color:#999999;font-family:${f};">Shipex Academy · <a href="https://discord.gg/ngkpbseGwn" style="color:#999999;">Join us on Discord</a></p>
 </td></tr>
 </table>
 </td></tr>
@@ -220,7 +220,7 @@ function welcomeEmailHtml(name, checkoutUrl) {
 <p style="margin:0 0 16px;">You're in. No funnel, no upsell sequence, no "limited spots" — you just got free access to some of the highest-priced e-commerce, AI, and marketing courses out there.</p>
 <p style="margin:0 0 16px;">Go pick one and start: <a href="https://www.shipex.academy/library" style="color:#FF4211;">shipex.academy/library</a></p>
 <p style="margin:0 0 16px;">Most of the catalog is actually VIP-only — courses that cost thousands elsewhere. $29/month unlocks all of it, plus everything we add after, and you can cancel whenever. If that's useful to you: <a href="${checkoutUrl}" style="color:#FF4211;">get VIP</a>.</p>
-<p style="margin:0;">Either way, come say hi in <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> — that's where new courses get announced first.</p>
+<p style="margin:0;">Either way, come say hi in <a href="https://discord.gg/ngkpbseGwn" style="color:#FF4211;">Discord</a> — that's where new courses get announced first.</p>
 `);
 }
 
@@ -229,7 +229,7 @@ function vipEmailHtml(name) {
 <p style="margin:0 0 16px;">Hey ${name},</p>
 <p style="margin:0 0 16px;">You're VIP now — everything that was locked is unlocked, and every course we add from here on is included automatically for as long as you're a member.</p>
 <p style="margin:0 0 16px;">See what just opened up: <a href="https://www.shipex.academy/library" style="color:#FF4211;">shipex.academy/library</a></p>
-<p style="margin:0 0 16px;">Two things worth doing now — grab your VIP role in <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> (that's also where new courses get announced first), and if there's a course you want us to go get, request it from the library — VIP requests get looked at first.</p>
+<p style="margin:0 0 16px;">Two things worth doing now — grab your VIP role in <a href="https://discord.gg/ngkpbseGwn" style="color:#FF4211;">Discord</a> (that's also where new courses get announced first), and if there's a course you want us to go get, request it from the library — VIP requests get looked at first.</p>
 <p style="margin:0;">Cancel anytime from Whop, no contracts, no hoops.</p>
 `);
 }
