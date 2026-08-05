@@ -35296,6 +35296,7 @@ function userChip(user) {
           trailingHtml;
         row.addEventListener("click", function () {
           if (vipLocked) {
+            if (isGuest) { requireAuth(); return; }
             document.getElementById("courseVipModal").classList.add("open");
             return;
           }
