@@ -1573,9 +1573,41 @@ app.get("/api/admin/affiliates", async (req, res) => {
       totalEarned: a.totalEarned,
       referralCount: a.referralCount,
       payoutRequests: a.payoutRequests || [],
+      rate: typeof a.rateOverride === "number" ? a.rateOverride : DEFAULT_AFFILIATE_RATE,
+      isCustomRate: typeof a.rateOverride === "number",
     };
   });
   res.json({ affiliates: out });
+});
+
+app.post("/api/admin/affiliates/:userId/rate", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  const rate = Number(req.body && req.body.rate);
+  if (!Number.isFinite(rate) || rate < 0 || rate > 1) return res.status(400).json({ error: "invalid_rate" });
+  try {
+    const accounts = await readAffiliateAccounts();
+    const account = ensureAffiliateAccount(accounts, req.params.userId);
+    account.rateOverride = rate;
+    await writeAffiliateAccounts(accounts);
+    res.json({ ok: true, rate });
+  } catch (e) {
+    console.error("[affiliate] rate update failed:", e.message);
+    res.status(500).json({ error: "update_failed" });
+  }
+});
+
+app.delete("/api/admin/affiliates/:userId/rate", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "not_admin" });
+  try {
+    const accounts = await readAffiliateAccounts();
+    const account = accounts[req.params.userId];
+    if (account) delete account.rateOverride;
+    await writeAffiliateAccounts(accounts);
+    res.json({ ok: true, rate: DEFAULT_AFFILIATE_RATE });
+  } catch (e) {
+    console.error("[affiliate] rate reset failed:", e.message);
+    res.status(500).json({ error: "reset_failed" });
+  }
 });
 
 app.post("/api/admin/affiliate-payouts/:userId/:requestId/mark-paid", async (req, res) => {

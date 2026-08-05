@@ -93,6 +93,13 @@ td.muted { color: var(--muted-2); font-size: 13px; }
   padding: 5px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: var(--font-body);
 }
 .remove-btn:hover { color: #ff6b5c; border-color: rgba(255,107,92,0.4); }
+.rate-edit { display: flex; align-items: center; gap: 6px; }
+.rate-input {
+  width: 56px; padding: 6px 8px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft);
+  color: #fff; font-size: 13px; font-family: var(--font-body);
+}
+.rate-input:focus { outline: none; border-color: var(--accent-dim); }
 .empty { color: var(--muted); font-size: 14px; padding: 20px 0; text-align: center; }
 .gate { display: flex; align-items: center; justify-content: center; min-height: 60vh; text-align: center; }
 .gate p { color: var(--muted-2); font-size: 15px; }
@@ -165,7 +172,7 @@ td.muted { color: var(--muted-2); font-size: 13px; }
       <h2 id="affiliatesCountLabel">Affiliates</h2>
       <table id="affiliatesTable" style="display:none;">
         <thead>
-          <tr><th>Affiliate</th><th>Balance</th><th>Total earned</th><th>Referrals</th><th>Payout requests</th></tr>
+          <tr><th>Affiliate</th><th>Rate</th><th>Balance</th><th>Total earned</th><th>Referrals</th><th>Payout requests</th></tr>
         </thead>
         <tbody id="affiliatesTbody"></tbody>
       </table>
@@ -351,8 +358,17 @@ td.muted { color: var(--muted-2); font-size: 13px; }
           var action = r.status === "paid" ? "" : ' <button class="remove-btn mark-paid-btn" data-user="' + a.id + '" data-req="' + r.id + '">Mark paid</button>';
           return '<div class="payout-list__row">' + fmtMoney(r.amount) + ' ' + tag + action + '</div>';
         }).join("") + '</div>' : '<span class="muted">—</span>';
+        var ratePct = Math.round((a.rate || 0) * 100);
+        var rateHtml =
+          '<div class="rate-edit">' +
+            '<input type="number" class="rate-input" min="0" max="100" step="1" value="' + ratePct + '" data-user="' + a.id + '">' +
+            '<span class="muted">%</span>' +
+            '<button class="remove-btn rate-save-btn" data-user="' + a.id + '">Save</button>' +
+            (a.isCustomRate ? '<button class="remove-btn rate-reset-btn" data-user="' + a.id + '">Reset</button>' : '') +
+          '</div>';
         tr.innerHTML =
           '<td>' + (a.username || a.id) + '</td>' +
+          '<td>' + rateHtml + '</td>' +
           '<td class="muted">' + fmtMoney(a.balance) + '</td>' +
           '<td class="muted">' + fmtMoney(a.totalEarned) + '</td>' +
           '<td class="muted">' + (a.referralCount || 0) + '</td>' +
@@ -366,6 +382,30 @@ td.muted { color: var(--muted-2); font-size: 13px; }
           btn.disabled = true;
           btn.textContent = "Marking…";
           fetchJson("/api/admin/affiliate-payouts/" + encodeURIComponent(userId) + "/" + encodeURIComponent(reqId) + "/mark-paid", { method: "POST" })
+            .then(function () { loadAffiliates(); });
+        });
+      });
+      Array.prototype.forEach.call(tbody.querySelectorAll(".rate-save-btn"), function (btn) {
+        btn.addEventListener("click", function () {
+          var userId = btn.getAttribute("data-user");
+          var input = tbody.querySelector('.rate-input[data-user="' + userId + '"]');
+          var pct = parseFloat(input.value);
+          if (isNaN(pct) || pct < 0 || pct > 100) { input.style.borderColor = "#ff6b5c"; return; }
+          btn.disabled = true;
+          btn.textContent = "Saving…";
+          fetchJson("/api/admin/affiliates/" + encodeURIComponent(userId) + "/rate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ rate: pct / 100 }),
+          }).then(function () { loadAffiliates(); });
+        });
+      });
+      Array.prototype.forEach.call(tbody.querySelectorAll(".rate-reset-btn"), function (btn) {
+        btn.addEventListener("click", function () {
+          var userId = btn.getAttribute("data-user");
+          btn.disabled = true;
+          btn.textContent = "Resetting…";
+          fetchJson("/api/admin/affiliates/" + encodeURIComponent(userId) + "/rate", { method: "DELETE" })
             .then(function () { loadAffiliates(); });
         });
       });
