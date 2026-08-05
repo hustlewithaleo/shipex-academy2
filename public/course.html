@@ -1405,6 +1405,10 @@ p {
   border-radius: 12px; padding: 12px 14px;
 }
 .course-intro__features li b { flex: 0 0 auto; color: var(--accent); font-weight: 700; }
+.course-intro__feature-title { flex: 1; }
+.course-intro__feature-count { flex: 0 0 auto; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.course-intro__features li.locked { opacity: .68; }
+.course-intro__feature-lock { flex: 0 0 auto; color: var(--accent); display: inline-flex; margin-left: 2px; }
 .course-intro__actions {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
@@ -35683,7 +35687,11 @@ function userChip(user) {
     // into the rail/player.
     var vipLocked = Boolean(course.vipOnly) && !(user && user.vip);
     var comingSoon = flat.length === 0;
-    var hasEngagedBefore = !isGuest && !vipLocked && !comingSoon && (Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
+    // VIP members always drop straight into the unlocked player — no teaser
+    // landing page — for anything they can actually access; everyone else
+    // only skips it once they've already started the course.
+    var hasEngagedBefore = !isGuest && !vipLocked && !comingSoon &&
+      (Boolean(user && user.vip) || Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
     if (hasEngagedBefore) {
       startPlayer();
     } else {
@@ -35741,8 +35749,12 @@ function userChip(user) {
       var featuresEl = document.getElementById("courseIntroFeatures");
       if (course.chapters.length) {
         featuresEl.style.display = "";
+        var lockIconSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
         featuresEl.innerHTML = course.chapters.map(function (ch, i) {
-          return "<li><b>" + (i + 1) + ".</b><span>" + ch.title + "</span></li>";
+          var lessonCount = chapterLessons(ch).length;
+          var countHtml = '<span class="course-intro__feature-count">' + lessonCount + (lessonCount === 1 ? " lesson" : " lessons") + "</span>";
+          var lockHtml = vipLocked ? '<span class="course-intro__feature-lock" title="Unlock with VIP">' + lockIconSvg + "</span>" : "";
+          return "<li" + (vipLocked ? ' class="locked"' : "") + "><b>" + (i + 1) + '.</b><span class="course-intro__feature-title">' + ch.title + "</span>" + countHtml + lockHtml + "</li>";
         }).join("");
       } else {
         featuresEl.style.display = "none";
