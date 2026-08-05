@@ -1583,6 +1583,12 @@ p {
 .lrow.done .lrow__check svg { color: #101604; }
 .lrow__t { flex: 1; }
 .lrow__d { flex: 0 0 auto; color: var(--muted); font-size: 12px; }
+.lrow.locked { cursor: default; }
+.lrow.locked:hover { background: none; color: var(--muted-2); }
+.lrow__lock { flex: 0 0 auto; color: var(--muted); display: inline-flex; }
+.stage__preview-actions {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 20px;
+}
 
 .stage { padding: 28px 32px 64px; max-width: 1000px; }
 .player {
@@ -2004,7 +2010,11 @@ p {
 
       <div class="stage__crumb" id="crumb"></div>
       <h1 id="lessonTitle"></h1>
-      <div class="stage__row">
+      <div class="stage__preview-actions" id="stagePreviewActions" style="display:none;">
+        <button class="btn btn--accent" id="stageWatchBtn" type="button">Watch now</button>
+        <a class="btn btn--primary" id="stageFindBtn" href="#" target="_blank" rel="noopener" style="display:none;">Find the course online</a>
+      </div>
+      <div class="stage__row" id="stageRow">
         <button class="markbtn" id="markBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span id="markLabel">Mark complete</span>
@@ -35276,12 +35286,22 @@ function userChip(user) {
       function matches(ls) { return !term || ls.title.toLowerCase().indexOf(term) !== -1; }
 
       function buildLessonRow(ls) {
-        var row = el("button", "lrow" + (ls.id === current ? " active" : "") + (prog.done[ls.id] ? " done" : ""));
+        var row = el("button", "lrow" + (ls.id === current ? " active" : "") + (prog.done[ls.id] ? " done" : "") + (vipLocked ? " locked" : ""));
+        var trailingHtml = vipLocked
+          ? '<span class="lrow__lock" title="Unlock with VIP"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>'
+          : '<span class="lrow__d">' + ls.duration + '</span>';
         row.innerHTML =
           '<span class="lrow__check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' +
           '<span class="lrow__t">' + ls.title + '</span>' +
-          '<span class="lrow__d">' + ls.duration + '</span>';
-        row.addEventListener("click", function () { go(ls.id); document.getElementById("rail").classList.remove("open"); });
+          trailingHtml;
+        row.addEventListener("click", function () {
+          if (vipLocked) {
+            document.getElementById("courseVipModal").classList.add("open");
+            return;
+          }
+          go(ls.id);
+          document.getElementById("rail").classList.remove("open");
+        });
         return row;
       }
 
@@ -35682,6 +35702,55 @@ function userChip(user) {
       document.getElementById("courseSupportTitle").textContent = course.title;
       document.getElementById("courseSupport").classList.add("open");
     }
+    // VIP-only course, not VIP (includes guests): drop straight into the
+    // real rail/stage layout so the full curriculum is browsable, but every
+    // lesson is locked — only the intro video (if any) is actually playable.
+    function startLockedPreview() {
+      document.getElementById("courseIntro").classList.remove("open");
+      document.getElementById("watchArea").style.display = "";
+      current = null;
+      buildRail();
+
+      document.getElementById("crumb").textContent = "Preview";
+      document.getElementById("lessonTitle").textContent = course.title;
+      document.getElementById("stageRow").style.display = "none";
+
+      Array.prototype.forEach.call(document.querySelectorAll(".tabs__btn"), function (b) {
+        b.classList.toggle("active", b.dataset.tab === "about");
+      });
+      Array.prototype.forEach.call(document.querySelectorAll(".tabs__panel"), function (p) {
+        p.classList.toggle("active", p.id === "tab-about");
+      });
+
+      document.getElementById("stagePreviewActions").style.display = "";
+      document.getElementById("stageWatchBtn").addEventListener("click", function () {
+        if (isGuest) { requireAuth(); return; }
+        document.getElementById("courseVipModal").classList.add("open");
+      });
+      var stageFindBtn = document.getElementById("stageFindBtn");
+      stageFindBtn.href = course.externalUrl || ("https://www.google.com/search?q=" + encodeURIComponent(course.title));
+      stageFindBtn.style.display = "";
+
+      function showPreviewPlaceholder() {
+        video.style.display = "none";
+        video.removeAttribute("src");
+        placeholder.style.display = "grid";
+        document.getElementById("placeholderNote").innerHTML = "<b>This course is VIP-only</b> — get VIP to unlock every lesson";
+        document.getElementById("placeholderIcon").innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#101604" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+      }
+      if (course.introVideo) {
+        placeholder.style.display = "none";
+        video.style.display = "block";
+        fetch("/api/intro-video-url?key=" + encodeURIComponent(course.introVideo))
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            if (data && data.url) { video.src = data.url; } else { showPreviewPlaceholder(); }
+          })
+          .catch(showPreviewPlaceholder);
+      } else {
+        showPreviewPlaceholder();
+      }
+    }
     // first time on this course (no saved progress, no deep link to a
     // specific lesson) — show a landing page for it before dropping them
     // into the rail/player.
@@ -35694,6 +35763,8 @@ function userChip(user) {
       (Boolean(user && user.vip) || Boolean(Progress.forCourse(course.id).last) || Boolean(qs("l")));
     if (hasEngagedBefore) {
       startPlayer();
+    } else if (vipLocked && !comingSoon) {
+      startLockedPreview();
     } else {
       document.getElementById("watchArea").style.display = "none";
       var courseIntroImgEl = document.getElementById("courseIntroImg");
