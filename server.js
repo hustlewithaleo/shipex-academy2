@@ -25,6 +25,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
+const vm = require("vm");
 
 const {
   DISCORD_CLIENT_ID,
@@ -69,6 +70,90 @@ app.use(cookieParser());
 // Canonicalize away the .html extension: /dashboard.html -> /dashboard.
 app.get(/\.html$/, (req, res) => {
   res.redirect(301, req.path.slice(0, -".html".length) + req.url.slice(req.path.length));
+});
+
+// ---- per-course SEO ----
+// course.html is one static file shared by every course (routed via
+// ?c=<id>), so out of the box every course page has identical, generic
+// <title>/<meta>/OG tags. Search engines and link-preview bots (Discord,
+// Twitter, Facebook, etc.) largely don't execute JS, so patching these
+// client-side wouldn't help indexing or share previews — this rewrites
+// them server-side, per course, before the HTML is sent.
+let cachedCourses = null;
+function loadCoursesData() {
+  if (cachedCourses) return cachedCourses;
+  try {
+    // public/data.js is a plain browser script (`const COURSES = [...]`),
+    // not a CommonJS module — run it in a sandbox and pull COURSES back out
+    // via a trailing `var` (which, unlike const/let, attaches to the
+    // sandbox object) so this stays in sync with data.js automatically.
+    const code = fs.readFileSync(path.join(__dirname, "public", "data.js"), "utf8") +
+      "\nvar __EXPORTED_COURSES__ = COURSES;";
+    const sandbox = {};
+    vm.createContext(sandbox);
+    vm.runInContext(code, sandbox);
+    cachedCourses = sandbox.__EXPORTED_COURSES__ || [];
+  } catch (e) {
+    console.error("[seo] failed to load course data:", e.message);
+    cachedCourses = [];
+  }
+  return cachedCourses;
+}
+function escapeHtmlAttr(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+app.get("/course", (req, res, next) => {
+  const course = loadCoursesData().find((c) => c.id === req.query.c);
+  if (!course) return next(); // no/unknown course id -> generic fallback page
+
+  let html;
+  try {
+    html = fs.readFileSync(path.join(__dirname, "public", "course.html"), "utf8");
+  } catch (e) {
+    return next();
+  }
+
+  const siteUrl = "https://www.shipex.academy";
+  const pageUrl = `${siteUrl}/course?c=${encodeURIComponent(course.id)}`;
+  const title = `${course.title} — Shipex Academy`;
+  const rawDescription = course.tagline || `Watch ${course.title} on Shipex Academy.`;
+  const description = rawDescription.length > 160 ? rawDescription.slice(0, 157).trimEnd() + "…" : rawDescription;
+  const imageUrl = course.cover
+    ? (course.cover.startsWith("http") ? course.cover : `${siteUrl}/${course.cover.replace(/^\.\//, "")}`)
+    : `${siteUrl}/shipexban.png`;
+  const titleAttr = escapeHtmlAttr(title);
+  const descAttr = escapeHtmlAttr(description);
+
+  html = html
+    .replace(/<title>[^<]*<\/title>/, `<title>${titleAttr}</title>`)
+    .replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${descAttr}">`)
+    .replace(/<meta property="og:title" content="[^"]*">/, `<meta property="og:title" content="${titleAttr}">`)
+    .replace(/<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${descAttr}">`)
+    .replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${escapeHtmlAttr(pageUrl)}">`)
+    .replace(/<meta property="og:image" content="[^"]*">/, `<meta property="og:image" content="${escapeHtmlAttr(imageUrl)}">`)
+    .replace(/<meta name="twitter:image" content="[^"]*">/, `<meta name="twitter:image" content="${escapeHtmlAttr(imageUrl)}">`)
+    .replace(/<meta name="robots" content="[^"]*">/, `<meta name="robots" content="index, follow">`);
+
+  const priceNumber = String(course.price || "").replace(/[^0-9.]/g, "");
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: rawDescription,
+    url: pageUrl,
+    image: imageUrl,
+    provider: { "@type": "Organization", name: "Shipex Academy", sameAs: siteUrl },
+  };
+  if (priceNumber) {
+    jsonLd.offers = { "@type": "Offer", price: priceNumber, priceCurrency: "USD", availability: "https://schema.org/InStock", url: pageUrl };
+  }
+  const extraTags =
+    `\n  <link rel="canonical" href="${escapeHtmlAttr(pageUrl)}">` +
+    `\n  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+  html = html.replace('<meta name="robots" content="index, follow">', `<meta name="robots" content="index, follow">${extraTags}`);
+
+  res.set("Content-Type", "text/html; charset=utf-8");
+  res.send(html);
 });
 
 // keep the raw body around too — needed to verify the Whop webhook signature
