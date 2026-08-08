@@ -1201,6 +1201,28 @@ p {
   .online-badge span:last-child { display: none; }
 }
 
+/* always-visible floating VIP purchase button (bottom-right) */
+.vip-fab {
+  position: fixed; right: 20px; bottom: 20px; z-index: 90;
+  display: flex; align-items: center; gap: 8px;
+  background: #FF4211; color: #fff; font-weight: 700; font-size: 14px;
+  padding: 14px 20px; border-radius: 999px; border: none; cursor: pointer;
+  font-family: var(--font-head); text-decoration: none;
+  box-shadow: 0 8px 24px rgba(255, 66, 17, 0.45);
+  transition: transform .15s, box-shadow .15s;
+  animation: vipFabPulse 2.4s ease-in-out infinite;
+}
+.vip-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(255, 66, 17, 0.6); }
+.vip-fab svg { flex: 0 0 auto; }
+@keyframes vipFabPulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(255, 66, 17, 0.45); }
+  50% { box-shadow: 0 8px 24px rgba(255, 66, 17, 0.8); }
+}
+@media (max-width: 640px) {
+  .vip-fab { right: 14px; bottom: 14px; padding: 12px 16px; font-size: 13px; }
+  .vip-fab span { display: none; }
+}
+
 /* fake VIP-purchase toasts (bottom-left, stackable) */
 .vip-toast-stack {
   position: fixed; left: 18px; bottom: 18px; z-index: 80;
@@ -36576,6 +36598,14 @@ function userChip(user) {
       vipModal.addEventListener("click", function (e) { if (e.target === vipModal) closeVipModal(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape" && vipModal.classList.contains("open")) closeVipModal(); });
 
+      // always-visible floating VIP button — same purchase flow as the pill,
+      // just impossible to miss regardless of where you are on the page
+      var vipFab = document.getElementById("vipFab");
+      if (!(user && user.vip)) {
+        vipFab.style.display = "";
+        vipFab.addEventListener("click", openVipModal);
+      }
+
       // "join our Discord" modal — opens automatically the first time this
       // browser ever views the library, then never again.
       var discordModal = document.getElementById("discordModal");
@@ -36902,5 +36932,10 @@ function userChip(user) {
       setTimeout(scheduleNext, 12000 + Math.random() * 10000); // first one after 12-22s
     })();
   </script>
+
+  <button type="button" class="vip-fab" id="vipFab" style="display:none;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 4L12 3l3.5 6L21 5l-2 11H5zm0 2h14v2H5v-2z"/></svg>
+    <span>Unlock every course — Get VIP</span>
+  </button>
 </body>
 </html>
