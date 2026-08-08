@@ -587,26 +587,35 @@ async function writeCourseStats(stats) {
   }));
 }
 
-// ---- shoutbox: a single shared list of short public messages ----
-const SHOUTBOX_KEY = "_shoutbox.json";
-const SHOUTBOX_MAX_MESSAGES = 200;
-const SHOUTBOX_COOLDOWN_MS = 3000;
-const lastShoutAt = {}; // in-memory per-user cooldown, fine to reset on redeploy
-async function readShoutbox() {
-  if (!s3Client) return [];
+// ---- forum: a few shared channels, each a short public message list ----
+// "announcements" is admin-post-only (like a Discord announcements channel);
+// everyone can post in the rest.
+const FORUM_CHANNELS = [
+  { id: "announcements", label: "announcements", icon: "📢", adminOnly: true },
+  { id: "chat", label: "chat", icon: "💬" },
+  { id: "request-a-course", label: "request-a-course", icon: "❓" },
+  { id: "suggestions", label: "suggestions", icon: "🙋" },
+];
+const FORUM_CHANNEL_IDS = new Set(FORUM_CHANNELS.map((c) => c.id));
+const FORUM_KEY = "_forum.json";
+const FORUM_MAX_MESSAGES_PER_CHANNEL = 200;
+const FORUM_COOLDOWN_MS = 3000;
+const lastForumPostAt = {}; // in-memory per-user cooldown, fine to reset on redeploy
+async function readForum() {
+  if (!s3Client) return {};
   try {
-    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: SHOUTBOX_KEY }));
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: FORUM_KEY }));
     const text = await res.Body.transformToString();
     return JSON.parse(text);
   } catch (e) {
-    return [];
+    return {};
   }
 }
-async function writeShoutbox(messages) {
+async function writeForum(channels) {
   await s3Client.send(new R2PutObjectCommand({
     Bucket: R2_BUCKET_NAME,
-    Key: SHOUTBOX_KEY,
-    Body: JSON.stringify(messages, null, 2),
+    Key: FORUM_KEY,
+    Body: JSON.stringify(channels, null, 2),
     ContentType: "application/json",
   }));
 }
@@ -998,7 +1007,7 @@ app.get("/api/me", async (req, res) => {
   try {
     const user = jwt.verify(t, SESSION_SECRET);
     const vip = await isVip(user.id);
-    res.json({ id: user.id, username: user.username, displayName: user.displayName, avatar: user.avatar, vip });
+    res.json({ id: user.id, username: user.username, displayName: user.displayName, avatar: user.avatar, vip, admin: isAdmin(req) });
   } catch {
     res.status(401).json({ error: "invalid_session" });
   }
@@ -1218,36 +1227,53 @@ app.post("/api/track-progress", async (req, res) => {
   }
 });
 
-/* ---- shoutbox: shared public message list, polled by the frontend ---- */
-app.get("/api/shoutbox", async (req, res) => {
+/* ---- forum: a handful of shared channels, polled by the frontend ---- */
+app.get("/api/forum/channels", (req, res) => {
   const user = currentUser(req);
   if (!user) return res.status(401).json({ error: "not_authenticated" });
+  const admin = isAdmin(req);
+  res.json({
+    channels: FORUM_CHANNELS.map((c) => ({ ...c, canPost: !c.adminOnly || admin })),
+  });
+});
+
+app.get("/api/forum/:channelId/messages", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  const { channelId } = req.params;
+  if (!FORUM_CHANNEL_IDS.has(channelId)) return res.status(404).json({ error: "unknown_channel" });
   try {
-    const messages = await readShoutbox();
+    const forum = await readForum();
+    const messages = forum[channelId] || [];
     res.json({ messages: messages.slice(-100) });
   } catch (e) {
-    console.error("[shoutbox] read failed:", e.message);
-    res.status(500).json({ error: "shoutbox_failed" });
+    console.error("[forum] read failed:", e.message);
+    res.status(500).json({ error: "forum_failed" });
   }
 });
 
-app.post("/api/shoutbox", async (req, res) => {
+app.post("/api/forum/:channelId/messages", async (req, res) => {
   const user = currentUser(req);
   if (!user) return res.status(401).json({ error: "not_authenticated" });
-  if (!s3Client) return res.status(500).json({ error: "shoutbox_failed" });
+  if (!s3Client) return res.status(500).json({ error: "forum_failed" });
+  const { channelId } = req.params;
+  const channel = FORUM_CHANNELS.find((c) => c.id === channelId);
+  if (!channel) return res.status(404).json({ error: "unknown_channel" });
+  if (channel.adminOnly && !isAdmin(req)) return res.status(403).json({ error: "not_admin" });
 
   const text = String(req.body?.text || "").trim().slice(0, 300);
   if (!text) return res.status(400).json({ error: "empty_message" });
 
   const now = Date.now();
-  const last = lastShoutAt[user.id] || 0;
-  if (now - last < SHOUTBOX_COOLDOWN_MS) {
+  const last = lastForumPostAt[user.id] || 0;
+  if (now - last < FORUM_COOLDOWN_MS) {
     return res.status(429).json({ error: "too_fast" });
   }
-  lastShoutAt[user.id] = now;
+  lastForumPostAt[user.id] = now;
 
   try {
-    const messages = await readShoutbox();
+    const forum = await readForum();
+    const messages = forum[channelId] || [];
     const message = {
       id: crypto.randomBytes(8).toString("hex"),
       userId: user.id,
@@ -1255,16 +1281,18 @@ app.post("/api/shoutbox", async (req, res) => {
       displayName: user.displayName || user.username,
       avatar: user.avatar || null,
       vip: await isVip(user.id),
+      admin: isAdmin(req),
       text,
       at: now,
     };
     messages.push(message);
-    while (messages.length > SHOUTBOX_MAX_MESSAGES) messages.shift();
-    await writeShoutbox(messages);
+    while (messages.length > FORUM_MAX_MESSAGES_PER_CHANNEL) messages.shift();
+    forum[channelId] = messages;
+    await writeForum(forum);
     res.json({ ok: true, message });
   } catch (e) {
-    console.error("[shoutbox] post failed:", e.message);
-    res.status(500).json({ error: "shoutbox_failed" });
+    console.error("[forum] post failed:", e.message);
+    res.status(500).json({ error: "forum_failed" });
   }
 });
 

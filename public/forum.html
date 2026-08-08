@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Shoutbox — Shipex</title>
-  <meta name="description" content="Say what's up to the rest of the academy.">
-  <meta property="og:title" content="Shoutbox — Shipex">
-  <meta property="og:description" content="Say what's up to the rest of the academy.">
+  <title>Forum — Shipex</title>
+  <meta name="description" content="Announcements, chat, course requests, and suggestions for the academy.">
+  <meta property="og:title" content="Forum — Shipex">
+  <meta property="og:description" content="Announcements, chat, course requests, and suggestions for the academy.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://shipex.academy/shipexban.png">
   <meta property="og:image:width" content="1920">
@@ -38,18 +38,42 @@ body {
   margin: 0; background: var(--bg); color: var(--text);
   font-family: var(--font-body); min-height: 100vh;
 }
-.wrap { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; display: flex; flex-direction: column; height: 100vh; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 40px 24px 40px; display: flex; flex-direction: column; height: 100vh; }
 .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex: 0 0 auto; }
 .head a { color: var(--muted); text-decoration: none; font-size: 14px; }
 .head a:hover { color: #fff; }
 h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; margin: 0 0 6px; }
 .sub { color: var(--muted-2); font-size: 14px; margin: 0; }
 
+.layout { flex: 1 1 auto; min-height: 0; display: flex; gap: 16px; }
+
+.channels {
+  flex: 0 0 220px; background: var(--surface); border: 1px solid var(--border-soft);
+  border-radius: var(--radius); padding: 10px; overflow-y: auto;
+}
+.channel-btn {
+  width: 100%; display: flex; align-items: center; gap: 8px; text-align: left;
+  padding: 9px 10px; border-radius: 10px; border: 0; background: none; cursor: pointer;
+  color: var(--muted-2); font-family: var(--font-body); font-size: 13.5px;
+}
+.channel-btn:hover { background: rgba(255,255,255,0.04); color: #fff; }
+.channel-btn.active { background: var(--accent-dim); color: #fff; }
+.channel-btn__hash { flex: 0 0 auto; color: var(--muted); font-size: 13px; }
+.channel-btn__emoji { flex: 0 0 auto; }
+.channel-btn__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 .box {
   background: var(--surface); border: 1px solid var(--border-soft);
   border-radius: var(--radius); display: flex; flex-direction: column;
   flex: 1 1 auto; min-height: 0; overflow: hidden;
 }
+.box__head {
+  flex: 0 0 auto; padding: 14px 18px; border-bottom: 1px solid var(--border-soft);
+  display: flex; align-items: center; gap: 8px;
+}
+.box__head-emoji { font-size: 16px; }
+.box__head-title { font-family: var(--font-head); font-size: 15px; letter-spacing: -0.01em; }
+
 .messages {
   flex: 1 1 auto; overflow-y: auto; padding: 20px; display: flex;
   flex-direction: column; gap: 14px;
@@ -64,14 +88,15 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
 }
 .msg-row__avatar img { width: 100%; height: 100%; object-fit: cover; }
 .msg-row__body { min-width: 0; }
-.msg-row__head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+.msg-row__head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; flex-wrap: wrap; }
 .msg-row__name { font-size: 13px; font-weight: 700; color: #fff; }
 .msg-row__name.vip { color: var(--accent); }
-.msg-row__vip-tag {
+.msg-row__tag {
   font-size: 10px; font-weight: 800; letter-spacing: 0.04em; color: var(--accent);
   background: rgba(255, 66, 17, 0.14); border: 1px solid rgba(255, 66, 17, 0.4);
   border-radius: 999px; padding: 1px 6px;
 }
+.msg-row__tag--admin { color: #22C55E; background: rgba(34, 197, 94, 0.14); border-color: rgba(34, 197, 94, 0.4); }
 .msg-row__time { font-size: 11px; color: var(--muted); }
 .msg-row__text { font-size: 14px; color: var(--muted-2); line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; }
 .empty { color: var(--muted); font-size: 14px; padding: 40px 0; text-align: center; }
@@ -85,6 +110,7 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
   color: #fff; font-size: 14px; font-family: var(--font-body);
 }
 .composer input:focus { outline: none; border-color: var(--accent-dim); }
+.composer input:disabled { opacity: 0.5; }
 .composer .btn {
   padding: 11px 18px; border-radius: 10px; border: 0; cursor: pointer;
   font-family: var(--font-body); font-size: 14px; font-weight: 600;
@@ -97,24 +123,38 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
 
 .gate { display: flex; align-items: center; justify-content: center; min-height: 60vh; text-align: center; }
 .gate p { color: var(--muted-2); font-size: 15px; }
+
+@media (max-width: 680px) {
+  .layout { flex-direction: column; }
+  .channels { flex: 0 0 auto; display: flex; overflow-x: auto; gap: 6px; }
+  .channel-btn { width: auto; flex: 0 0 auto; }
+  .channel-btn__label { max-width: 140px; }
+}
   </style>
 </head>
 <body>
   <div class="wrap" id="app" style="display:none;">
     <div class="head">
       <div>
-        <h1>Shoutbox</h1>
-        <p class="sub">Say what's up to the rest of the academy.</p>
+        <h1>Forum</h1>
+        <p class="sub">Announcements, chat, course requests, and suggestions.</p>
       </div>
       <a href="/library">&larr; Back to library</a>
     </div>
 
-    <div class="box">
-      <div class="messages" id="messages"></div>
-      <div class="composer-msg" id="composerMsg"></div>
-      <div class="composer">
-        <input type="text" id="shoutInput" placeholder="Say something…" maxlength="300" autocomplete="off">
-        <button class="btn" id="shoutBtn">Send</button>
+    <div class="layout">
+      <div class="channels" id="channels"></div>
+      <div class="box">
+        <div class="box__head">
+          <span class="box__head-emoji" id="channelEmoji"></span>
+          <span class="box__head-title" id="channelTitle"></span>
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="composer-msg" id="composerMsg"></div>
+        <div class="composer">
+          <input type="text" id="shoutInput" placeholder="Say something…" maxlength="300" autocomplete="off">
+          <button class="btn" id="shoutBtn">Send</button>
+        </div>
       </div>
     </div>
   </div>
@@ -143,30 +183,75 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
       return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
     }
 
-    var messagesEl = document.getElementById("messages");
+    var channels = [];
+    var activeChannelId = null;
     var lastRenderedId = null;
+    var shoutInput = document.getElementById("shoutInput");
+    var shoutBtn = document.getElementById("shoutBtn");
+    var composerMsg = document.getElementById("composerMsg");
+    var messagesEl = document.getElementById("messages");
+
+    function activeChannel() {
+      return channels.filter(function (c) { return c.id === activeChannelId; })[0];
+    }
+
+    function renderChannelList() {
+      var wrap = document.getElementById("channels");
+      wrap.innerHTML = "";
+      channels.forEach(function (c) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "channel-btn" + (c.id === activeChannelId ? " active" : "");
+        btn.innerHTML =
+          '<span class="channel-btn__hash">#</span>' +
+          '<span class="channel-btn__emoji">' + c.icon + '</span>' +
+          '<span class="channel-btn__label">' + escapeHtml(c.label) + '</span>';
+        btn.addEventListener("click", function () { selectChannel(c.id); });
+        wrap.appendChild(btn);
+      });
+    }
+
+    function updateComposerForChannel() {
+      var c = activeChannel();
+      if (!c) return;
+      if (c.canPost) {
+        shoutInput.disabled = false;
+        shoutBtn.disabled = false;
+        shoutInput.placeholder = "Message #" + c.label + "…";
+      } else {
+        shoutInput.disabled = true;
+        shoutBtn.disabled = true;
+        shoutInput.placeholder = "Only admins can post here";
+      }
+      composerMsg.className = "composer-msg";
+      composerMsg.textContent = "";
+    }
+
     function renderMessages(messages) {
       var wasAtBottom = messagesEl.scrollTop + messagesEl.clientHeight >= messagesEl.scrollHeight - 40;
       var newestId = messages.length ? messages[messages.length - 1].id : null;
-      if (newestId === lastRenderedId) return; // nothing new, don't re-render and steal scroll position
-      lastRenderedId = newestId;
+      var key = activeChannelId + ":" + newestId;
+      if (key === lastRenderedId) return; // nothing new, don't re-render and steal scroll position
+      lastRenderedId = key;
 
       if (!messages.length) {
-        messagesEl.innerHTML = '<div class="empty">No shouts yet — be the first.</div>';
+        messagesEl.innerHTML = '<div class="empty">No messages yet — be the first.</div>';
         return;
       }
       messagesEl.innerHTML = messages.map(function (m) {
         var avatar = m.avatar
           ? '<img src="' + escapeHtml(m.avatar) + '" alt="">'
           : initials(m.displayName);
-        var vipTag = m.vip ? '<span class="msg-row__vip-tag">VIP</span>' : '';
+        var tags = "";
+        if (m.admin) tags += '<span class="msg-row__tag msg-row__tag--admin">ADMIN</span>';
+        else if (m.vip) tags += '<span class="msg-row__tag">VIP</span>';
         return (
           '<div class="msg-row">' +
             '<div class="msg-row__avatar">' + avatar + '</div>' +
             '<div class="msg-row__body">' +
               '<div class="msg-row__head">' +
                 '<span class="msg-row__name' + (m.vip ? ' vip' : '') + '">' + escapeHtml(m.displayName) + '</span>' +
-                vipTag +
+                tags +
                 '<span class="msg-row__time">' + fmtTime(m.at) + '</span>' +
               '</div>' +
               '<div class="msg-row__text">' + escapeHtml(m.text) + '</div>' +
@@ -174,25 +259,37 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
           '</div>'
         );
       }).join("");
-      if (wasAtBottom) messagesEl.scrollTop = messagesEl.scrollHeight;
+      if (wasAtBottom || key.split(":")[1] === "null") messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
     function loadMessages() {
-      fetchJson("/api/shoutbox").then(function (res) {
-        if (res.ok) renderMessages(res.data.messages || []);
+      if (!activeChannelId) return;
+      fetchJson("/api/forum/" + activeChannelId + "/messages").then(function (res) {
+        if (res.ok && activeChannelId) renderMessages(res.data.messages || []);
       });
     }
 
-    var shoutInput = document.getElementById("shoutInput");
-    var shoutBtn = document.getElementById("shoutBtn");
-    var composerMsg = document.getElementById("composerMsg");
+    function selectChannel(channelId) {
+      activeChannelId = channelId;
+      lastRenderedId = null;
+      var c = activeChannel();
+      document.getElementById("channelEmoji").textContent = c ? c.icon : "";
+      document.getElementById("channelTitle").textContent = c ? c.label : "";
+      messagesEl.innerHTML = "";
+      renderChannelList();
+      updateComposerForChannel();
+      loadMessages();
+    }
+
     function sendShout() {
+      var c = activeChannel();
+      if (!c || !c.canPost) return;
       var text = shoutInput.value.trim();
       if (!text) return;
       shoutBtn.disabled = true;
       composerMsg.className = "composer-msg";
       composerMsg.textContent = "";
-      fetchJson("/api/shoutbox", {
+      fetchJson("/api/forum/" + activeChannelId + "/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: text }),
@@ -220,8 +317,15 @@ h1 { font-family: var(--font-head); font-size: 28px; letter-spacing: -0.02em; ma
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (user) {
         if (!user) { location.href = "/login"; return; }
+        return fetchJson("/api/forum/channels");
+      })
+      .then(function (res) {
+        if (!res || !res.ok) throw new Error("channels_failed");
+        channels = res.data.channels || [];
         document.getElementById("app").style.display = "flex";
-        loadMessages();
+        var wanted = new URLSearchParams(location.search).get("c");
+        var initial = channels.filter(function (c) { return c.id === wanted; })[0] || channels[0];
+        if (initial) selectChannel(initial.id);
         setInterval(loadMessages, 4000);
       })
       .catch(function () {
