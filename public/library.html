@@ -1208,16 +1208,10 @@ p {
   background: #FF4211; color: #fff; font-weight: 700; font-size: 14px;
   padding: 14px 20px; border-radius: 999px; border: none; cursor: pointer;
   font-family: var(--font-head); text-decoration: none;
-  box-shadow: 0 8px 24px rgba(255, 66, 17, 0.45);
-  transition: transform .15s, box-shadow .15s;
-  animation: vipFabPulse 2.4s ease-in-out infinite;
+  transition: transform .15s;
 }
-.vip-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(255, 66, 17, 0.6); }
+.vip-fab:hover { transform: translateY(-2px); }
 .vip-fab svg { flex: 0 0 auto; }
-@keyframes vipFabPulse {
-  0%, 100% { box-shadow: 0 8px 24px rgba(255, 66, 17, 0.45); }
-  50% { box-shadow: 0 8px 24px rgba(255, 66, 17, 0.8); }
-}
 @media (max-width: 640px) {
   .vip-fab { right: 14px; bottom: 14px; padding: 12px 16px; font-size: 13px; }
   .vip-fab span { display: none; }
