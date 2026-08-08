@@ -749,6 +749,13 @@ app.get("/auth/discord", (req, res) => {
   res.cookie("oauth_state", state, {
     httpOnly: true, secure: isProd, sameSite: "lax", maxAge: 10 * 60 * 1000,
   });
+  // remembers "take them straight to VIP checkout" across the round trip to
+  // Discord and back, since query params don't survive that redirect
+  if (req.query.next === "vip") {
+    res.cookie("post_auth_next", "vip", {
+      httpOnly: true, secure: isProd, sameSite: "lax", maxAge: 10 * 60 * 1000,
+    });
+  }
   const url = new URL(DISCORD_API + "/oauth2/authorize");
   url.searchParams.set("client_id", DISCORD_CLIENT_ID);
   url.searchParams.set("redirect_uri", DISCORD_REDIRECT_URI);
@@ -840,7 +847,9 @@ app.get("/auth/discord/callback", async (req, res) => {
       await announceJoin(user);
     }
 
-    res.redirect("/library");
+    const wantsVipCheckout = req.cookies.post_auth_next === "vip";
+    res.clearCookie("post_auth_next");
+    res.redirect(wantsVipCheckout ? "/library?vip_checkout=1" : "/library");
   } catch (e) {
     console.error("[oauth]", e.message);
     res.redirect("/login?error=oauth_failed");
@@ -854,6 +863,13 @@ app.get("/auth/google", (req, res) => {
   res.cookie("oauth_state", state, {
     httpOnly: true, secure: isProd, sameSite: "lax", maxAge: 10 * 60 * 1000,
   });
+  // remembers "take them straight to VIP checkout" across the round trip to
+  // Google and back, since query params don't survive that redirect
+  if (req.query.next === "vip") {
+    res.cookie("post_auth_next", "vip", {
+      httpOnly: true, secure: isProd, sameSite: "lax", maxAge: 10 * 60 * 1000,
+    });
+  }
   const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
   url.searchParams.set("client_id", GOOGLE_CLIENT_ID);
   url.searchParams.set("redirect_uri", GOOGLE_REDIRECT_URI);
@@ -942,7 +958,9 @@ app.get("/auth/google/callback", async (req, res) => {
     }
     res.clearCookie("ref_code");
 
-    res.redirect("/library");
+    const wantsVipCheckout = req.cookies.post_auth_next === "vip";
+    res.clearCookie("post_auth_next");
+    res.redirect(wantsVipCheckout ? "/library?vip_checkout=1" : "/library");
   } catch (e) {
     console.error("[oauth google]", e.message);
     res.redirect("/login?error=oauth_failed");

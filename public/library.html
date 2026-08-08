@@ -36509,9 +36509,11 @@ function userChip(user) {
         logoutBtn.addEventListener("click", function () { Auth.signOut(); });
       }
 
-      // gated actions for guests — browsing is free, these need an account
-      function requireAuth() {
-        location.href = "/login";
+      // gated actions for guests — browsing is free, these need an account.
+      // passing next="vip" carries the intent through login/signup so the
+      // user lands straight on VIP checkout instead of just the library.
+      function requireAuth(next) {
+        location.href = "/login" + (next ? "?next=" + encodeURIComponent(next) : "");
       }
 
       document.getElementById("navAffiliate").addEventListener("click", function (e) {
@@ -36574,7 +36576,7 @@ function userChip(user) {
       vipPurchaseBtn.href = "https://whop.com/checkout/plan_rC2vxh8BLaFPV"; // fallback until the personalized link loads
       document.getElementById("vipPrice").textContent = "$29 / month";
       function openVipModal() {
-        if (isGuest) { requireAuth(); return; }
+        if (isGuest) { requireAuth("vip"); return; }
         vipModal.classList.add("open");
         vipPurchaseBtn.textContent = "Loading…";
         // ask the server for a checkout link tagged with this user's Discord ID,
@@ -36598,6 +36600,21 @@ function userChip(user) {
       if (!(user && user.vip)) {
         vipFab.style.display = "";
         vipFab.addEventListener("click", openVipModal);
+      }
+
+      // a guest who clicked "Get VIP" gets sent to login/signup with
+      // ?next=vip; once that flow completes it lands back here with
+      // ?vip_checkout=1, so pick up right where they left off and go
+      // straight to checkout instead of making them click "Get VIP" again.
+      if (!isGuest && !(user && user.vip) && /[?&]vip_checkout=1(&|$)/.test(location.search)) {
+        var cleanUrl = location.pathname + location.search.replace(/[?&]vip_checkout=1/, "").replace(/^&/, "?") + location.hash;
+        history.replaceState(null, "", cleanUrl);
+        fetch("/api/vip-checkout-url", { credentials: "same-origin" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            if (data && data.url) { location.href = data.url; } else { openVipModal(); }
+          })
+          .catch(function () { openVipModal(); });
       }
 
       // "join our Discord" modal — opens automatically the first time this

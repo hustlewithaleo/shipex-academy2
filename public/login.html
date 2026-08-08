@@ -36048,7 +36048,7 @@ function qs(name) {
 function startDiscordAuth(btn) {
   btn.disabled = true;
   btn.innerHTML = discordSpinner() + "<span>Redirecting to Discord…</span>";
-  location.href = "/auth/discord";
+  location.href = "/auth/discord" + (qs("next") === "vip" ? "?next=vip" : "");
 }
 function discordSpinner() {
   return '<span class="spin" aria-hidden="true"></span>';
@@ -36063,7 +36063,7 @@ function discordMark() {
 function startGoogleAuth(btn) {
   btn.disabled = true;
   btn.innerHTML = discordSpinner() + "<span>Redirecting to Google…</span>";
-  location.href = "/auth/google";
+  location.href = "/auth/google" + (qs("next") === "vip" ? "?next=vip" : "");
 }
 function googleMark() {
   return '<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">' +
@@ -36081,7 +36081,8 @@ function googleMark() {
       if (ref) document.cookie = "ref_code=" + encodeURIComponent(ref) + "; path=/; max-age=" + (30 * 24 * 60 * 60);
     })();
 
-    Auth.me().then(function (user) { if (user) location.href = "library"; });
+    var postAuthUrl = qs("next") === "vip" ? "library?vip_checkout=1" : "library";
+    Auth.me().then(function (user) { if (user) location.href = postAuthUrl; });
     var btn = document.getElementById("discordBtn");
     btn.querySelector(".dc-mark").innerHTML = discordMark();
     btn.addEventListener("click", function () { startDiscordAuth(btn); });
@@ -36136,7 +36137,7 @@ function googleMark() {
           if (res.ok) {
             loginMsg.className = "modal__msg success";
             loginMsg.textContent = "Welcome back — redirecting…";
-            location.href = "library";
+            location.href = postAuthUrl;
           } else {
             loginSubmit.disabled = false;
             loginMsg.className = "modal__msg error";

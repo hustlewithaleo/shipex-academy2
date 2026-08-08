@@ -36665,9 +36665,11 @@ function userChip(user) {
       logoutBtn.addEventListener("click", function () { Auth.signOut(); });
     }
 
-    // gated actions for guests — browsing is free, watching needs an account
-    function requireAuth() {
-      location.href = "/login";
+    // gated actions for guests — browsing is free, watching needs an account.
+    // passing next="vip" carries the intent through login/signup so the
+    // user lands straight on VIP checkout instead of just the library.
+    function requireAuth(next) {
+      location.href = "/login" + (next ? "?next=" + encodeURIComponent(next) : "");
     }
 
     // daily watch-time limit — non-VIP accounts get 1 hour of video/day,
@@ -36757,7 +36759,7 @@ function userChip(user) {
           trailingHtml;
         row.addEventListener("click", function () {
           if (vipLocked) {
-            if (isGuest) { requireAuth(); return; }
+            if (isGuest) { requireAuth("vip"); return; }
             document.getElementById("courseVipModal").classList.add("open");
             return;
           }
@@ -37186,7 +37188,7 @@ function userChip(user) {
 
       document.getElementById("stagePreviewActions").style.display = "";
       document.getElementById("stageWatchBtn").addEventListener("click", function () {
-        if (isGuest) { requireAuth(); return; }
+        if (isGuest) { requireAuth("vip"); return; }
         document.getElementById("courseVipModal").classList.add("open");
       });
       var stageFindBtn = document.getElementById("stageFindBtn");
@@ -37305,7 +37307,7 @@ function userChip(user) {
         // VIP checkout itself requires being logged in — so send them to log
         // in/register first, before ever showing the VIP or support prompts.
         if (isGuest) {
-          requireAuth();
+          requireAuth(course.vipOnly ? "vip" : undefined);
           return;
         }
         if (comingSoon) {
