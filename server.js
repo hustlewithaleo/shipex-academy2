@@ -587,6 +587,30 @@ async function writeCourseStats(stats) {
   }));
 }
 
+// ---- shoutbox: a single shared list of short public messages ----
+const SHOUTBOX_KEY = "_shoutbox.json";
+const SHOUTBOX_MAX_MESSAGES = 200;
+const SHOUTBOX_COOLDOWN_MS = 3000;
+const lastShoutAt = {}; // in-memory per-user cooldown, fine to reset on redeploy
+async function readShoutbox() {
+  if (!s3Client) return [];
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: SHOUTBOX_KEY }));
+    const text = await res.Body.transformToString();
+    return JSON.parse(text);
+  } catch (e) {
+    return [];
+  }
+}
+async function writeShoutbox(messages) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: SHOUTBOX_KEY,
+    Body: JSON.stringify(messages, null, 2),
+    ContentType: "application/json",
+  }));
+}
+
 // ---- daily watch-time limit for non-VIP users ----
 const DAILY_WATCH_LIMIT_SECONDS = 60 * 60; // 1 hour/day
 const DAILY_WATCH_KEY = "_daily-watch.json";
@@ -1191,6 +1215,56 @@ app.post("/api/track-progress", async (req, res) => {
   } catch (e) {
     console.error("[track] failed:", e.message);
     res.status(500).json({ error: "track_failed" });
+  }
+});
+
+/* ---- shoutbox: shared public message list, polled by the frontend ---- */
+app.get("/api/shoutbox", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  try {
+    const messages = await readShoutbox();
+    res.json({ messages: messages.slice(-100) });
+  } catch (e) {
+    console.error("[shoutbox] read failed:", e.message);
+    res.status(500).json({ error: "shoutbox_failed" });
+  }
+});
+
+app.post("/api/shoutbox", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!s3Client) return res.status(500).json({ error: "shoutbox_failed" });
+
+  const text = String(req.body?.text || "").trim().slice(0, 300);
+  if (!text) return res.status(400).json({ error: "empty_message" });
+
+  const now = Date.now();
+  const last = lastShoutAt[user.id] || 0;
+  if (now - last < SHOUTBOX_COOLDOWN_MS) {
+    return res.status(429).json({ error: "too_fast" });
+  }
+  lastShoutAt[user.id] = now;
+
+  try {
+    const messages = await readShoutbox();
+    const message = {
+      id: crypto.randomBytes(8).toString("hex"),
+      userId: user.id,
+      username: user.username,
+      displayName: user.displayName || user.username,
+      avatar: user.avatar || null,
+      vip: await isVip(user.id),
+      text,
+      at: now,
+    };
+    messages.push(message);
+    while (messages.length > SHOUTBOX_MAX_MESSAGES) messages.shift();
+    await writeShoutbox(messages);
+    res.json({ ok: true, message });
+  } catch (e) {
+    console.error("[shoutbox] post failed:", e.message);
+    res.status(500).json({ error: "shoutbox_failed" });
   }
 });
 
