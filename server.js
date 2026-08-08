@@ -302,10 +302,9 @@ ${bodyHtml}
 function welcomeEmailHtml(name, checkoutUrl) {
   return emailShell(`
 <p style="margin:0 0 16px;">Hey ${name},</p>
-<p style="margin:0 0 16px;">You're in. No funnel, no upsell sequence, no "limited spots" — you just got free access to some of the highest-priced e-commerce, AI, and marketing courses out there.</p>
-<p style="margin:0 0 16px;">Go pick one and start: <a href="https://www.shipex.academy/library" style="color:#FF4211;">shipex.academy/library</a></p>
-<p style="margin:0 0 16px;">Most of the catalog is actually VIP-only — courses that cost thousands elsewhere. $29/month unlocks all of it, plus everything we add after, and you can cancel whenever. If that's useful to you: <a href="${checkoutUrl}" style="color:#FF4211;">get VIP</a>.</p>
-<p style="margin:0;">Either way, come say hi in <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> — that's where new courses get announced first.</p>
+<p style="margin:0 0 16px;">You're in. Browse the full catalog here: <a href="https://www.shipex.academy/library" style="color:#FF4211;">shipex.academy/library</a></p>
+<p style="margin:0 0 16px;">Everything in it is VIP-only — courses that cost thousands elsewhere, all unlocked for $29/month, plus everything we add after, and you can cancel whenever: <a href="${checkoutUrl}" style="color:#FF4211;">get VIP</a>.</p>
+<p style="margin:0;">Come say hi in <a href="https://discord.gg/shipex" style="color:#FF4211;">Discord</a> — that's where new courses get announced first.</p>
 `);
 }
 

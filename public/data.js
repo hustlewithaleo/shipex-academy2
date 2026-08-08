@@ -13329,6 +13329,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$6,000",
+    vipOnly: true,
     chapters: [
       {
         id: "hte1",
@@ -18197,6 +18198,7 @@ const COURSES = [
     accent: "#FF4211",
     category: "ecommerce",
     price: "$1,500",
+    vipOnly: true,
     chapters: [
       {
         id: "ch1",
