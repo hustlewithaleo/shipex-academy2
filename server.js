@@ -620,6 +620,33 @@ async function writeForum(channels) {
   }));
 }
 
+// ---- direct messages: one-on-one threads between members ----
+const DM_KEY = "_dms.json";
+const DM_MAX_MESSAGES_PER_THREAD = 300;
+const DM_COOLDOWN_MS = 2000;
+const lastDmAt = {}; // in-memory per-user cooldown, fine to reset on redeploy
+function dmThreadKey(idA, idB) {
+  return [idA, idB].sort().join("__");
+}
+async function readDMs() {
+  if (!s3Client) return {};
+  try {
+    const res = await s3Client.send(new R2GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: DM_KEY }));
+    const text = await res.Body.transformToString();
+    return JSON.parse(text);
+  } catch (e) {
+    return {};
+  }
+}
+async function writeDMs(threads) {
+  await s3Client.send(new R2PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: DM_KEY,
+    Body: JSON.stringify(threads, null, 2),
+    ContentType: "application/json",
+  }));
+}
+
 // ---- daily watch-time limit for non-VIP users ----
 const DAILY_WATCH_LIMIT_SECONDS = 60 * 60; // 1 hour/day
 const DAILY_WATCH_KEY = "_daily-watch.json";
@@ -1293,6 +1320,128 @@ app.post("/api/forum/:channelId/messages", async (req, res) => {
   } catch (e) {
     console.error("[forum] post failed:", e.message);
     res.status(500).json({ error: "forum_failed" });
+  }
+});
+
+/* ---- direct messages: one-on-one threads between members ---- */
+
+// search members by username/display name, to start a new DM
+app.get("/api/dm/search", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  const q = String(req.query.q || "").trim().toLowerCase();
+  if (!q) return res.json({ users: [] });
+  try {
+    const [members, vipMembers] = await Promise.all([readMembers(), readVipMembers()]);
+    const results = Object.values(members)
+      .filter((m) => m.id !== user.id)
+      .filter((m) =>
+        (m.username || "").toLowerCase().includes(q) ||
+        (m.displayName || "").toLowerCase().includes(q)
+      )
+      .slice(0, 10)
+      .map((m) => ({
+        id: m.id, username: m.username, displayName: m.displayName || m.username,
+        avatar: m.avatar || null, vip: Boolean(vipMembers[m.id]),
+      }));
+    res.json({ users: results });
+  } catch (e) {
+    console.error("[dm] search failed:", e.message);
+    res.status(500).json({ error: "dm_failed" });
+  }
+});
+
+// list this user's conversations, most recently active first
+app.get("/api/dm/conversations", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  try {
+    const [threads, members, vipMembers] = await Promise.all([readDMs(), readMembers(), readVipMembers()]);
+    const conversations = Object.values(threads)
+      .filter((t) => t.participants.includes(user.id) && t.messages.length)
+      .map((t) => {
+        const otherId = t.participants.find((id) => id !== user.id);
+        const otherMember = members[otherId] || {};
+        const lastMessage = t.messages[t.messages.length - 1];
+        const readAt = (t.readAt && t.readAt[user.id]) || 0;
+        const unreadCount = t.messages.filter((m) => m.from !== user.id && m.at > readAt).length;
+        return {
+          otherUser: {
+            id: otherId,
+            username: otherMember.username || otherId,
+            displayName: otherMember.displayName || otherMember.username || "Unknown",
+            avatar: otherMember.avatar || null,
+            vip: Boolean(vipMembers[otherId]),
+          },
+          lastMessage: { text: lastMessage.text, at: lastMessage.at, from: lastMessage.from },
+          unreadCount,
+        };
+      })
+      .sort((a, b) => b.lastMessage.at - a.lastMessage.at);
+    res.json({ conversations });
+  } catch (e) {
+    console.error("[dm] conversations failed:", e.message);
+    res.status(500).json({ error: "dm_failed" });
+  }
+});
+
+// thread with a specific user — fetching it marks it read
+app.get("/api/dm/:otherUserId/messages", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  const { otherUserId } = req.params;
+  if (otherUserId === user.id) return res.status(400).json({ error: "cannot_dm_self" });
+  try {
+    const threads = await readDMs();
+    const key = dmThreadKey(user.id, otherUserId);
+    const thread = threads[key];
+    if (thread) {
+      thread.readAt = thread.readAt || {};
+      thread.readAt[user.id] = Date.now();
+      await writeDMs(threads);
+    }
+    res.json({ messages: thread ? thread.messages.slice(-200) : [] });
+  } catch (e) {
+    console.error("[dm] read failed:", e.message);
+    res.status(500).json({ error: "dm_failed" });
+  }
+});
+
+app.post("/api/dm/:otherUserId/messages", async (req, res) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: "not_authenticated" });
+  if (!s3Client) return res.status(500).json({ error: "dm_failed" });
+  const { otherUserId } = req.params;
+  if (otherUserId === user.id) return res.status(400).json({ error: "cannot_dm_self" });
+
+  const text = String(req.body?.text || "").trim().slice(0, 500);
+  if (!text) return res.status(400).json({ error: "empty_message" });
+
+  const now = Date.now();
+  const last = lastDmAt[user.id] || 0;
+  if (now - last < DM_COOLDOWN_MS) {
+    return res.status(429).json({ error: "too_fast" });
+  }
+  lastDmAt[user.id] = now;
+
+  try {
+    const members = await readMembers();
+    if (!members[otherUserId]) return res.status(404).json({ error: "unknown_recipient" });
+
+    const threads = await readDMs();
+    const key = dmThreadKey(user.id, otherUserId);
+    const thread = threads[key] || { participants: [user.id, otherUserId], messages: [], readAt: {} };
+    const message = { id: crypto.randomBytes(8).toString("hex"), from: user.id, text, at: now };
+    thread.messages.push(message);
+    while (thread.messages.length > DM_MAX_MESSAGES_PER_THREAD) thread.messages.shift();
+    thread.readAt = thread.readAt || {};
+    thread.readAt[user.id] = now; // sending counts as having read up to now
+    threads[key] = thread;
+    await writeDMs(threads);
+    res.json({ ok: true, message });
+  } catch (e) {
+    console.error("[dm] post failed:", e.message);
+    res.status(500).json({ error: "dm_failed" });
   }
 });
 
